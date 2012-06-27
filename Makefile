@@ -11,9 +11,18 @@ PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d _build/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
-.PHONY: help clean html dirhtml pickle json htmlhelp qthelp latex changes linkcheck doctest
+.PHONY: help clean html dirhtml pickle json htmlhelp qthelp latex changes linkcheck doctest push
 
 cheat: html
+
+push: clean html
+	rm -r /dev/shm/html
+	mv _build/html/ /dev/shm/
+	git checkout gh-pages
+	cp -r /dev/shm/html/* .
+	git commit --verbose --all -m "auto job. see https://github.com/felixhummel/blag"
+	git push
+	git checkout master
 
 show:
 	firefox _build/html/index.html
