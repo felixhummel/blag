@@ -9,26 +9,51 @@ DNS is set up, so those work::
 
 Puppet Agent
 ------------
-::
+Agent: As root or ``sudo bash``::
 
     wget http://apt.puppetlabs.com/puppetlabs-release_1.0-3_all.deb
-    sudo dpkg -i puppetlabs-release_1.0-3_all.deb
+    dpkg -i puppetlabs-release_1.0-3_all.deb
     apt-get update && apt-get -y install puppet
     sed -i -e 's/START=no/START=yes/' /etc/default/puppet
     service puppet start
 
 
-Configure Agent with ::
+Agent: Configure puppet::
+
+    mv /etc/puppet/puppet.conf /etc/puppet/puppet.conf.bak
+    cat <<'EOF'> /etc/puppet/puppet.conf
+    [main]
+      logdir=/var/log/puppet
+      vardir=/var/lib/puppet
+      ssldir=/var/lib/puppet/ssl
+      rundir=/var/run/puppet
+      factpath=$vardir/lib/facter
+      templatedir=$confdir/templates
+
+    [master]
+      # These are needed when the puppetmaster is run by passenger
+      # and can safely be removed if webrick is used.
+      ssl_client_header = SSL_CLIENT_S_DN
+      ssl_client_verify_header = SSL_CLIENT_VERIFY
 
     [agent]
-        certname = ubuntu1204.local
-        server = locutus.local
-        report = true
-        classfile = $vardir/classes.txt
-        localconfig = $vardir/localconfig
-        graph = true
-        pluginsync = true
+      certname = ubuntu1204.local
+      server = locutus.local
+      report = true
+      classfile = $vardir/classes.txt
+      localconfig = $vardir/localconfig
+      graph = true
+      pluginsync = true
+    EOF
 
+Agent: create certificate and try to connect to master::
+
+    puppet agent --test
+
+Master: sign certificate::
+
+    sudo puppet cert list
+    sudo puppet cert sign ubuntu1204.local
 
 Further Reading
 ---------------
