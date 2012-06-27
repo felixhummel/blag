@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Vim auto completion for Django in a virtualenv &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Vim" href="index.html" />
+    <link rel="next" title="Sphinx Sandbox" href="../sandbox/index.html" />
+    <link rel="prev" title="Vim" href="index.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../sandbox/index.html" title="Sphinx Sandbox"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Vim"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Vim</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="vim-auto-completion-for-django-in-a-virtualenv">
+<h1>Vim auto completion for Django in a virtualenv<a class="headerlink" href="#vim-auto-completion-for-django-in-a-virtualenv" title="Permalink to this headline">¶</a></h1>
+<p>The title says it all. Daniel Roseman&#8217;s <a class="reference external" href="http://blog.roseman.org.uk/2010/04/21/vim-autocomplete-django-and-virtualenv/">post</a> helped me a lot. Here is my attempt of a slightly more automatic way:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="c">&quot; Sets up omni-completion for a django project in a virtualenv.</span>
+<span class="c">&quot;</span>
+<span class="c">&quot; Copy this file to YOUR_VIRTUALENV_DIR/.vimrc and add the following to your</span>
+<span class="c">&quot; ~/.vimrc file:</span>
+<span class="c">&quot;     if filereadable($VIRTUAL_ENV . &#39;/.vimrc&#39;)</span>
+<span class="c">&quot;         source $VIRTUAL_ENV/.vimrc</span>
+<span class="c">&quot;     endif</span>
+<span class="c">&quot;</span>
+<span class="c">&quot; Thanks, Daniel!</span>
+<span class="c">&quot; http://blog.roseman.org.uk/2010/04/21/vim-autocomplete-django-and-virtualenv/</span>
+
+<span class="k">py</span> <span class="p">&lt;&lt;</span> EOF
+import os.<span class="nb">path</span>
+import sys
+import <span class="k">vim</span>
+
+# SET THIS MANUALLY
+# <span class="p">=================</span>
+DJANGO_SETTINGS_MODULE<span class="p">=</span><span class="s1">&#39;foo.settings&#39;</span>
+
+project_base_dir <span class="p">=</span> os.environ[<span class="s1">&#39;VIRTUAL_ENV&#39;</span>]
+
+sys.<span class="nb">path</span>.<span class="nb">insert</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> project_base_dir<span class="p">)</span>
+
+activate_this <span class="p">=</span> os.<span class="nb">path</span>.<span class="k">join</span><span class="p">(</span>project_base_dir<span class="p">,</span> <span class="s1">&#39;bin/activate_this.py&#39;</span><span class="p">)</span>
+execfile<span class="p">(</span>activate_this<span class="p">,</span> <span class="nb">dict</span><span class="p">(</span>__file__<span class="p">=</span>activate_this<span class="p">))</span>
+
+os.environ[<span class="s1">&#39;DJANGO_SETTINGS_MODULE&#39;</span>] <span class="p">=</span> DJANGO_SETTINGS_MODULE
+EOF
+</pre></div>
+</div>
+<p>All you need to do is set the DJANGO_SETTINGS_MODULE variable.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Vim</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../sandbox/index.html"
+                        title="next chapter">Sphinx Sandbox</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/vim/django_completion.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../sandbox/index.html" title="Sphinx Sandbox"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Vim"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Vim</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,185 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GRUB &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Junk" href="index.html" />
+    <link rel="next" title="Funambol" href="funambol.html" />
+    <link rel="prev" title="ExtJS" href="extjs.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="funambol.html" title="Funambol"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="extjs.html" title="ExtJS"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="grub">
+<h1>GRUB<a class="headerlink" href="#grub" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="grub-is-not-installed">
+<h2>GRUB is not installed<a class="headerlink" href="#grub-is-not-installed" title="Permalink to this headline">¶</a></h2>
+<p>Error:</p>
+<div class="highlight-python"><pre>GRUB Loading stage1.5.
+
+GRUB loading, please wait...
+Error 17</pre>
+</div>
+<div class="section" id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Permalink to this headline">¶</a></h3>
+<p>Recovery-CD -&gt; Root Shell:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fdisk</span> <span class="o">-</span><span class="n">l</span>
+</pre></div>
+</div>
+<p>to list all partitions. Remember <tt class="docutils literal"><span class="pre">/boot/</span></tt>-Partition (e.g. <tt class="docutils literal"><span class="pre">/dev/sdb1</span></tt>) and its GRUB-equivalent (<tt class="docutils literal"><span class="pre">(hd1,0)</span></tt> in this case). Then:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">grub</span>
+</pre></div>
+</div>
+<p>to start GRUB&#8217;s shell and feed it with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">root</span> <span class="p">(</span><span class="n">hd1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">setup</span> <span class="p">(</span><span class="n">hd1</span><span class="p">)</span>
+<span class="n">quit</span>
+</pre></div>
+</div>
+<p>and reboot.</p>
+<p>If Grub does <em>not</em> work after rebooting, simply press <tt class="docutils literal"><span class="pre">e</span></tt> in GRUB&#8217;s boot menu to go to the edit mode of the boot entry. Press <tt class="docutils literal"><span class="pre">e</span></tt> again to change the line <tt class="docutils literal"><span class="pre">root</span> <span class="pre">(hdX,Y)</span></tt> to e.g. <tt class="docutils literal"><span class="pre">root</span> <span class="pre">(hd1,0)</span></tt>. Press <tt class="kbd docutils literal"><span class="pre">b</span></tt> to boot with the new root partition.</p>
+</div>
+<div class="section" id="explanation">
+<h3>Explanation<a class="headerlink" href="#explanation" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="the-right-partition">
+<h4>The right partition<a class="headerlink" href="#the-right-partition" title="Permalink to this headline">¶</a></h4>
+<p>... is wherever your <tt class="docutils literal"><span class="pre">/boot</span></tt> is. This command tells you:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">df</span> <span class="o">/</span><span class="n">boot</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-kernel-s-root-argument">
+<h4>The kernel&#8217;s root argument<a class="headerlink" href="#the-kernel-s-root-argument" title="Permalink to this headline">¶</a></h4>
+<p>... expects a path to the inititial ramdisk. If you have a seperate boot partition (which you should), then <tt class="docutils literal"><span class="pre">root=/&lt;your-initramfs-file-name&gt;</span></tt> is correct. <tt class="docutils literal"><span class="pre">/boot</span></tt> could also be a simple directory under <tt class="docutils literal"><span class="pre">/</span></tt>. Then the kernel argument would be <tt class="docutils literal"><span class="pre">root=/boot/&lt;your-initramfs-file-name&gt;</span></tt></p>
+</div>
+</div>
+</div>
+<div class="section" id="sources">
+<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://ubuntuforums.org/showpost.php?p=117829&amp;postcount=2">http://ubuntuforums.org/showpost.php?p=117829&amp;postcount=2</a> (GER)</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">GRUB</a><ul>
+<li><a class="reference internal" href="#grub-is-not-installed">GRUB is not installed</a><ul>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+<li><a class="reference internal" href="#explanation">Explanation</a><ul>
+<li><a class="reference internal" href="#the-right-partition">The right partition</a></li>
+<li><a class="reference internal" href="#the-kernel-s-root-argument">The kernel&#8217;s root argument</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sources">Sources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="extjs.html"
+                        title="previous chapter">ExtJS</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="funambol.html"
+                        title="next chapter">Funambol</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/junk/fix_grub.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="funambol.html" title="Funambol"
+             >next</a></li>
+        <li class="right" >
+          <a href="extjs.html" title="ExtJS"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Junk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

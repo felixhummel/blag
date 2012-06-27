@@ -1,0 +1,139 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Htop or Linux Memory &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Junk" href="index.html" />
+    <link rel="next" title="Javascript Hacks" href="javascript.html" />
+    <link rel="prev" title="Git, Gitosis" href="git.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="javascript.html" title="Javascript Hacks"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="git.html" title="Git, Gitosis"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="htop-or-linux-memory">
+<h1>Htop or Linux Memory<a class="headerlink" href="#htop-or-linux-memory" title="Permalink to this headline">¶</a></h1>
+<p>Help, Linux ate my RAM: <a class="reference external" href="http://webcache.googleusercontent.com/search?q=cache:http://www.linuxatemyram.com/">http://webcache.googleusercontent.com/search?q=cache:http://www.linuxatemyram.com/</a></p>
+<p>RAM available = free + buffers + cache</p>
+<p>Htop <a class="reference external" href="http://htop.sourceforge.net/index.php?page=faq">http://htop.sourceforge.net/index.php?page=faq</a></p>
+<p>Colors (F1 in htop):</p>
+<ul class="simple">
+<li>green: processes (=RES in column)</li>
+<li>blue: buffers</li>
+<li>orange: cache</li>
+</ul>
+<p>Difference between buffers and cache: <a class="reference external" href="http://www.linuxhowtos.org/System/Linux%20Memory%20Management.htm">http://www.linuxhowtos.org/System/Linux%20Memory%20Management.htm</a></p>
+<ul class="simple">
+<li>Buffers hold file system meta data</li>
+<li>Cache holds file contents</li>
+</ul>
+<p>Get available RAM one-liner:</p>
+<div class="highlight-python"><pre>free -m | awk '/cache:/ {print $4}'</pre>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="git.html"
+                        title="previous chapter">Git, Gitosis</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="javascript.html"
+                        title="next chapter">Javascript Hacks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/junk/htop.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="javascript.html" title="Javascript Hacks"
+             >next</a></li>
+        <li class="right" >
+          <a href="git.html" title="Git, Gitosis"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Junk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

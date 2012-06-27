@@ -1,0 +1,190 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Apache &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Administration" href="index.html" />
+    <link rel="next" title="Debian" href="debian.html" />
+    <link rel="prev" title="Administration" href="index.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="debian.html" title="Debian"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Administration"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="apache">
+<h1>Apache<a class="headerlink" href="#apache" title="Permalink to this headline">¶</a></h1>
+<p>Some notes about stuff I kept googling.</p>
+<div class="section" id="ssl">
+<h2>SSL<a class="headerlink" href="#ssl" title="Permalink to this headline">¶</a></h2>
+<p>Need key and cert? As root:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">servername</span><span class="o">=</span>example.org  <span class="c"># &lt;-- this is a usage example ;)</span>
+<span class="nv">servername</span><span class="o">=</span>
+<span class="nv">prefix</span><span class="o">=</span>/srv/certs
+mkdir -p <span class="nv">$prefix</span>
+<span class="nv">keyfile_path</span><span class="o">=</span><span class="nv">$prefix</span>/<span class="nv">$servername</span>.key
+<span class="nv">signing_request_path</span><span class="o">=</span><span class="nv">$prefix</span>/<span class="nv">$servername</span>.csr
+<span class="nv">cert_path</span><span class="o">=</span><span class="nv">$prefix</span>/<span class="nv">$servername</span>.crt
+<span class="c"># create the private key</span>
+openssl genrsa -out <span class="nv">$keyfile_path</span> 1024
+<span class="c"># create a signing request (if you don&#39;t care, press enter 9 times)</span>
+<span class="c"># for wildcard certificates (e.g. *.domain.com), set Common Name accordingly</span>
+openssl req -new<span class="se">\</span>
+    -key <span class="nv">$keyfile_path</span><span class="se">\</span>
+    -out <span class="nv">$signing_request_path</span>
+<span class="c"># create a self-signed certificate</span>
+openssl x509<span class="se">\</span>
+    -in <span class="nv">$signing_request_path</span><span class="se">\</span>
+    -out <span class="nv">$cert_path</span><span class="se">\</span>
+    -req -signkey <span class="nv">$keyfile_path</span><span class="se">\</span>
+    -days 65500
+<span class="c"># let&#39;s see those files</span>
+<span class="nb">echo</span> <span class="nv">$prefix</span> <span class="o">&amp;&amp;</span> ls <span class="nv">$prefix</span>
+</pre></div>
+</div>
+<p>Example config:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">document_root</span><span class="o">=</span>
+<span class="nv">basic_auth_file</span><span class="o">=</span>
+<span class="nb">echo</span> <span class="s2">&quot;&lt;VirtualHost $servername:443&gt;</span>
+<span class="s2">    ServerName $servername</span>
+<span class="s2">    DocumentRoot $document_root</span>
+
+<span class="s2">    SSLEngine on</span>
+<span class="s2">    SSLCertificateKeyFile $keyfile_path</span>
+<span class="s2">    SSLCertificateFile $cert_path</span>
+
+<span class="s2">    &lt;Directory \&quot;$document_root\&quot;&gt;</span>
+<span class="s2">        Options Indexes FollowSymLinks</span>
+<span class="s2">        AllowOverride none</span>
+<span class="s2">        Order allow,deny</span>
+<span class="s2">        Allow from all</span>
+<span class="s2">        AuthType Basic</span>
+<span class="s2">        AuthName $(basename $document_root)</span>
+<span class="s2">        AuthUserFile $basic_auth_file</span>
+<span class="s2">    &lt;/Directory&gt;</span>
+
+<span class="s2">&lt;/VirtualHost&gt;&quot;</span>
+</pre></div>
+</div>
+<div class="section" id="sources">
+<h3>Sources<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://www.crazysquirrel.com/computing/debian/apache-mod_ssl.jspx">http://www.crazysquirrel.com/computing/debian/apache-mod_ssl.jspx</a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Apache</a><ul>
+<li><a class="reference internal" href="#ssl">SSL</a><ul>
+<li><a class="reference internal" href="#sources">Sources</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Administration</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="debian.html"
+                        title="next chapter">Debian</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/admin/apache.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="debian.html" title="Debian"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Administration"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Administration</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

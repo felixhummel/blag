@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Processes &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../../index.html" />
+    <link rel="up" title="Python" href="index.html" />
+    <link rel="next" title="VMWare and VirtualBox" href="../vmware.html" />
+    <link rel="prev" title="Did you know?" href="did_you_know.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../vmware.html" title="VMWare and VirtualBox"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="did_you_know.html" title="Did you know?"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Home</a> &raquo;</li>
+          <li><a href="../index.html" >Basics</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Python</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="processes">
+<h1>Processes<a class="headerlink" href="#processes" title="Permalink to this headline">¶</a></h1>
+<p>Let&#8217;s talk about processes from a shell point of view.</p>
+<img alt="../../_images/process_stdin_stdout_stderr_return-code.png" src="../../_images/process_stdin_stdout_stderr_return-code.png" />
+<p>A process takes standard input (STDIN) and returns</p>
+<ul class="simple">
+<li>standard output (STDOUT) - it gets printed on your console</li>
+<li>standard error (STDERR) - you see that too if you don&#8217;t do <tt class="docutils literal"><span class="pre">process</span> <span class="pre">2&gt;</span> <span class="pre">/dev/null</span></tt>, but more about that later</li>
+<li>return code - <tt class="docutils literal"><span class="pre">0</span></tt> on success, a different number otherwise</li>
+</ul>
+<p>Of course there are processes that</p>
+<ul class="simple">
+<li>do not read STDIN (but instead read files, get data from the kernel, ...)</li>
+<li>do not write to STDOUT (because they don&#8217;t have anything to say)</li>
+<li>do not write to STDERR (because there are no errors)</li>
+</ul>
+<p>But <em>every process</em> returns a return code.</p>
+<p>There are environment variables too.</p>
+<p>In the next sections I&#8217;ll show you how to use that knowledge with Bash and Python.</p>
+<div class="section" id="bash">
+<h2>Bash<a class="headerlink" href="#bash" title="Permalink to this headline">¶</a></h2>
+<p>I could not do better than the <a class="reference external" href="http://tldp.org/LDP/abs/html/index.html">Advanced Bash Scripting Guide</a>, so I will simply present a basic example. Just paste it line by line into your running shell.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/bin/bash</span>
+
+<span class="c"># environment variables</span>
+<span class="c"># =====================</span>
+
+<span class="nv">var</span><span class="o">=</span><span class="s2">&quot;hello world&quot;</span>
+
+
+<span class="c"># STDIN, STDOUT</span>
+<span class="c"># =============</span>
+
+<span class="c"># echo takes a string and puts it on STDOUT</span>
+<span class="nb">echo</span> <span class="nv">$var</span>
+
+<span class="c"># we can redirect STDIN to a file</span>
+<span class="nb">echo</span> <span class="nv">$var</span> 1&gt; /tmp/some_file
+
+<span class="c"># cat takes a file as first argument and writes it to STDOUT</span>
+cat /tmp/some_file
+
+<span class="c"># to be brutally honest cat concatenates files and writes them to STDOUT</span>
+<span class="nb">echo</span> <span class="s2">&quot;part 2&quot;</span> &gt; /tmp/some_other_file
+cat /tmp/some_file /tmp/some_other_file
+
+<span class="c"># cat can also take STDIN and write it to STDOUT</span>
+<span class="nb">echo</span> <span class="nv">$var</span> | cat
+
+<span class="c"># to concatenate STDIN with a file:</span>
+<span class="nb">echo</span> <span class="nv">$var</span> | cat - /tmp/some_other_file
+
+
+<span class="c"># STDERR</span>
+<span class="c"># ======</span>
+
+<span class="c"># let&#39;s redirect STDIN to STDERR</span>
+<span class="nb">echo</span> <span class="nv">$var</span> 1&gt;&amp;2
+
+<span class="c"># we can read it, but if we redirect STDOUT to a file it remains empty</span>
+write_stuff_to_STDERR<span class="o">()</span> <span class="o">{</span>  <span class="c"># this is a function -- see ``man bash``</span>
+    <span class="nb">echo</span> <span class="s2">&quot;stuff&quot;</span> 1&gt;&amp;2
+<span class="o">}</span>
+write_stuff_to_STDERR 1&gt; /tmp/where_is_my_message
+cat /tmp/where_is_my_message
+
+<span class="c"># so to get to the message we redirect STDERR to a file</span>
+write_stuff_to_STDERR 2&gt; /tmp/there_it_is
+cat /tmp/there_it_is
+
+<span class="c"># we can also redirect everything to a file</span>
+<span class="c"># that&#39;s basically everything you can read on your console</span>
+write_stuff<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">&quot;INFO&quot;</span> 2&gt;&amp;1  <span class="c"># to STDOUT</span>
+    <span class="nb">echo</span> <span class="s2">&quot;ERROR&quot;</span> 1&gt;&amp;2  <span class="c"># to STDERR</span>
+<span class="o">}</span>
+write_stuff &gt; /tmp/everything
+write_stuff 1&gt; /tmp/just_stdout
+write_stuff 2&gt; /tmp/just_stderr
+cat /tmp/everything
+cat /tmp/just_stdout
+cat /tmp/just_stderr
+
+<span class="c"># if the output of a process is irrelevant</span>
+<span class="c"># we redirect to /dev/null (the bottomless bucket)</span>
+write_stuff 1&gt; /dev/null  <span class="c"># don&#39;t care about your info</span>
+write_stuff 2&gt; /dev/null  <span class="c"># don&#39;t care about your errors</span>
+
+
+<span class="c"># Return Codes</span>
+<span class="c"># ============</span>
+
+<span class="c"># on success processes return a 0</span>
+<span class="nb">echo</span> <span class="s1">&#39;&#39;</span>  <span class="c"># this will definitely succeed</span>
+<span class="nb">echo</span> <span class="nv">$?</span>
+
+<span class="c"># else they return something &gt; 0</span>
+<span class="c"># good tools document this in their man pages</span>
+this_command_will_probably_not_be_found 2&gt; /dev/null
+<span class="nb">echo</span> <span class="nv">$?</span>
+
+<span class="c"># return codes are useful for chaining processes</span>
+this_command_will_probably_not_be_found 2&gt; /dev/null <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;success&#39;</span>
+<span class="nb">echo</span> <span class="s1">&#39;I work!&#39;</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s1">&#39;success&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="python">
+<h2>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
+<p>We know how to write stuff to STDIN and STDERR, how to set a return code and how to read STDOUT, STDERR and return codes. Let&#8217;s do that in Python!</p>
+<p>Here is a process that can do all that:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Example about basic process manipulation</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">def</span> <span class="nf">read_stdin</span><span class="p">():</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="s">&#39;Your STDIN contains: &#39;</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">+</span> <span class="n">line</span>
+    <span class="k">print</span> <span class="n">res</span>
+
+<span class="k">def</span> <span class="nf">write_to_stdout</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;Writing to STDOUT is easy.&quot;</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;One way or another...</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">write_to_stderr</span><span class="p">():</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;Writing to STDERR is easy too.</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">return_code</span><span class="p">():</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">read_stdin</span><span class="p">()</span>
+    <span class="n">write_to_stdout</span><span class="p">()</span>
+    <span class="n">write_to_stderr</span><span class="p">()</span>
+    <span class="n">return_code</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Use it like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">echo</span> <span class="s1">&#39;spam&#39;</span> | ./processes.py
+<span class="nb">echo</span> <span class="nv">$?</span>
+</pre></div>
+</div>
+<p>But how do we communicate with other processes, i.e. be the one controlling others? Here&#8217;s an example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Example about process communication</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">call</span><span class="p">,</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span>
+
+<span class="k">def</span> <span class="nf">get_return_code</span><span class="p">():</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;echo&#39;</span><span class="p">,</span> <span class="s">&#39;&quot;&quot;&#39;</span><span class="p">]</span>
+    <span class="n">retcode</span> <span class="o">=</span> <span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="k">print</span>
+    <span class="k">print</span> <span class="s">&#39;get_return_code&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;===============&#39;</span>
+    <span class="k">print</span> <span class="n">retcode</span>
+
+<span class="k">def</span> <span class="nf">get_stdout</span><span class="p">():</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ls&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">]</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">print</span>
+    <span class="k">print</span> <span class="s">&#39;get_stdout&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;==========&#39;</span>
+    <span class="k">print</span> <span class="n">res</span>
+
+<span class="k">def</span> <span class="nf">run_in_shell</span><span class="p">():</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s">&quot;echo &#39;Shell makes life easy, but is not too powerful.&#39; | cat -&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">print</span>
+    <span class="k">print</span> <span class="s">&#39;run_in_shell&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;============&#39;</span>
+    <span class="k">print</span> <span class="n">res</span>
+
+<span class="k">def</span> <span class="nf">get_stderr</span><span class="p">():</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;some_filename_that_cannot_be_found&#39;</span><span class="p">]</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">print</span>
+    <span class="k">print</span> <span class="s">&#39;get_stderr&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;==========&#39;</span>
+    <span class="k">print</span> <span class="n">res</span>
+
+<span class="k">def</span> <span class="nf">get_everything</span><span class="p">():</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s">&quot;echo &#39;first part works&#39; | cat - but_this_file_cannot_be_found&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+    <span class="n">retcode</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">returncode</span>
+    <span class="k">print</span>
+    <span class="k">print</span> <span class="s">&#39;get_stdout_and_stderr&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;============&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;STDOUT: </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="n">out</span>
+    <span class="k">print</span> <span class="s">&#39;STDERR: </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="n">err</span>
+    <span class="k">print</span> <span class="s">&#39;returncode: </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="n">retcode</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">get_return_code</span><span class="p">()</span>
+    <span class="n">get_stdout</span><span class="p">()</span>
+    <span class="n">run_in_shell</span><span class="p">()</span>
+    <span class="n">get_stderr</span><span class="p">()</span>
+    <span class="n">get_everything</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can find more information in the official <a class="reference external" href="http://docs.python.org/library/subprocess.html">Python Documentation</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Processes</a><ul>
+<li><a class="reference internal" href="#bash">Bash</a></li>
+<li><a class="reference internal" href="#python">Python</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="did_you_know.html"
+                        title="previous chapter">Did you know?</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../vmware.html"
+                        title="next chapter">VMWare and VirtualBox</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/basics/python/processes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../vmware.html" title="VMWare and VirtualBox"
+             >next</a></li>
+        <li class="right" >
+          <a href="did_you_know.html" title="Did you know?"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Home</a> &raquo;</li>
+          <li><a href="../index.html" >Basics</a> &raquo;</li>
+          <li><a href="index.html" >Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

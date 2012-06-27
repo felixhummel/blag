@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Syncing desktop, notebook and server with bzr &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Junk" href="index.html" />
+    <link rel="next" title="Capture and Save Webcam Video" href="vlc.html" />
+    <link rel="prev" title="Shell Colors (ANSI Escape Codes)" href="shell_colors.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="vlc.html" title="Capture and Save Webcam Video"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="shell_colors.html" title="Shell Colors (ANSI Escape Codes)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <p>For <em>large files</em> (like Ubuntu images) I use <a class="reference external" href="http://www.krusader.org/">krusader</a> to make backups or copy them somewhere on demand, but for <em>small, hand-written files</em> like configs, notes and scripts, I use <a class="reference external" href="http://bazaar-vcs.org/">bazaar</a> (see below).</p>
+<p>This way my stuff is</p>
+<ul class="simple">
+<li>versioned</li>
+<li>mirrored on three computers and</li>
+<li>accessible anywhere (well, the ssh port is open on most firewalls I have encountered so far).</li>
+</ul>
+<div class="section" id="syncing-desktop-notebook-and-server-with-bzr">
+<h1>Syncing desktop, notebook and server with bzr<a class="headerlink" href="#syncing-desktop-notebook-and-server-with-bzr" title="Permalink to this headline">¶</a></h1>
+<p>For projects like &#8220;studying&#8221;, &#8220;wobsite&#8221;, &#8220;evaluations&#8221;, ... I use a bzr branch on my server like so:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd </span>someproject
+<span class="c"># first time setup (on desktop)</span>
+bzr init .
+bzr push sftp://server/var/bzr/someproject
+bzr <span class="nb">bind </span>sftp://server/var/bzr/someproject
+
+<span class="c"># get it to notebook (still on desktop)</span>
+ssh notebook
+    bzr co sftp://server/var/bzr/someproject
+<span class="nb">exit</span>
+
+<span class="c"># on the road, without internet access (on notebook)</span>
+bzr unbind
+bzr m <span class="s2">&quot;will merge it, when i come home&quot;</span>
+
+<span class="c"># back at home, with internet access (on desktop)</span>
+ssh notebook
+    bzr <span class="nb">bind</span>
+<span class="nb">    </span>bzr update
+    bzr m <span class="s2">&quot;did some stuff on the road&quot;</span>
+<span class="nb">exit</span>
+
+<span class="nb">cd </span>someproject
+bzr update
+</pre></div>
+</div>
+<p>Assuming <tt class="docutils literal"><span class="pre">~/someproject</span></tt> is already versioned and I have internet access available, the workflow remains simple:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/someproject
+bzr update
+<span class="c"># do stuff</span>
+bzr m <span class="s2">&quot;did stuff&quot;</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="shell_colors.html"
+                        title="previous chapter">Shell Colors (ANSI Escape Codes)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="vlc.html"
+                        title="next chapter">Capture and Save Webcam Video</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/junk/slashdot_2009-06-24.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="vlc.html" title="Capture and Save Webcam Video"
+             >next</a></li>
+        <li class="right" >
+          <a href="shell_colors.html" title="Shell Colors (ANSI Escape Codes)"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Junk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

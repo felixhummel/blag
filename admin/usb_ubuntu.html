@@ -1,0 +1,552 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing Ubuntu 8.10 on a USB Drive with Debootstrap &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Administration" href="index.html" />
+    <link rel="next" title="GRUB" href="grub.html" />
+    <link rel="prev" title="Debootstrapping and Chrooting" href="chroot.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="grub.html" title="GRUB"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="chroot.html" title="Debootstrapping and Chrooting"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installing-ubuntu-8-10-on-a-usb-drive-with-debootstrap">
+<h1><a class="toc-backref" href="#id2">Installing Ubuntu 8.10 on a USB Drive with Debootstrap</a><a class="headerlink" href="#installing-ubuntu-8-10-on-a-usb-drive-with-debootstrap" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#installing-ubuntu-8-10-on-a-usb-drive-with-debootstrap" id="id2">Installing Ubuntu 8.10 on a USB Drive with Debootstrap</a><ul>
+<li><a class="reference internal" href="#your-skills" id="id3">Your Skills</a></li>
+<li><a class="reference internal" href="#prerequisites" id="id4">Prerequisites</a></li>
+<li><a class="reference internal" href="#partitioning" id="id5">Partitioning</a></li>
+<li><a class="reference internal" href="#formatting" id="id6">Formatting</a><ul>
+<li><a class="reference internal" href="#plain-ext2-boot-partition" id="id7">Plain ext2 Boot Partition</a></li>
+<li><a class="reference internal" href="#root-swap-home" id="id8">Root, Swap, Home</a></li>
+<li><a class="reference internal" href="#tune2fs" id="id9">Tune2fs</a></li>
+<li><a class="reference internal" href="#check-partitions" id="id10">Check Partitions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mounting-and-unmounting" id="id11">Mounting and Unmounting</a></li>
+<li><a class="reference internal" href="#debootstrap" id="id12">Debootstrap</a><ul>
+<li><a class="reference internal" href="#new-hostname" id="id13">New Hostname</a></li>
+<li><a class="reference internal" href="#fstab" id="id14">Fstab</a></li>
+<li><a class="reference internal" href="#root-uuid" id="id15">Root UUID</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chrooting" id="id16">Chrooting</a><ul>
+<li><a class="reference internal" href="#configuring-the-boot-loader" id="id17">Configuring the Boot Loader</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#making-it-bootable" id="id18">Making It Bootable</a></li>
+<li><a class="reference internal" href="#troubleshooting" id="id19">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#grub" id="id20">GRUB</a><ul>
+<li><a class="reference internal" href="#file-not-found" id="id21">15 : File not found</a></li>
+<li><a class="reference internal" href="#cannot-mount-selected-partition" id="id22">17 : Cannot mount selected partition</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ramdisk-image" id="id23">Ramdisk Image</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#further-reading" id="id24">Further Reading</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>We will install Ubuntu on a USB drive without leaving our current Ubuntu installation.</p>
+<p>My USB drive is <tt class="docutils literal"><span class="pre">/dev/sde</span></tt> and I create the chroot directory at <tt class="docutils literal"><span class="pre">/tmp/target</span></tt>. Have fun and good luck!</p>
+<div class="section" id="your-skills">
+<h2><a class="toc-backref" href="#id3">Your Skills</a><a class="headerlink" href="#your-skills" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>You can partition a hard drive and</li>
+<li>you can install packages and</li>
+<li>you like the command line.</li>
+</ul>
+</div>
+<div class="section" id="prerequisites">
+<h2><a class="toc-backref" href="#id4">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>Get debootstrap (see <a class="reference internal" href="../junk/apps.html#wajig"><em>Wajig (Package Management)</em></a>):</p>
+<div class="highlight-bash"><div class="highlight"><pre>wajig install debootstrap
+</pre></div>
+</div>
+<p>Get admin rights to eliminate the need of typing sudo before every command:</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo bash
+</pre></div>
+</div>
+</div>
+<div class="section" id="partitioning">
+<h2><a class="toc-backref" href="#id5">Partitioning</a><a class="headerlink" href="#partitioning" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">/dev/sde</span></tt> is the usb drive. Create the following partitions:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="37%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">device</th>
+<th class="head">mount point</th>
+<th class="head">size</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>/dev/sde1</td>
+<td>/boot</td>
+<td>50M</td>
+</tr>
+<tr class="row-odd"><td>/dev/sde2</td>
+<td>/</td>
+<td>10G</td>
+</tr>
+<tr class="row-even"><td>/dev/sde3</td>
+<td>swap</td>
+<td>1G</td>
+</tr>
+<tr class="row-odd"><td>/dev/sde4</td>
+<td>/home</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<p>Remember to make <tt class="docutils literal"><span class="pre">/dev/sde1</span></tt> bootable!</p>
+</div>
+<div class="section" id="formatting">
+<h2><a class="toc-backref" href="#id6">Formatting</a><a class="headerlink" href="#formatting" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="plain-ext2-boot-partition">
+<h3><a class="toc-backref" href="#id7">Plain ext2 Boot Partition</a><a class="headerlink" href="#plain-ext2-boot-partition" title="Permalink to this headline">¶</a></h3>
+<p><em>/boot</em> should be a regular ext2 file system:</p>
+<div class="highlight-bash"><div class="highlight"><pre>mke2fs -L boot /dev/sde1
+</pre></div>
+</div>
+</div>
+<div class="section" id="root-swap-home">
+<h3><a class="toc-backref" href="#id8">Root, Swap, Home</a><a class="headerlink" href="#root-swap-home" title="Permalink to this headline">¶</a></h3>
+<p>Any file system will do:</p>
+<div class="highlight-bash"><div class="highlight"><pre>mkfs.ext3 -L root /dev/sde2
+mkswap -L swap /dev/sde3
+mkfs.ext3 -L home /dev/sde4
+</pre></div>
+</div>
+</div>
+<div class="section" id="tune2fs">
+<h3><a class="toc-backref" href="#id9">Tune2fs</a><a class="headerlink" href="#tune2fs" title="Permalink to this headline">¶</a></h3>
+<p>You <em>could</em> disable file system checks if you wanted to:</p>
+<div class="highlight-bash"><div class="highlight"><pre>tune2fs -c 0 -i 0 /dev/sde1
+tune2fs -c 0 -i 0 /dev/sde2
+tune2fs -c 0 -i 0 /dev/sde4
+</pre></div>
+</div>
+</div>
+<div class="section" id="check-partitions">
+<h3><a class="toc-backref" href="#id10">Check Partitions</a><a class="headerlink" href="#check-partitions" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>fdisk -l /dev/sde
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="mounting-and-unmounting">
+<h2><a class="toc-backref" href="#id11">Mounting and Unmounting</a><a class="headerlink" href="#mounting-and-unmounting" title="Permalink to this headline">¶</a></h2>
+<p>Create and run the Bash script <tt class="docutils literal"><span class="pre">mountall</span></tt>:</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre>cat &gt; mountall <span class="s">&lt;&lt; EOF</span>
+<span class="s">mkdir -p /tmp/target/</span>
+<span class="s">mount /dev/sde2 /tmp/target/</span>
+
+<span class="s">mkdir -p /tmp/target/boot</span>
+<span class="s">mount /dev/sde1 /tmp/target/boot</span>
+
+<span class="s">mkdir -p /tmp/target/home</span>
+<span class="s">mount /dev/sde4 /tmp/target/home</span>
+
+<span class="s">mkdir /tmp/target/{proc,dev,sys}</span>
+<span class="s">mount -t proc proc /tmp/target/proc  # for bash completion</span>
+<span class="s">mount --bind /dev /tmp/target/dev</span>
+<span class="s">mount -t sysfs sysfs /tmp/target/sys</span>
+<span class="s">EOF</span>
+
+chmod +x mountall
+./mountall
+</pre></div>
+</td></tr></table></div>
+<p>Create the Bash script <tt class="docutils literal"><span class="pre">umountall</span></tt> for later use:</p>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre>cat &gt; umountall <span class="s">&lt;&lt; EOF</span>
+<span class="s">umount /tmp/target/proc  # for bash completion</span>
+<span class="s">umount /tmp/target/dev</span>
+<span class="s">umount /tmp/target/sys</span>
+
+<span class="s">umount /tmp/target/home</span>
+<span class="s">umount /tmp/target/boot</span>
+<span class="s">umount /tmp/target/</span>
+<span class="s">EOF</span>
+
+chmod +x umountall
+</pre></div>
+</td></tr></table></div>
+<p>Check that everything is mounted:</p>
+<div class="highlight-bash"><div class="highlight"><pre>mount | grep /dev/sde
+</pre></div>
+</div>
+</div>
+<div class="section" id="debootstrap">
+<h2><a class="toc-backref" href="#id12">Debootstrap</a><a class="headerlink" href="#debootstrap" title="Permalink to this headline">¶</a></h2>
+<p>Choose a fast <a class="reference external" href="https://wiki.ubuntu.com/Mirrors">mirror</a> and a target architecture to increase debootstrap&#8217;s download speed and install the base system:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">release</span><span class="o">=</span>intrepid
+<span class="nv">target</span><span class="o">=</span>/tmp/target
+<span class="nv">mirror</span><span class="o">=</span>http://de.archive.ubuntu.com/ubuntu/
+<span class="nv">target_arch</span><span class="o">=</span>i386
+
+debootstrap --arch <span class="nv">$target_arch</span> <span class="nv">$release</span> <span class="nv">$target</span> <span class="nv">$mirror</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is important to choose the right architecture in the next step. You probably
+want <tt class="docutils literal"><span class="pre">i386</span></tt> or <tt class="docutils literal"><span class="pre">amd64</span></tt>. For a full list of supported architectures see
+<a class="reference external" href="http://archive.ubuntu.com/ubuntu/dists/jaunty/Release">http://archive.ubuntu.com/ubuntu/dists/jaunty/Release</a></p>
+</div>
+<div class="section" id="new-hostname">
+<h3><a class="toc-backref" href="#id13">New Hostname</a><a class="headerlink" href="#new-hostname" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">new_hostname</span><span class="o">=</span>port
+cat &gt; /tmp/target/etc/hostname <span class="s">&lt;&lt; EOF</span>
+<span class="s">$new_hostname</span>
+<span class="s">EOF</span>
+cat &gt; /tmp/target/etc/hosts <span class="s">&lt;&lt;EOF</span>
+<span class="s">127.0.0.1       localhost</span>
+<span class="s">127.0.0.1       $new_hostname</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fstab">
+<h3><a class="toc-backref" href="#id14">Fstab</a><a class="headerlink" href="#fstab" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s get uuids and check them:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">boot_uuid</span><span class="o">=</span><span class="k">$(</span>vol_id /dev/sde1 | grep <span class="nv">UUID</span><span class="o">=</span> | cut -d<span class="o">=</span> -f2<span class="k">)</span>
+<span class="nv">root_uuid</span><span class="o">=</span><span class="k">$(</span>vol_id /dev/sde2 | grep <span class="nv">UUID</span><span class="o">=</span> | cut -d<span class="o">=</span> -f2<span class="k">)</span>
+<span class="nv">home_uuid</span><span class="o">=</span><span class="k">$(</span>vol_id /dev/sde4 | grep <span class="nv">UUID</span><span class="o">=</span> | cut -d<span class="o">=</span> -f2<span class="k">)</span>
+
+<span class="nb">echo</span> <span class="nv">$boot_uuid</span>
+<span class="nb">echo</span> <span class="nv">$root_uuid</span>
+<span class="nb">echo</span> <span class="nv">$home_uuid</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">fstab</span></tt> (the indentation will be proper after uuid substitution):</p>
+<div class="highlight-bash"><div class="highlight"><pre>cat &gt; /tmp/target/etc/fstab <span class="s">&lt;&lt;EOF</span>
+<span class="s"># device                                    mount   type options freq passno</span>
+<span class="s">UUID=$root_uuid   /       ext3 defaults,errors=remount-ro 0 1</span>
+<span class="s">UUID=$boot_uuid   /boot   ext2 defaults   0 1</span>
+<span class="s">UUID=$home_uuid   /home   ext3 defaults   0 0</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="root-uuid">
+<h3><a class="toc-backref" href="#id15">Root UUID</a><a class="headerlink" href="#root-uuid" title="Permalink to this headline">¶</a></h3>
+<p>We&#8217;ll need <em>root_uuid</em> in the chroot environment:</p>
+<div class="highlight-bash"><div class="highlight"><pre>mkdir -p /tmp/target/tmp
+<span class="nb">echo</span> <span class="nv">$root_uuid</span> &gt; /tmp/target/tmp/root_uuid
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="chrooting">
+<h2><a class="toc-backref" href="#id16">Chrooting</a><a class="headerlink" href="#chrooting" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre>chroot /tmp/target
+</pre></div>
+</div>
+<p>Set the time zone and update the system (ignore the perl locale warnings):</p>
+<div class="highlight-bash"><div class="highlight"><pre>cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+
+<span class="c"># add universe repository for wajig and python-optcomplete</span>
+<span class="nb">echo</span> <span class="sb">`</span>cat /etc/apt/sources.list<span class="sb">`</span> universe &gt; /etc/apt/sources.list
+
+apt-get update
+apt-get dist-upgrade
+</pre></div>
+</div>
+<p>Install the kernel, GRUB, completion tools and the terminal mouse server:</p>
+<div class="highlight-bash"><div class="highlight"><pre>apt-get install -y<span class="se">\</span>
+    initramfs-tools<span class="se">\</span>
+    grub
+
+apt-get install -y<span class="se">\</span>
+    linux-image-generic<span class="se">\</span>
+    vim bash-completion wajig python-optcomplete gpm
+</pre></div>
+</div>
+<p>Enable root login:</p>
+<div class="highlight-bash"><div class="highlight"><pre>passwd
+</pre></div>
+</div>
+<div class="section" id="configuring-the-boot-loader">
+<h3><a class="toc-backref" href="#id17">Configuring the Boot Loader</a><a class="headerlink" href="#configuring-the-boot-loader" title="Permalink to this headline">¶</a></h3>
+<p>Remember the uuid of <em>/</em> (select with mouse). That&#8217;s why we copied it in <a class="reference internal" href="#root-uuid">Root UUID</a>:</p>
+<div class="highlight-bash"><div class="highlight"><pre>cat /tmp/root_uuid
+</pre></div>
+</div>
+<p>Let <tt class="docutils literal"><span class="pre">update-grub</span></tt> create a menu.lst, then customize it:</p>
+<div class="highlight-bash"><div class="highlight"><pre>mkdir /boot/grub  <span class="c"># else, update-grub won&#39;t create /boot/grub/menu.lst</span>
+update-grub
+vim /boot/grub/menu.lst
+</pre></div>
+</div>
+<p>Uncomment and edit:</p>
+<div class="highlight-bash"><div class="highlight"><pre>timeout     9
+</pre></div>
+</div>
+<p>Comment this line:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#hiddenmenu</span>
+</pre></div>
+</div>
+<p>Uncomment and edit:</p>
+<div class="highlight-bash"><div class="highlight"><pre>color green/black black/green
+</pre></div>
+</div>
+<p>Do <strong>not</strong> uncomment, but edit the following:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">kopt</span><span class="o">=</span><span class="nv">root</span><span class="o">=</span><span class="nv">UUID</span><span class="o">=</span>
+<span class="nv">alternative</span><span class="o">=</span><span class="nb">false</span>
+<span class="nv">defoptions</span><span class="o">=</span><span class="nv">vga</span><span class="o">=</span>791
+<span class="nv">updatedefaultentry</span><span class="o">=</span><span class="nb">true</span>
+</pre></div>
+</div>
+<p>Exit the chroot:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">exit</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="making-it-bootable">
+<h2><a class="toc-backref" href="#id18">Making It Bootable</a><a class="headerlink" href="#making-it-bootable" title="Permalink to this headline">¶</a></h2>
+<p>MBR:</p>
+<div class="highlight-bash"><div class="highlight"><pre>grub-install --root-directory<span class="o">=</span>/tmp/target --no-floppy --recheck /dev/sde
+</pre></div>
+</div>
+<p>You can remove all drives except <tt class="docutils literal"><span class="pre">(hd0)</span></tt> from <tt class="docutils literal"><span class="pre">/tmp/target/boot/grub/device.map</span></tt>.</p>
+<p>Unmount:</p>
+<div class="highlight-bash"><div class="highlight"><pre>./umountall
+</pre></div>
+</div>
+<p>That&#8217;s it! Exit the &#8220;sudo bash&#8221;:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">exit</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h2><a class="toc-backref" href="#id19">Troubleshooting</a><a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="grub">
+<h3><a class="toc-backref" href="#id20">GRUB</a><a class="headerlink" href="#grub" title="Permalink to this headline">¶</a></h3>
+<p>See also <a class="reference external" href="http://www.gnu.org/software/grub/manual/grub.html#Troubleshooting">http://www.gnu.org/software/grub/manual/grub.html#Troubleshooting</a>.</p>
+<div class="section" id="file-not-found">
+<h4><a class="toc-backref" href="#id21">15 : File not found</a><a class="headerlink" href="#file-not-found" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Check if <tt class="docutils literal"><span class="pre">vmlinuz-&lt;kernel-version&gt;</span></tt> exists in <tt class="docutils literal"><span class="pre">/boot</span></tt></li>
+<li>Check kernel line. Should be <tt class="docutils literal"><span class="pre">kernel</span> <span class="pre">/vmlinuz-&lt;kernel-version&gt;</span> <span class="pre">root=UUID=&lt;root_uuid&gt;</span> <span class="pre">vga=791</span></tt>, because <tt class="file docutils literal"><span class="pre">/boot</span></tt> has it&#8217;s own partition. If it is just a directory under <tt class="file docutils literal"><span class="pre">/</span></tt>, it should read <tt class="docutils literal"><span class="pre">kernel</span> <span class="pre">/boot/vmlinuz-&lt;kernel-version&gt;</span> <span class="pre">root=UUID=&lt;root_uuid&gt;</span> <span class="pre">vga=791</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="cannot-mount-selected-partition">
+<h4><a class="toc-backref" href="#id22">17 : Cannot mount selected partition</a><a class="headerlink" href="#cannot-mount-selected-partition" title="Permalink to this headline">¶</a></h4>
+<p>Play with <tt class="docutils literal"><span class="pre">root</span> <span class="pre">(hd&lt;disk-number&gt;,&lt;partition-number&gt;</span></tt>. GRUB will show you <tt class="docutils literal"><span class="pre">21</span> <span class="pre">:</span> <span class="pre">Selected</span> <span class="pre">disk</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">exist</span></tt> or <tt class="docutils literal"><span class="pre">22</span> <span class="pre">:</span> <span class="pre">No</span> <span class="pre">such</span> <span class="pre">partition</span></tt> when you try a disk/partition that does not exist.</p>
+</div>
+</div>
+<div class="section" id="ramdisk-image">
+<h3><a class="toc-backref" href="#id23">Ramdisk Image</a><a class="headerlink" href="#ramdisk-image" title="Permalink to this headline">¶</a></h3>
+<p>thanks, skrewz <a class="footnote-reference" href="#ramdiskcheck" id="id1">[3]</a>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">kernel_version</span><span class="o">=</span>2.6.28-11-generic
+<span class="nb">cd</span> /tmp <span class="o">&amp;&amp;</span> rm -Rf w; mkdir w <span class="o">&amp;&amp;</span> <span class="nb">cd </span>w <span class="o">&amp;&amp;</span> cp /tmp/target/boot/initrd.img-<span class="nv">$kernel_version</span> i.cpio.gz <span class="o">&amp;&amp;</span> gunzip i.cpio.gz <span class="o">&amp;&amp;</span> cpio --extract --file<span class="o">=</span>i.cpio <span class="o">&amp;&amp;</span> rm i.cpio
+ls
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="further-reading">
+<h2><a class="toc-backref" href="#id24">Further Reading</a><a class="headerlink" href="#further-reading" title="Permalink to this headline">¶</a></h2>
+<table class="docutils footnote" frame="void" id="articles" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td>Articles can be found on <a class="reference external" href="http://www.pendrivelinux.com/">pendrivelinux</a> or through <a class="reference external" href="http://www.google.de/search?q=usb+ubuntu">Google</a>; there are even some &#8220;official&#8221; <a class="reference external" href="https://help.ubuntu.com/community/Installation/FromUSBStick#Automatic%20Approaches">tools</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="cryptsetup" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[2]</td><td><a class="reference external" href="https://help.ubuntu.com/community/FeistyEncryptedRootWithInstaller/#Chroot%20and%20configure">https://help.ubuntu.com/community/FeistyEncryptedRootWithInstaller/#Chroot%20and%20configure</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="ramdiskcheck" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[3]</a></td><td>See &#8220;4. The Initial Ramdisk Image&#8221; on <a class="reference external" href="http://howto.tjekke.skrewz.dk/encrypted-root.html">http://howto.tjekke.skrewz.dk/encrypted-root.html</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing Ubuntu 8.10 on a USB Drive with Debootstrap</a><ul>
+<li><a class="reference internal" href="#your-skills">Your Skills</a></li>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#partitioning">Partitioning</a></li>
+<li><a class="reference internal" href="#formatting">Formatting</a><ul>
+<li><a class="reference internal" href="#plain-ext2-boot-partition">Plain ext2 Boot Partition</a></li>
+<li><a class="reference internal" href="#root-swap-home">Root, Swap, Home</a></li>
+<li><a class="reference internal" href="#tune2fs">Tune2fs</a></li>
+<li><a class="reference internal" href="#check-partitions">Check Partitions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mounting-and-unmounting">Mounting and Unmounting</a></li>
+<li><a class="reference internal" href="#debootstrap">Debootstrap</a><ul>
+<li><a class="reference internal" href="#new-hostname">New Hostname</a></li>
+<li><a class="reference internal" href="#fstab">Fstab</a></li>
+<li><a class="reference internal" href="#root-uuid">Root UUID</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chrooting">Chrooting</a><ul>
+<li><a class="reference internal" href="#configuring-the-boot-loader">Configuring the Boot Loader</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#making-it-bootable">Making It Bootable</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#grub">GRUB</a><ul>
+<li><a class="reference internal" href="#file-not-found">15 : File not found</a></li>
+<li><a class="reference internal" href="#cannot-mount-selected-partition">17 : Cannot mount selected partition</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ramdisk-image">Ramdisk Image</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="chroot.html"
+                        title="previous chapter">Debootstrapping and Chrooting</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="grub.html"
+                        title="next chapter">GRUB</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/admin/usb_ubuntu.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="grub.html" title="GRUB"
+             >next</a></li>
+        <li class="right" >
+          <a href="chroot.html" title="Debootstrapping and Chrooting"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Administration</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

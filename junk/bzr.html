@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bazaar VCS &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Junk" href="index.html" />
+    <link rel="next" title="Mounting CD Images" href="cd_images.html" />
+    <link rel="prev" title="Brain Dump" href="braindump.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="cd_images.html" title="Mounting CD Images"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="braindump.html" title="Brain Dump"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bazaar-vcs">
+<h1>Bazaar VCS<a class="headerlink" href="#bazaar-vcs" title="Permalink to this headline">¶</a></h1>
+<p>Effective Branching:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> /tmp
+mkdir bzr_experiments
+<span class="nb">cd </span>bzr_experiments/
+
+mkdir main
+<span class="nb">cd </span>main/
+bzr init .
+touch a
+bzr add
+bzr commit -m <span class="s2">&quot;added a&quot;</span>
+
+<span class="nb">cd</span> ..
+bzr branch main/ b1
+bzr branch main/ b2
+
+<span class="nb">cd </span>b1/
+touch b
+touch c
+bzr add
+bzr commit -m <span class="s2">&quot;added b and c&quot;</span>
+
+<span class="nb">cd</span> ../b2/
+touch d
+bzr add d
+bzr commit -m <span class="s2">&quot;added d&quot;</span>
+
+<span class="nb">cd</span> ../main/
+bzr merge ../b1/
+bzr commit -m <span class="s2">&quot;merged b1&quot;</span>
+bzr merge ../b2/
+bzr commit -m <span class="s2">&quot;merged b2&quot;</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="braindump.html"
+                        title="previous chapter">Brain Dump</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cd_images.html"
+                        title="next chapter">Mounting CD Images</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/junk/bzr.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="cd_images.html" title="Mounting CD Images"
+             >next</a></li>
+        <li class="right" >
+          <a href="braindump.html" title="Brain Dump"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Junk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

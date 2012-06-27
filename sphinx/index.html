@@ -1,0 +1,169 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sphinx &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="next" title="Sphinx Cheatsheet" href="cheatsheet.html" />
+    <link rel="prev" title="Python" href="../junk/python/index.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="cheatsheet.html" title="Sphinx Cheatsheet"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../junk/python/index.html" title="Python"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sphinx">
+<h1>Sphinx<a class="headerlink" href="#sphinx" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cheatsheet.html">Sphinx Cheatsheet</a></li>
+</ul>
+</div>
+<p>Built with <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a>, a small tutorial about <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a>.</p>
+<div class="section" id="what">
+<h2>What?<a class="headerlink" href="#what" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>+--------+
+|   rst  |+        +----------+
+|  Files ||  ===&gt;  |  Sphinx  |  ===&gt;  HTML/PDF
++--------+|        +----------+
+ +--------+</pre>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>sudo pip install sphinx</pre>
+</div>
+<p>Installing the development version of Sphinx is straight forward too.</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo easy-install jinja  <span class="c"># &lt;-- templating engine</span>
+wajig install mercurial  <span class="c"># &lt;-- the version control system, sphinx developers use</span>
+<span class="nv">checkouts</span><span class="o">=</span><span class="nv">$HOME</span>/checkouts  <span class="c"># &lt;-- where we&#39;ll keep the checkout</span>
+mkdir -p <span class="nv">$checkouts</span>
+<span class="nb">cd</span> <span class="nv">$checkouts</span>
+hg clone http://bitbucket.org/birkenfeld/sphinx/
+<span class="nb">cd </span>sphinx
+sudo python setup.py install
+</pre></div>
+</div>
+</div>
+<div class="section" id="some-resources">
+<h2>Some resources<a class="headerlink" href="#some-resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://sphinx.pocoo.org/contents.html">Sphinx documentation</a></li>
+<li><a class="reference external" href="http://scienceoss.com/use-sphinx-for-documentation/">here</a> I got started (actually it was <a class="reference external" href="http://docs.python.org/">here</a> at the bottom)</li>
+<li><a class="reference external" href="http://www.proven-corporation.com/2008/03/27/sphinx-templates/">Sphinx Templates</a></li>
+</ul>
+<p>See also:</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sphinx</a><ul>
+<li><a class="reference internal" href="#what">What?</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#some-resources">Some resources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../junk/python/index.html"
+                        title="previous chapter">Python</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cheatsheet.html"
+                        title="next chapter">Sphinx Cheatsheet</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/sphinx/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="cheatsheet.html" title="Sphinx Cheatsheet"
+             >next</a></li>
+        <li class="right" >
+          <a href="../junk/python/index.html" title="Python"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

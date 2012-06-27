@@ -1,0 +1,190 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to explore (and edit) a MySQL server’s content conveniently in Eclipse. &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Junk" href="index.html" />
+    <link rel="next" title="ExtJS" href="extjs.html" />
+    <link rel="prev" title="Conventions" href="conventions.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="extjs.html" title="ExtJS"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="conventions.html" title="Conventions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="how-to-explore-and-edit-a-mysql-server-s-content-conveniently-in-eclipse">
+<h1>How to explore (and edit) a MySQL server&#8217;s content conveniently in Eclipse.<a class="headerlink" href="#how-to-explore-and-edit-a-mysql-server-s-content-conveniently-in-eclipse" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>mysql is running</li>
+<li>mysql-server is localhost (if not, substitute <tt class="docutils literal"><span class="pre">localhost</span></tt> with <tt class="docutils literal"><span class="pre">&lt;your-server-name&gt;</span></tt>)</li>
+</ol>
+<p>Tested on Ubuntu 8.04, but should run everywhere with some modifications.</p>
+</div>
+<div class="section" id="mysql-jdbc-connector">
+<h2>MySQL JDBC Connector<a class="headerlink" href="#mysql-jdbc-connector" title="Permalink to this headline">¶</a></h2>
+<p>This library serves as driver for the SQL Explorer:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">libPath</span><span class="o">=</span><span class="nv">$HOME</span>/lib
+<span class="nb">cd</span> /tmp
+wget ftp://sunsite.informatik.rwth-aachen.de/pub/mirror/www.mysql.com/Downloads/Connector-J/mysql-connector-java-5.1.7.tar.gz
+tar zxvf mysql-connector-java-5.1.7.tar.gz
+cp mysql-connector-java-5.1.7/mysql-connector-java-5.1.7-bin.jar <span class="nv">$libPath</span>
+</pre></div>
+</div>
+<p>Homepage: <a class="reference external" href="http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.7.tar.gz/from/pick#mirrors">http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.7.tar.gz/from/pick#mirrors</a></p>
+<p>(There&#8217;s a <em>No thanks, just take me to the downloads!</em> link on the bottom.)</p>
+</div>
+<div class="section" id="sql-explorer">
+<h2>SQL Explorer<a class="headerlink" href="#sql-explorer" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Update-Site: <a class="reference external" href="http://eclipsesql.sourceforge.net/">http://eclipsesql.sourceforge.net/</a></li>
+<li>Homepage: <a class="reference external" href="http://eclipsesql.sourceforge.net/">http://eclipsesql.sourceforge.net/</a></li>
+</ul>
+<p><em class="menuselection">Window ‣ Open Perspective ‣ Other ‣ SQL Explorer</em></p>
+<p>Create new Connection:</p>
+<p><em class="menuselection">Connection ‣ Create New Connection Profile</em> (first button)</p>
+<ul>
+<li><p class="first">Name: give it a name (e.g. <tt class="docutils literal"><span class="pre">root&#64;localhost</span></tt>)</p>
+</li>
+<li><dl class="first docutils">
+<dt>Driver: Add/Edit Drivers</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>select MySQL &gt; Edit</dt>
+<dd><ul class="first last simple">
+<li>Extra Class Path &gt; Add &gt; $libPath/mysql-connector-java-5.1.7-bin.jar</li>
+<li>List Drivers (<tt class="docutils literal"><span class="pre">com.mysql.jdbc.Driver</span></tt> is fine)</li>
+<li>OK</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">OK</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">URL: <tt class="docutils literal"><span class="pre">jdbc:mysql://localhost/</span></tt></p>
+</li>
+<li><p class="first">everything else is self-explanatory</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to explore (and edit) a MySQL server&#8217;s content conveniently in Eclipse.</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#mysql-jdbc-connector">MySQL JDBC Connector</a></li>
+<li><a class="reference internal" href="#sql-explorer">SQL Explorer</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="conventions.html"
+                        title="previous chapter">Conventions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="extjs.html"
+                        title="next chapter">ExtJS</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/junk/eclipse_sql_exploring.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="extjs.html" title="ExtJS"
+             >next</a></li>
+        <li class="right" >
+          <a href="conventions.html" title="Conventions"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Junk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

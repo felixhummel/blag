@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MySQL on Ramdisk &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Junk" href="index.html" />
+    <link rel="next" title="neatx" href="neatx.html" />
+    <link rel="prev" title="Making Gifs" href="making_gifs.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="neatx.html" title="neatx"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="making_gifs.html" title="Making Gifs"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="mysql-on-ramdisk">
+<h1>MySQL on Ramdisk<a class="headerlink" href="#mysql-on-ramdisk" title="Permalink to this headline">¶</a></h1>
+<p>Install:</p>
+<div class="highlight-python"><pre>mkdir -p /dev/shm/mysql/data
+cd /dev/shm/mysql
+
+mysql_install_db --datadir=/dev/shm/mysql/data
+
+mysqladmin -S /dev/shm/mysql/socket --port=9002 -u root password toor</pre>
+</div>
+<p>defaults.conf:</p>
+<div class="highlight-python"><pre>[mysqld]
+user      = felix
+socket    = /dev/shm/mysql/socket
+port      = 9002
+basedir   = /usr
+datadir   = /dev/shm/mysql/data
+tmpdir    = /dev/shm/mysql/tmp
+skip-external-locking
+
+bind-address    = 0.0.0.0
+
+key_buffer    = 16M
+max_allowed_packet  = 16M
+thread_stack    = 192K
+thread_cache_size       = 8
+
+myisam-recover         = BACKUP
+
+thread_concurrency     = 6
+
+query_cache_limit = 1M
+query_cache_size = 16M
+
+#general_log_file        = /var/log/mysql/mysql.log
+#general_log             = 1
+log_error                = /dev/shm/mysql/error.log
+
+log_slow_queries  = /dev/shm/mysql/mysql-slow.log
+long_query_time = 1
+#log-queries-not-using-indexes
+
+[isamchk]
+key_buffer    = 16M</pre>
+</div>
+<p>start server:</p>
+<div class="highlight-python"><pre>mysqld --defaults-file=/dev/shm/mysql/defaults.conf</pre>
+</div>
+<p>client:</p>
+<div class="highlight-python"><pre>mysql --socket=/dev/shm/mysql/socket --port=9002 -u root -p</pre>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="making_gifs.html"
+                        title="previous chapter">Making Gifs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="neatx.html"
+                        title="next chapter">neatx</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/junk/mysql_on_ramdisk.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="neatx.html" title="neatx"
+             >next</a></li>
+        <li class="right" >
+          <a href="making_gifs.html" title="Making Gifs"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Junk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

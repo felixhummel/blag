@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>VMWare and VirtualBox &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Basics" href="index.html" />
+    <link rel="next" title="CouchDB" href="../couchdb/index.html" />
+    <link rel="prev" title="Processes" href="python/processes.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../couchdb/index.html" title="CouchDB"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="python/processes.html" title="Processes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Basics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="vmware-and-virtualbox">
+<h1>VMWare and VirtualBox<a class="headerlink" href="#vmware-and-virtualbox" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="static-ip-on-linux-host-virtualbox-bridged">
+<h2>Static IP on Linux Host (Virtualbox, Bridged)<a class="headerlink" href="#static-ip-on-linux-host-virtualbox-bridged" title="Permalink to this headline">¶</a></h2>
+<p>Goal: make virtual machine (guest) available to on your LAN</p>
+<p><a class="reference internal" href="#way-1">Way 1</a>: change VM and router (dhcp server, dns server) settings, aka. &#8220;I own this place&#8221;</p>
+<blockquote>
+<div><ul class="simple">
+<li>the good: any PC on your LAN can access the VM under its name</li>
+<li>the bad: you need full control over dhcp and dns in your network</li>
+</ul>
+</div></blockquote>
+<p><a class="reference internal" href="#way-2">Way 2</a>: change VM only</p>
+<blockquote>
+<div><ul class="simple">
+<li>the good: easy setup</li>
+<li>the bad: machines other that the host can access the guest only via its IP address</li>
+</ul>
+</div></blockquote>
+<div class="section" id="way-1">
+<h3>Way 1<a class="headerlink" href="#way-1" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>change network settings of VM<ul>
+<li>Bridged</li>
+<li>choose host interface that&#8217;s connected to the LAN</li>
+<li>(if you did this before, click &#8220;settings symbol&#8221; and set old MAC address (see ifconfig of guest))</li>
+</ul>
+</li>
+<li>set &#8220;static&#8221; IP address<ul>
+<li>go to your DHCP server</li>
+<li>set reserved IP for guest&#8217;s MAC address</li>
+<li>(set name for guest&#8217;s &#8220;static&#8221; IP address)</li>
+</ul>
+</li>
+<li>boot VM, start ethernet with dhcp<ul>
+<li>e.g. via <tt class="docutils literal"><span class="pre">/etc/network/interfaces</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">ifdown</span> <span class="pre">eth0</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">ifup</span> <span class="pre">eth0</span></tt></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="way-2">
+<h3>Way 2<a class="headerlink" href="#way-2" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>do <a class="reference internal" href="#way-1">Way 1</a>, step 1</li>
+<li>set static IP-address on guest <strong>in same subnet as host</strong></li>
+<li>adapt <tt class="docutils literal"><span class="pre">/etc/hosts</span></tt> on host</li>
+</ol>
+</div>
+</div>
+<div class="section" id="static-ip-on-linux-host-vmware-nat">
+<h2>Static IP on Linux Host (VMWare, NAT)<a class="headerlink" href="#static-ip-on-linux-host-vmware-nat" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Linux host running Ubuntu 9.10</li>
+<li>Linux guest <em>tsvm</em> running Ubuntu 8.04 server</li>
+</ul>
+<p>Mission:</p>
+<ol class="arabic simple">
+<li>make tsvm (guest) accessible <strong>to host only</strong> via a static IP</li>
+<li>be able to copy tsvm to another host and repeat 1)</li>
+</ol>
+<div class="section" id="set-static-mac-address">
+<h3>Set Static MAC Address<a class="headerlink" href="#set-static-mac-address" title="Permalink to this headline">¶</a></h3>
+<p>Edit <tt class="docutils literal"><span class="pre">tsvm.vmx</span></tt>, delete those lines:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ethernet</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">generatedAddress</span>
+<span class="n">ethernet</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">addressType</span>
+<span class="n">ethernet</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">generatedAddressOffset</span>
+</pre></div>
+</div>
+<p>Add this line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ethernet0</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="s">&quot;00:50:56:00:13:37&quot;</span>
+</pre></div>
+</div>
+<p>You can set another MAC address. It must have the form &#8220;00:50:56:XX:YY:ZZ&#8221; with XX between 00 and 3F and YY and ZZ between 00 and FF. (hex of course)</p>
+<p>From <a class="reference external" href="http://www.vmware.com/support/gsx3/doc/network_macaddr_gsx.html">http://www.vmware.com/support/gsx3/doc/network_macaddr_gsx.html</a></p>
+</div>
+<div class="section" id="set-static-device-name">
+<h3>Set Static Device Name<a class="headerlink" href="#set-static-device-name" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><pre>find /etc/udev/rules.d/ -name "*-net.rules" -exec rm {} \;
+echo 'KERNEL=="eth*", SYSFS{address}=="00:50:56:00:13:37", NAME="eth"' &gt;        /etc/udev/rules.d/10-net.rules</pre>
+</div>
+<p>vim /etc/network/interfaces:</p>
+<div class="highlight-python"><pre>auto lo
+iface lo inet loopback
+auto eth
+iface eth inet dhcp</pre>
+</div>
+</div>
+<div class="section" id="set-static-ip-address">
+<h3>Set Static IP Address<a class="headerlink" href="#set-static-ip-address" title="Permalink to this headline">¶</a></h3>
+<p>In vmware go to <em class="menuselection">Edit ‣ Virtual Network Editor</em>. Set vmnet8 to NAT, tick both <em class="guilabel">Use local DHCP service to distribute IP addresses to VMs</em> and <em class="guilabel">Connect a host virtual adapter (vmnet8) to this network</em>. Set subnet IP to <tt class="docutils literal"><span class="pre">10.0.0.0</span></tt>. The changes you made are saved to <tt class="docutils literal"><span class="pre">/etc/vmware/vmnet8/dhcpd/dhcpd.conf</span></tt>. Edit this file and append:</p>
+<div class="highlight-python"><pre>host tsvm {
+    hardware ethernet 00:50:56:00:13:37;
+    fixed-address 10.0.0.23;
+}</pre>
+</div>
+<p>Now restart vmware networking services:</p>
+<div class="highlight-python"><pre>/etc/init.d/vmware restart</pre>
+</div>
+<p>From <a class="reference external" href="http://www.vmware.com/support/ws55/doc/ws_net_advanced_ipaddress.html">http://www.vmware.com/support/ws55/doc/ws_net_advanced_ipaddress.html</a> and <a class="reference external" href="http://www.stereoplex.com/two-voices/vmware-fusion-guests-with-a-static-ip">http://www.stereoplex.com/two-voices/vmware-fusion-guests-with-a-static-ip</a></p>
+</div>
+<div class="section" id="set-hostname-on-host">
+<h3>Set Hostname on Host<a class="headerlink" href="#set-hostname-on-host" title="Permalink to this headline">¶</a></h3>
+<p>On host, edit:</p>
+<div class="highlight-python"><pre>sudo vim /etc/hosts</pre>
+</div>
+<p>and add:</p>
+<div class="highlight-python"><pre>10.0.0.23 tsvm</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">VMWare and VirtualBox</a><ul>
+<li><a class="reference internal" href="#static-ip-on-linux-host-virtualbox-bridged">Static IP on Linux Host (Virtualbox, Bridged)</a><ul>
+<li><a class="reference internal" href="#way-1">Way 1</a></li>
+<li><a class="reference internal" href="#way-2">Way 2</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#static-ip-on-linux-host-vmware-nat">Static IP on Linux Host (VMWare, NAT)</a><ul>
+<li><a class="reference internal" href="#set-static-mac-address">Set Static MAC Address</a></li>
+<li><a class="reference internal" href="#set-static-device-name">Set Static Device Name</a></li>
+<li><a class="reference internal" href="#set-static-ip-address">Set Static IP Address</a></li>
+<li><a class="reference internal" href="#set-hostname-on-host">Set Hostname on Host</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="python/processes.html"
+                        title="previous chapter">Processes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../couchdb/index.html"
+                        title="next chapter">CouchDB</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/basics/vmware.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../couchdb/index.html" title="CouchDB"
+             >next</a></li>
+        <li class="right" >
+          <a href="python/processes.html" title="Processes"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Basics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

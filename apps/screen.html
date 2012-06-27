@@ -1,0 +1,154 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GNU Screen &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Apps" href="index.html" />
+    <link rel="next" title="Basics" href="../basics/index.html" />
+    <link rel="prev" title="Open Office Calc" href="oocalc.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../basics/index.html" title="Basics"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="oocalc.html" title="Open Office Calc"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="gnu-screen">
+<h1>GNU Screen<a class="headerlink" href="#gnu-screen" title="Permalink to this headline">¶</a></h1>
+<p>Basically a window manager for the console. See <a class="reference external" href="http://www.gnu.org/software/screen/">http://www.gnu.org/software/screen/</a>.</p>
+<div class="section" id="my-favorite-commands">
+<h2>My Favorite Commands<a class="headerlink" href="#my-favorite-commands" title="Permalink to this headline">¶</a></h2>
+<p>List existing sessions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">screen</span> <span class="o">-</span><span class="n">ls</span>
+</pre></div>
+</div>
+<p>Create session named MYSESSION:</p>
+<div class="highlight-python"><pre>screen -S MYSESSION</pre>
+</div>
+<p>Reattach to session MYSESSION:</p>
+<div class="highlight-python"><pre>screen -r MYSESSION</pre>
+</div>
+<p>If you got disconnected, detach and reattach to session MYSESSION:</p>
+<div class="highlight-python"><pre>screen -dr MYSESSION</pre>
+</div>
+</div>
+<div class="section" id="shortcuts-in-a-screen-session">
+<h2>Shortcuts in a screen session<a class="headerlink" href="#shortcuts-in-a-screen-session" title="Permalink to this headline">¶</a></h2>
+<p>detach:</p>
+<blockquote>
+<div><em>C-a, d</em> (read <em>Ctrl</em> and <em>a</em> together, then <em>d</em>)</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">GNU Screen</a><ul>
+<li><a class="reference internal" href="#my-favorite-commands">My Favorite Commands</a></li>
+<li><a class="reference internal" href="#shortcuts-in-a-screen-session">Shortcuts in a screen session</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="oocalc.html"
+                        title="previous chapter">Open Office Calc</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../basics/index.html"
+                        title="next chapter">Basics</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/apps/screen.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../basics/index.html" title="Basics"
+             >next</a></li>
+        <li class="right" >
+          <a href="oocalc.html" title="Open Office Calc"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Connecting to WPA2-Encrypted Networks &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Administration" href="index.html" />
+    <link rel="next" title="WPA2 Without Network Manager" href="wpa_roam.html" />
+    <link rel="prev" title="GRUB" href="grub.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="wpa_roam.html" title="WPA2 Without Network Manager"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="grub.html" title="GRUB"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="connecting-to-wpa2-encrypted-networks">
+<h1><a class="toc-backref" href="#id1">Connecting to WPA2-Encrypted Networks</a><a class="headerlink" href="#connecting-to-wpa2-encrypted-networks" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial is for those, who like to know exactly what&#8217;s going on. It shows how to connect to a WPA2-encrpted network manually and how to automate just enough of it to make it suitable for daily use while remaining geeky. Enjoy!</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#connecting-to-wpa2-encrypted-networks" id="id1">Connecting to WPA2-Encrypted Networks</a><ul>
+<li><a class="reference internal" href="#hardcore-manual-way" id="id2">Hardcore Manual Way</a><ul>
+<li><a class="reference internal" href="#listing-available-wlans" id="id3">Listing Available WLANs</a></li>
+<li><a class="reference internal" href="#connecting-with-wpa-supplicant" id="id4">Connecting with wpa_supplicant</a></li>
+<li><a class="reference internal" href="#getting-ip-address-gateway-and-nameserver" id="id5">Getting IP Address, Gateway and Nameserver</a></li>
+<li><a class="reference internal" href="#disconnecting" id="id6">Disconnecting</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-debian-s-ifup-down" id="id7">Using Debian&#8217;s ifup/down</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="hardcore-manual-way">
+<h2><a class="toc-backref" href="#id2">Hardcore Manual Way</a><a class="headerlink" href="#hardcore-manual-way" title="Permalink to this headline">¶</a></h2>
+<p>First, some assumptions:</p>
+<ol class="arabic simple">
+<li>Your network interface is called <tt class="docutils literal"><span class="pre">wlan0</span></tt>.</li>
+<li>You have wpa_supplicant installed.</li>
+<li>You have a WPA2-protected WLAN at your disposal</li>
+</ol>
+<p>There are three steps to get connected to your WLAN:</p>
+<ol class="arabic simple">
+<li>Get some data about your WLAN</li>
+<li>Connect with wpa_supplicant</li>
+<li>Get an IP-address and set your nameserver and default gateway</li>
+</ol>
+<div class="section" id="listing-available-wlans">
+<h3><a class="toc-backref" href="#id3">Listing Available WLANs</a><a class="headerlink" href="#listing-available-wlans" title="Permalink to this headline">¶</a></h3>
+<p>Simply type:</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo iwlist wlan0 scan
+</pre></div>
+</div>
+<p>You&#8217;ll see something like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre>wlan0     Scan completed :
+          Cell 01 - Address: 00:AB:CD:EF:01:23
+                    Channel:7
+                    Frequency:2.442 GHz <span class="o">(</span>Channel 7<span class="o">)</span>
+                    <span class="nv">Quality</span><span class="o">=</span>52/70  Signal <span class="nv">level</span><span class="o">=</span>-58 dBm
+                    Encryption key:on
+                    ESSID:<span class="s2">&quot;my_wlan&quot;</span>
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 11 Mb/s; 18 Mb/s
+                              24 Mb/s; 36 Mb/s; 54 Mb/s
+                    Bit Rates:6 Mb/s; 9 Mb/s; 12 Mb/s; 48 Mb/s
+                    Mode:Master
+                    Extra:tsf<span class="o">=</span>000003c295135189
+                    Extra: Last beacon: 56ms ago
+                    IE: IEEE 802.11i/WPA2 Version 1
+                        Group Cipher : TKIP
+                        Pairwise Ciphers <span class="o">(</span>1<span class="o">)</span> : TKIP
+                        Authentication Suites <span class="o">(</span>1<span class="o">)</span> : PSK
+                    IE: Unknown: 32040C121860
+                    IE: Unknown: DD06001018020004
+          Cell 02 - Address: 00:01:23:45:67:89
+                    Channel:6
+                    Frequency:2.437 GHz <span class="o">(</span>Channel 6<span class="o">)</span>
+                    <span class="nv">Quality</span><span class="o">=</span>56/70  Signal <span class="nv">level</span><span class="o">=</span>-54 dBm
+                    Encryption key:on
+                    ESSID:<span class="s2">&quot;another_wlan&quot;</span>
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 11 Mb/s; 6 Mb/s
+                              12 Mb/s; 24 Mb/s; 36 Mb/s
+                    Bit Rates:9 Mb/s; 18 Mb/s; 48 Mb/s; 54 Mb/s
+                    Mode:Master
+                    Extra:tsf<span class="o">=</span>000000c0d6bbe45e
+                    Extra: Last beacon: 4100ms ago
+                    IE: Unknown: DD0900037F0101001FFF7F
+                    IE: WPA Version 1
+                        Group Cipher : TKIP
+                        Pairwise Ciphers <span class="o">(</span>1<span class="o">)</span> : TKIP
+                        Authentication Suites <span class="o">(</span>1<span class="o">)</span> : PSK
+                    IE: Unknown: DD1A00037F030100000000095BE87A1802095BE87A1864002C011F08
+</pre></div>
+</div>
+<p>We&#8217;re interested in <tt class="docutils literal"><span class="pre">cell0</span></tt> here. The following fields are noteworthy:</p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">Address:</span> <span class="pre">00:AB:CD:EF:01:23</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">ESSID:&quot;my_wlan&quot;</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">IE:</span> <span class="pre">IEEE</span> <span class="pre">802.11i/WPA2</span> <span class="pre">Version</span> <span class="pre">1</span></tt></li>
+</ol>
+<p>The address is the hardware address of your router, the essid is the name you gave your WLAN and the third field shows you that my_wlan is indeed encrypted with WPA2.</p>
+</div>
+<div class="section" id="connecting-with-wpa-supplicant">
+<h3><a class="toc-backref" href="#id4">Connecting with wpa_supplicant</a><a class="headerlink" href="#connecting-with-wpa-supplicant" title="Permalink to this headline">¶</a></h3>
+<p>I prefer to write a config file to hold my networks, but it&#8217;s also possible to provide options to wpa_supplicant - see <tt class="docutils literal"><span class="pre">man</span> <span class="pre">wpa_supplicant</span></tt>. Here&#8217;s a simple config file (<tt class="docutils literal"><span class="pre">~/my_wlan.conf</span></tt>):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">ctrl_interface</span><span class="o">=</span>/var/run/wpa_supplicant
+<span class="c"># my network (this is a comment)</span>
+<span class="nv">network</span><span class="o">={</span>
+    <span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;my_wlan&quot;</span>
+    <span class="nv">priority</span><span class="o">=</span>5
+    <span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
+    <span class="nv">group</span><span class="o">=</span>CCMP TKIP
+    <span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;secret&quot;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Connecting is easy now:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">iface</span><span class="o">=</span>wlan0
+<span class="nv">driver</span><span class="o">=</span>wext  <span class="c"># works for most chipsets</span>
+<span class="nv">config</span><span class="o">=</span>~/my_wlan.conf
+
+wpa_supplicant -i<span class="nv">$iface</span> -D<span class="nv">$driver</span> -c<span class="nv">$config</span>
+</pre></div>
+</div>
+<p>You are now connected to your WLAN. Note that wpa_supplicant remains in the forground - don&#8217;t close your terminal.</p>
+</div>
+<div class="section" id="getting-ip-address-gateway-and-nameserver">
+<h3><a class="toc-backref" href="#id5">Getting IP Address, Gateway and Nameserver</a><a class="headerlink" href="#getting-ip-address-gateway-and-nameserver" title="Permalink to this headline">¶</a></h3>
+<p>If you have DHCP activated on your router, simply run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">iface</span><span class="o">=</span>wlan0
+
+sudo dhclient <span class="nv">$iface</span>
+</pre></div>
+</div>
+<p>If not, then run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">iface</span><span class="o">=</span>wlan0
+<span class="nv">my_ip</span><span class="o">=</span>192.168.0.123
+<span class="nv">netmask</span><span class="o">=</span>255.255.255.0
+<span class="nv">gateway</span><span class="o">=</span>192.168.0.254
+
+sudo ifconfig <span class="nv">$iface</span> <span class="nv">$my_ip</span> netmask <span class="nv">$netmask</span> up
+sudo route add default gw <span class="nv">$gateway</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="disconnecting">
+<h3><a class="toc-backref" href="#id6">Disconnecting</a><a class="headerlink" href="#disconnecting" title="Permalink to this headline">¶</a></h3>
+<p>Assuming you used DHCP:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">iface</span><span class="o">=</span>wlan0
+sudo dhclient -r <span class="nv">$iface</span>
+sudo killall wpa_supplicant  <span class="c"># or simply close the running instance</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="using-debian-s-ifup-down">
+<h2><a class="toc-backref" href="#id7">Using Debian&#8217;s ifup/down</a><a class="headerlink" href="#using-debian-s-ifup-down" title="Permalink to this headline">¶</a></h2>
+<p>This is the way I do it. In the end, my wlan starts automatically and I can control it with <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">ifup</span> <span class="pre">wlan0</span></tt> and <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">ifdown</span> <span class="pre">wlan0</span></tt>. To do this, We will</p>
+<ol class="arabic simple">
+<li>create a config file for wpa_supplicant,</li>
+<li>edit <tt class="docutils literal"><span class="pre">/etc/network/interfaces</span></tt> and</li>
+<li>try it out.</li>
+</ol>
+<p>First, see my config above or read <tt class="docutils literal"><span class="pre">man</span> <span class="pre">wpa_supplicant.conf</span></tt>.</p>
+<p>/etc/network/interfaces:</p>
+<div class="highlight-bash"><div class="highlight"><pre>auto lo
+iface lo inet loopback
+
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up wpa_supplicant -B -Dwext -iwlan0 -c/home/me/my_wlans.conf
+    post-down killall -q wpa_supplicant
+</pre></div>
+</div>
+<p>Try it:</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo ifup wlan0
+sudo ifdown wlan0
+</pre></div>
+</div>
+<p>You should see the output from <tt class="docutils literal"><span class="pre">dhclient</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Connecting to WPA2-Encrypted Networks</a><ul>
+<li><a class="reference internal" href="#hardcore-manual-way">Hardcore Manual Way</a><ul>
+<li><a class="reference internal" href="#listing-available-wlans">Listing Available WLANs</a></li>
+<li><a class="reference internal" href="#connecting-with-wpa-supplicant">Connecting with wpa_supplicant</a></li>
+<li><a class="reference internal" href="#getting-ip-address-gateway-and-nameserver">Getting IP Address, Gateway and Nameserver</a></li>
+<li><a class="reference internal" href="#disconnecting">Disconnecting</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-debian-s-ifup-down">Using Debian&#8217;s ifup/down</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="grub.html"
+                        title="previous chapter">GRUB</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wpa_roam.html"
+                        title="next chapter">WPA2 Without Network Manager</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/admin/wpa_manual.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="wpa_roam.html" title="WPA2 Without Network Manager"
+             >next</a></li>
+        <li class="right" >
+          <a href="grub.html" title="GRUB"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Administration</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,174 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Multi Boot With Grub 2 &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Administration" href="index.html" />
+    <link rel="next" title="Apps" href="../apps/index.html" />
+    <link rel="prev" title="VirtualEnv Init.d Scripts the Easy Way" href="venv_initd.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../apps/index.html" title="Apps"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="venv_initd.html" title="VirtualEnv Init.d Scripts the Easy Way"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="multi-boot-with-grub-2">
+<h1>Multi Boot With Grub 2<a class="headerlink" href="#multi-boot-with-grub-2" title="Permalink to this headline">¶</a></h1>
+<p>Just some notes. You will get this, if this is for you:</p>
+<div class="highlight-python"><pre>fdisk /dev/sdb
+# WARNING pull stick, reattach (else grub-install could have problems probing the device)
+mount /dev/sdb /mnt
+grub-install --no-floppy --recheck --root-directory=/mnt /dev/sdb
+mkdir /mnt/iso
+
+# tmpdir to mount images
+mkdir -p /tmp/img</pre>
+</div>
+<p>For each iso:</p>
+<div class="highlight-python"><pre># copy image to /mnt/iso
+mount -o loop /mnt/iso/IMAGE_NAME /tmp/img
+# inspect syslinux loader for kernel args
+umount /tmp/img</pre>
+</div>
+<p>Ubuntu server 12.04 x64:</p>
+<div class="highlight-python"><pre>cat &lt;&lt;'EOF' &gt;&gt; /mnt/boot/grub/grub.cfg
+menuentry "ubuntu-12.04-server-amd64" {
+  set isofile="/iso/ubuntu-12.04-server-amd64.iso"
+  set kernel=/install/vmlinuz
+  set ramdisk=/install/initrd.gz
+  loopback iso (hd0,1)${isofile}
+  linux (iso)${kernel} boot=install iso-scan/filename=${isofile}
+  initrd (iso)${ramdisk}
+}
+
+EOF</pre>
+</div>
+<p>Postprocessing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sync</span>
+<span class="n">umount</span> <span class="o">/</span><span class="n">mnt</span>
+<span class="c"># pull stick, attach to target, enjoy</span>
+</pre></div>
+</div>
+<div class="section" id="sources">
+<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://www.gnu.org/software/grub/manual/grub.html">GRUB 2 manual</a></li>
+<li><a class="reference external" href="http://members.iinet.net/~herman546/p20/GRUB2%20CLI%20Mode%20Commands.html">GRUB 2 Cli mode commands</a></li>
+<li><a class="reference external" href="http://www.panticz.de/MultiBootUSB">http://www.panticz.de/MultiBootUSB</a></li>
+<li><a class="reference external" href="http://ubuntuforums.org/showthread.php?t=1549847">http://ubuntuforums.org/showthread.php?t=1549847</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Multi Boot With Grub 2</a><ul>
+<li><a class="reference internal" href="#sources">Sources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="venv_initd.html"
+                        title="previous chapter">VirtualEnv Init.d Scripts the Easy Way</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../apps/index.html"
+                        title="next chapter">Apps</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/admin/grub_2_multi_boot.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../apps/index.html" title="Apps"
+             >next</a></li>
+        <li class="right" >
+          <a href="venv_initd.html" title="VirtualEnv Init.d Scripts the Easy Way"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Administration</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

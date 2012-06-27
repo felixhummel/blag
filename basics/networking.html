@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Networking &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Basics" href="index.html" />
+    <link rel="next" title="Python" href="python/index.html" />
+    <link rel="prev" title="Firefox" href="firefox.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="python/index.html" title="Python"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="firefox.html" title="Firefox"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Basics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="networking">
+<h1><a class="toc-backref" href="#id2">Networking</a><a class="headerlink" href="#networking" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#networking" id="id2">Networking</a><ul>
+<li><a class="reference internal" href="#ssh" id="id3">SSH</a><ul>
+<li><a class="reference internal" href="#installation" id="id4">Installation</a></li>
+<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
+<li><a class="reference internal" href="#file-transfer" id="id6">File Transfer</a></li>
+<li><a class="reference internal" href="#authentication" id="id7">Authentication</a></li>
+<li><a class="reference internal" href="#mounting-ssh" id="id8">Mounting SSH</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#list-open-ports" id="id9">List Open Ports</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="ssh">
+<h2><a class="toc-backref" href="#id3">SSH</a><a class="headerlink" href="#ssh" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>simple <a class="reference internal" href="#installation"><em>Installation</em></a></li>
+<li>remote shell</li>
+<li>file transfer</li>
+<li>secure</li>
+<li><a class="reference external" href="http://tools.ietf.org/html/rfc4252">standard</a></li>
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Secure_Shell">http://en.wikipedia.org/wiki/Secure_Shell</a></li>
+</ul>
+<div class="section" id="installation">
+<span id="id1"></span><h3><a class="toc-backref" href="#id4">Installation</a><a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>The client is already installed. To install the server:</p>
+<div class="highlight-python"><pre>wajig install openssh-server</pre>
+</div>
+</div>
+<div class="section" id="usage">
+<h3><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p>Connect to host <tt class="docutils literal"><span class="pre">notebook</span></tt>:</p>
+<div class="highlight-python"><pre>ssh notebook</pre>
+</div>
+</div>
+<div class="section" id="file-transfer">
+<h3><a class="toc-backref" href="#id6">File Transfer</a><a class="headerlink" href="#file-transfer" title="Permalink to this headline">¶</a></h3>
+<p>In <a class="reference internal" href="../junk/apps.html#krusader"><em>Krusader (File Manager)</em></a>&#8216;s/Dolphin&#8217;s/&lt;your-graphical-filemanager-name-here&gt; address bar, type:</p>
+<div class="highlight-python"><pre>sftp://notebook</pre>
+</div>
+<p>To merely copy a file:</p>
+<div class="highlight-python"><pre>scp notebook:myfile .  # copies /home/me/myfile on notebook to current working directory
+scp notebook:/etc/passwd .  # copies /etc/passwd on notebook to current working directory</pre>
+</div>
+</div>
+<div class="section" id="authentication">
+<h3><a class="toc-backref" href="#id7">Authentication</a><a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h3>
+<p>Either with username/password or through public key encryption. The latter is very easy to setup and even lets you skip the password prompt (if you choose an empty password).</p>
+<p>Assumption: working on <em>desktop</em>, connecting to <em>notebook</em>:</p>
+<div class="highlight-python"><pre>ssh-keygen  # only if you haven't done it already
+            # leave default
+ssh-copy-id notebook
+ssh notebook</pre>
+</div>
+<p>If you chose an empty password and <em>desktop</em> gets compromised, then <em>notebook</em> will be too.</p>
+</div>
+<div class="section" id="mounting-ssh">
+<h3><a class="toc-backref" href="#id8">Mounting SSH</a><a class="headerlink" href="#mounting-ssh" title="Permalink to this headline">¶</a></h3>
+<p>Prerequisites:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sshfs</span>
+</pre></div>
+</div>
+<p>Mounting:</p>
+<div class="highlight-python"><pre>sshfs remotehost: /local/dir/</pre>
+</div>
+<p>Unmounting:</p>
+<div class="highlight-python"><pre>fusermount -u /local/dir/</pre>
+</div>
+<p>See <a class="reference external" href="https://help.ubuntu.com/community/SSHFS">this Ubuntu wiki page</a> for more details.</p>
+</div>
+</div>
+<div class="section" id="list-open-ports">
+<h2><a class="toc-backref" href="#id9">List Open Ports</a><a class="headerlink" href="#list-open-ports" title="Permalink to this headline">¶</a></h2>
+<p>... excluding sockets:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">netstat</span> <span class="o">--</span><span class="n">numeric</span><span class="o">-</span><span class="n">hosts</span> <span class="o">--</span><span class="n">protocol</span><span class="o">=</span><span class="n">inet</span>
+</pre></div>
+</div>
+<p>We use <em class="xref std std-option">--numeric-hosts</em> because dns lookups can be quite slow.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Networking</a><ul>
+<li><a class="reference internal" href="#ssh">SSH</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#file-transfer">File Transfer</a></li>
+<li><a class="reference internal" href="#authentication">Authentication</a></li>
+<li><a class="reference internal" href="#mounting-ssh">Mounting SSH</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#list-open-ports">List Open Ports</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="firefox.html"
+                        title="previous chapter">Firefox</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="python/index.html"
+                        title="next chapter">Python</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/basics/networking.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="python/index.html" title="Python"
+             >next</a></li>
+        <li class="right" >
+          <a href="firefox.html" title="Firefox"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Basics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

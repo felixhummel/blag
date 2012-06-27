@@ -1,0 +1,242 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Vim &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="next" title="Vim auto completion for Django in a virtualenv" href="django_completion.html" />
+    <link rel="prev" title="Sphinx Cheatsheet" href="../sphinx/cheatsheet.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="django_completion.html" title="Vim auto completion for Django in a virtualenv"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../sphinx/cheatsheet.html" title="Sphinx Cheatsheet"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="vim">
+<h1>Vim<a class="headerlink" href="#vim" title="Permalink to this headline">¶</a></h1>
+<p>Notes about my editor of choice.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="django_completion.html">Vim auto completion for Django in a virtualenv</a></li>
+</ul>
+</div>
+<div class="section" id="sphinx-ftplugin">
+<h2>Sphinx ftplugin<a class="headerlink" href="#sphinx-ftplugin" title="Permalink to this headline">¶</a></h2>
+<p>I am very proud of my first vim plugin: <a class="reference download internal" href="../_downloads/sphinx.vim"><tt class="xref download docutils literal"><span class="pre">sphinx.vim</span></tt></a></p>
+<p>For now, only creating and changing headings is mapped on the F1-F6 keys. More will follow.</p>
+</div>
+<div class="section" id="wrapping-a-python-function-in-a-vim-function">
+<h2>Wrapping a Python Function in a Vim function<a class="headerlink" href="#wrapping-a-python-function-in-a-vim-function" title="Permalink to this headline">¶</a></h2>
+<p>Normally the following snippet would suffice:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">fun</span><span class="p">!</span> Vimfun<span class="p">()</span>
+    python pyfun<span class="p">()</span>
+endfun
+</pre></div>
+</div>
+<p>But if you want to pass parameters, you&#8217;ll need something like this (please correct me if I&#8217;m wrong).</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">fun</span><span class="p">!</span> Vimfun<span class="p">(</span><span class="k">x</span><span class="p">)</span>
+	python import <span class="k">vim</span>
+	python <span class="k">f</span><span class="p">(</span><span class="k">vim</span>.eval<span class="p">(</span>str<span class="p">(</span><span class="s1">&#39;a:x&#39;</span><span class="p">)))</span>
+endfun
+
+python <span class="p">&lt;&lt;</span> EOF
+<span class="nb">def</span> <span class="k">f</span><span class="p">(</span><span class="k">x</span><span class="p">)</span>:
+	print <span class="k">x</span>
+EOF
+
+<span class="c">&quot; run it</span>
+<span class="k">call</span> Vimfun<span class="p">(</span><span class="s1">&#39;Hello!&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ugly-whitespace">
+<h2>Ugly Whitespace<a class="headerlink" href="#ugly-whitespace" title="Permalink to this headline">¶</a></h2>
+<p>To show all whitespace at line end:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">match</span> Error <span class="sr">/\s\+$/</span>
+</pre></div>
+</div>
+<p>To remove it:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>%s<span class="sr">/\s\+$/</span>/
+</pre></div>
+</div>
+</div>
+<div class="section" id="folding">
+<h2>Folding<a class="headerlink" href="#folding" title="Permalink to this headline">¶</a></h2>
+<p>See also: <tt class="docutils literal"><span class="pre">:help</span> <span class="pre">usr_28</span></tt>. Set folding for XML (in <tt class="docutils literal"><span class="pre">.vimrc</span></tt>):</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="c">&quot; XML syntax folding</span>
+<span class="k">let</span> g:xml_syntax_folding<span class="p">=</span><span class="m">1</span>
+au <span class="nb">FileType</span> xml <span class="k">setlocal</span> <span class="nb">foldmethod</span><span class="p">=</span><span class="nb">syntax</span>
+</pre></div>
+</div>
+<p>Shortcuts (from <a class="reference external" href="http://nion.modprobe.de/blog/archives/448-Folding-in-VIM.html">nion&#8217;s blog</a> on 2009-03-23):</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="4%" />
+<col width="96%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>zf</td>
+<td>create folder</td>
+</tr>
+<tr class="row-even"><td>zd</td>
+<td>delete folder under cursor</td>
+</tr>
+<tr class="row-odd"><td>zD</td>
+<td>delete folder recursive</td>
+</tr>
+<tr class="row-even"><td>zE</td>
+<td>delete all folders in file</td>
+</tr>
+<tr class="row-odd"><td>zo</td>
+<td>open folder under curso</td>
+</tr>
+<tr class="row-even"><td>zO</td>
+<td>open folder recursive</td>
+</tr>
+<tr class="row-odd"><td>zc</td>
+<td>close folder under cursor</td>
+</tr>
+<tr class="row-even"><td>zC</td>
+<td>same as zc recursive</td>
+</tr>
+<tr class="row-odd"><td>za</td>
+<td>open folder if closed, close folder if opened</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="templates">
+<h2>Templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h2>
+<p>Want easy templates? See <a class="reference external" href="http://www.vim.org/scripts/script.php?script_id=2540">http://www.vim.org/scripts/script.php?script_id=2540</a>!</p>
+</div>
+<div class="section" id="file-explorer">
+<h2>File Explorer<a class="headerlink" href="#file-explorer" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.vim.org/scripts/script.php?script_id=1658">NERDTree</a> is the answer. Wanted it on the right, so I added a one-liner to my .vimrc:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> g:NERDTreeWinPos<span class="p">=</span><span class="s2">&quot;right&quot;</span>
+</pre></div>
+</div>
+<p>Beautiful.</p>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://www.tummy.com/Community/Presentations/vimpython-20070225/vim.html">Python and vim - Two great tastes that go great together</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Vim</a><ul>
+<li><a class="reference internal" href="#sphinx-ftplugin">Sphinx ftplugin</a></li>
+<li><a class="reference internal" href="#wrapping-a-python-function-in-a-vim-function">Wrapping a Python Function in a Vim function</a></li>
+<li><a class="reference internal" href="#ugly-whitespace">Ugly Whitespace</a></li>
+<li><a class="reference internal" href="#folding">Folding</a></li>
+<li><a class="reference internal" href="#templates">Templates</a></li>
+<li><a class="reference internal" href="#file-explorer">File Explorer</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../sphinx/cheatsheet.html"
+                        title="previous chapter">Sphinx Cheatsheet</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="django_completion.html"
+                        title="next chapter">Vim auto completion for Django in a virtualenv</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/vim/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="django_completion.html" title="Vim auto completion for Django in a virtualenv"
+             >next</a></li>
+        <li class="right" >
+          <a href="../sphinx/cheatsheet.html" title="Sphinx Cheatsheet"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

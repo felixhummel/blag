@@ -1,0 +1,218 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bash &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../../index.html" />
+    <link rel="up" title="Basics" href="../index.html" />
+    <link rel="next" title="Readline" href="readline.html" />
+    <link rel="prev" title="Basics" href="../index.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="readline.html" title="Readline"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="Basics"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Home</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Basics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bash">
+<h1>Bash<a class="headerlink" href="#bash" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readline.html">Readline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="string_manipulation.html">String Manipulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="string_manipulation.html#split-string">Split String</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><tt class="docutils literal"><span class="pre">man</span> <span class="pre">bash</span></tt> - Read it! It&#8217;s worth your time.</p>
+<div class="section" id="bashrc">
+<h2>.bashrc<a class="headerlink" href="#bashrc" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">$HOME/.bashrc</span></tt> is executed when Bash starts. Add stuff you want to keep for every session (like <a class="reference internal" href="#completion">Completion</a> or <a class="reference internal" href="#silence">Silence</a>). Don&#8217;t want to restart Bash? Then <a class="reference external" href="Sourcing">source</a> it with run <tt class="docutils literal"><span class="pre">source</span> <span class="pre">~/.bashrc</span></tt>.</p>
+</div>
+<div class="section" id="sourcing">
+<h2>Sourcing<a class="headerlink" href="#sourcing" title="Permalink to this headline">¶</a></h2>
+<p><em>man</em> says &#8220;Read and execute commands from filename in the current shell environment and return the exit status of the last command executed from filename.&#8221;. The following lines are equivalent:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">source </span>some_file
+. some_file
+</pre></div>
+</div>
+</div>
+<div class="section" id="completion">
+<h2>Completion<a class="headerlink" href="#completion" title="Permalink to this headline">¶</a></h2>
+<p>These line activate Bash completion:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="k">if</span> <span class="o">[[</span> -f /etc/bash_completion <span class="o">]]</span>; <span class="k">then</span>
+    . /etc/bash_completion
+<span class="k">fi</span>
+</pre></div>
+</div>
+<p>You may want to <a class="reference internal" href="../../junk/apps.html#wajig"><em>install</em></a> <em>bash-completion</em> and <em>python-optcomplete</em>.</p>
+</div>
+<div class="section" id="silence">
+<h2>Silence<a class="headerlink" href="#silence" title="Permalink to this headline">¶</a></h2>
+<p>Disable beep:</p>
+<div class="highlight-bash"><div class="highlight"><pre>setterm -blength 0
+</pre></div>
+</div>
+<p>You also can make music with beeps. See <a class="reference download internal" href="../../_downloads/simpsons.sh"><tt class="xref download docutils literal"><span class="pre">simpsons.sh</span></tt></a>.</p>
+</div>
+<div class="section" id="bash-and-python">
+<h2>Bash and Python<a class="headerlink" href="#bash-and-python" title="Permalink to this headline">¶</a></h2>
+<p>... go well together:</p>
+<div class="highlight-bash"><div class="highlight"><pre>python <span class="s">&lt;&lt; EOF</span>
+<span class="s">print &#39;hello world&#39;</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="../python/index.html"><em>Python</em></a>!</p>
+</div>
+<div class="section" id="quoting">
+<h2>Quoting<a class="headerlink" href="#quoting" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/bin/bash</span>
+<span class="nv">x</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;$x world&quot;</span>
+<span class="nb">echo</span> <span class="s1">&#39;$x world&#39;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Simply copy and paste it to your running Bash session and see what happens.</p>
+</div>
+<div class="section" id="absolute-path-of-script">
+<h2>Absolute Path of Script<a class="headerlink" href="#absolute-path-of-script" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="nb">echo</span> <span class="s2">&quot;This file: $0&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;Absolute path of this file: $(readlink -f $0)&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;Absolute path of this file&#39;s parent directory: $(dirname $(readlink -f $0))&quot;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Simply copy and paste it to your running Bash session and see what happens.</p>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Advanced Bash Scripting Guide:</dt>
+<dd><a class="reference external" href="http://tldp.org/LDP/abs/html/index.html">http://tldp.org/LDP/abs/html/index.html</a></dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Bash</a><ul>
+<li><a class="reference internal" href="#bashrc">.bashrc</a></li>
+<li><a class="reference internal" href="#sourcing">Sourcing</a></li>
+<li><a class="reference internal" href="#completion">Completion</a></li>
+<li><a class="reference internal" href="#silence">Silence</a></li>
+<li><a class="reference internal" href="#bash-and-python">Bash and Python</a></li>
+<li><a class="reference internal" href="#quoting">Quoting</a></li>
+<li><a class="reference internal" href="#absolute-path-of-script">Absolute Path of Script</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Basics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="readline.html"
+                        title="next chapter">Readline</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/basics/bash/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="readline.html" title="Readline"
+             >next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="Basics"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Home</a> &raquo;</li>
+          <li><a href="../index.html" >Basics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

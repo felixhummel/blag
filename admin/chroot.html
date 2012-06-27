@@ -1,0 +1,247 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Debootstrapping and Chrooting &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Administration" href="index.html" />
+    <link rel="next" title="Installing Ubuntu 8.10 on a USB Drive with Debootstrap" href="usb_ubuntu.html" />
+    <link rel="prev" title="Debian" href="debian.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="usb_ubuntu.html" title="Installing Ubuntu 8.10 on a USB Drive with Debootstrap"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="debian.html" title="Debian"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="debootstrapping-and-chrooting">
+<h1><a class="toc-backref" href="#id1">Debootstrapping and Chrooting</a><a class="headerlink" href="#debootstrapping-and-chrooting" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#debootstrapping-and-chrooting" id="id1">Debootstrapping and Chrooting</a><ul>
+<li><a class="reference internal" href="#prerequisites" id="id2">Prerequisites</a></li>
+<li><a class="reference internal" href="#debootstrap" id="id3">Debootstrap</a></li>
+<li><a class="reference internal" href="#mounting-and-unmounting" id="id4">Mounting and Unmounting</a></li>
+<li><a class="reference internal" href="#chrooting" id="id5">Chrooting</a></li>
+<li><a class="reference internal" href="#after-reboot" id="id6">After Reboot</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This article shows how to create a chroot environment. Why? &#8211;&gt; <a class="reference external" href="http://en.wikipedia.org/wiki/Chroot#Uses">http://en.wikipedia.org/wiki/Chroot#Uses</a></p>
+<p>My initial use case was to set up Oracle Express - which only comes as a 32 bit package - on my 64 bit box:</p>
+<div class="highlight-bash"><div class="highlight"><pre>+------------------------+
+|      jaunty amd64      |
+|  +------------------+  |
+|  |   jaunty i386    |  |
+|  |  +------------+  |  |
+|  |  |   oracle   |  |  |
+|  |  +------------+  |  |
+|  +------------------+  |
++------------------------+
+</pre></div>
+</div>
+<p>We <em>will not</em> create a bootable system! If you want that, see</p>
+<ul class="simple">
+<li><a class="reference internal" href="usb_ubuntu.html"><em>Installing Ubuntu 8.10 on a USB Drive with Debootstrap</em></a></li>
+</ul>
+<div class="section" id="prerequisites">
+<h2><a class="toc-backref" href="#id2">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>Get debootstrap (<a class="reference internal" href="../junk/apps.html#wajig"><em>what is wajig?</em></a>):</p>
+<div class="highlight-bash"><div class="highlight"><pre>wajig install debootstrap
+</pre></div>
+</div>
+<p>Get admin rights to eliminate the need of typing sudo before every command:</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo bash
+</pre></div>
+</div>
+</div>
+<div class="section" id="debootstrap">
+<h2><a class="toc-backref" href="#id3">Debootstrap</a><a class="headerlink" href="#debootstrap" title="Permalink to this headline">¶</a></h2>
+<p>Create target directory:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">target_dir</span><span class="o">=</span>/usr/local/mychroot
+mkdir <span class="nv">$target_dir</span>
+</pre></div>
+</div>
+<p>Choose a release, i.e. the release code name. See <a class="reference external" href="http://archive.ubuntu.com/ubuntu/dists/">http://archive.ubuntu.com/ubuntu/dists/</a> or <a class="reference external" href="http://www.debian.org/releases/">http://www.debian.org/releases/</a>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">release</span><span class="o">=</span>squeeze
+</pre></div>
+</div>
+<p>Choose a fast <a class="reference external" href="https://wiki.ubuntu.com/Mirrors">mirror</a> (<a class="reference external" href="http://www.debian.org/mirror/list">debian</a>) <em>for your release</em> to increase debootstrap&#8217;s download speed:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">mirror</span><span class="o">=</span>ftp://ftp.fu-berlin.de/linux/ubuntu/releases/
+</pre></div>
+</div>
+<p>Choose an architecture!  It is important to choose the right architecture in the next step. You probably want <tt class="docutils literal"><span class="pre">i386</span></tt> (aka. x86 aka. 32 bit) or <tt class="docutils literal"><span class="pre">amd64</span></tt> (aka. 64 bit). For a full list of supported architectures see <a class="reference external" href="http://archive.ubuntu.com/ubuntu/dists/jaunty/Release">http://archive.ubuntu.com/ubuntu/dists/jaunty/Release</a>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">arch</span><span class="o">=</span>i386
+</pre></div>
+</div>
+<p>And put it all together:</p>
+<div class="highlight-bash"><div class="highlight"><pre>debootstrap --arch <span class="nv">$arch</span> <span class="nv">$release</span> <span class="nv">$target_dir</span>
+</pre></div>
+</div>
+<p>This takes a while. Upon completion, have a look:</p>
+<div class="highlight-bash"><div class="highlight"><pre>ls <span class="nv">$target_dir</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mounting-and-unmounting">
+<h2><a class="toc-backref" href="#id4">Mounting and Unmounting</a><a class="headerlink" href="#mounting-and-unmounting" title="Permalink to this headline">¶</a></h2>
+<p>Create and run the Bash script <tt class="docutils literal"><span class="pre">mountall</span></tt>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> /var/tmp  <span class="c"># or ~/bin if you like</span>
+cat &gt; mountall <span class="s">&lt;&lt; EOF</span>
+<span class="s">mount -t proc proc ${target_dir}/proc  # for bash completion</span>
+<span class="s">mount --bind /dev ${target_dir}/dev</span>
+<span class="s">mount -t sysfs sysfs ${target_dir}/sys</span>
+<span class="s">EOF</span>
+
+chmod +x mountall
+./mountall
+</pre></div>
+</div>
+<p>Create the Bash script <tt class="docutils literal"><span class="pre">umountall</span></tt> for later use:</p>
+<div class="highlight-bash"><div class="highlight"><pre>cat &gt; umountall <span class="s">&lt;&lt; EOF</span>
+<span class="s">umount ${target_dir}/proc</span>
+<span class="s">umount ${target_dir}/dev</span>
+<span class="s">umount ${target_dir}/sys</span>
+<span class="s">EOF</span>
+
+chmod +x umountall
+</pre></div>
+</div>
+</div>
+<div class="section" id="chrooting">
+<h2><a class="toc-backref" href="#id5">Chrooting</a><a class="headerlink" href="#chrooting" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre>chroot <span class="nv">$target_dir</span>
+</pre></div>
+</div>
+<p>Done. Now you can install packages, run servers, ...</p>
+<p>Upon exiting the chroot, remember to unmount:</p>
+<div class="highlight-bash"><div class="highlight"><pre>/var/tmp/umountall
+</pre></div>
+</div>
+</div>
+<div class="section" id="after-reboot">
+<h2><a class="toc-backref" href="#id6">After Reboot</a><a class="headerlink" href="#after-reboot" title="Permalink to this headline">¶</a></h2>
+<p>Just mount everyhing and chroot:</p>
+<div class="highlight-bash"><div class="highlight"><pre>/var/tmp/mountall
+chroot /usr/local/mychroot
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Debootstrapping and Chrooting</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#debootstrap">Debootstrap</a></li>
+<li><a class="reference internal" href="#mounting-and-unmounting">Mounting and Unmounting</a></li>
+<li><a class="reference internal" href="#chrooting">Chrooting</a></li>
+<li><a class="reference internal" href="#after-reboot">After Reboot</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="debian.html"
+                        title="previous chapter">Debian</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="usb_ubuntu.html"
+                        title="next chapter">Installing Ubuntu 8.10 on a USB Drive with Debootstrap</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/admin/chroot.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="usb_ubuntu.html" title="Installing Ubuntu 8.10 on a USB Drive with Debootstrap"
+             >next</a></li>
+        <li class="right" >
+          <a href="debian.html" title="Debian"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Administration</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

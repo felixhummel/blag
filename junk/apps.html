@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Best Apps Ever &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Junk" href="index.html" />
+    <link rel="next" title="Brain Dump" href="braindump.html" />
+    <link rel="prev" title="Junk" href="index.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="braindump.html" title="Brain Dump"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Junk"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="best-apps-ever">
+<h1><a class="toc-backref" href="#id1">Best Apps Ever</a><a class="headerlink" href="#best-apps-ever" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#best-apps-ever" id="id1">Best Apps Ever</a><ul>
+<li><a class="reference internal" href="#wajig-package-management" id="id2">Wajig (Package Management)</a><ul>
+<li><a class="reference internal" href="#motivation" id="id3">Motivation</a></li>
+<li><a class="reference internal" href="#alternatives" id="id4">Alternatives</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#krusader-file-manager" id="id5">Krusader (File Manager)</a></li>
+<li><a class="reference internal" href="#yakuake-quake-style-console" id="id6">Yakuake (Quake Style Console)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Unless stated otherwise installation of these applications is as easy as typing:</p>
+<div class="highlight-python"><pre>wajig install &lt;application-name-in-lowercase&gt;</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>You need <a class="reference internal" href="#wajig"><em>wajig</em></a> for this to work. You can install it with:</p>
+<div class="last highlight-python"><pre>sudo apt-get install wajig</pre>
+</div>
+</div>
+<div class="section" id="wajig-package-management">
+<span id="wajig"></span><h2><a class="toc-backref" href="#id2">Wajig (Package Management)</a><a class="headerlink" href="#wajig-package-management" title="Permalink to this headline">¶</a></h2>
+<p>Wajig is a friendly front end to Debian&#8217;s (and therefore also Ubuntu&#8217;s) package system
+APT (the <a class="reference external" href="http://www.debian.org/doc/manuals/apt-howto/ch1.en.html">Advanced Packaging Tool</a>), dpkg, apt-cache, apt-search, ...</p>
+<div class="section" id="motivation">
+<h3><a class="toc-backref" href="#id3">Motivation</a><a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>typing <tt class="docutils literal"><span class="pre">waji&lt;TAB&gt;</span></tt> feels right</li>
+<li>getting all available subcommands with <tt class="docutils literal"><span class="pre">wajig</span> <span class="pre">&lt;TAB&gt;&lt;TAB&gt;</span></tt> is just nice</li>
+<li>tab-completion for package-names rocks, e.g. <tt class="docutils literal"><span class="pre">wajig</span> <span class="pre">install</span> <span class="pre">krus&lt;TAB&gt;</span></tt> :)</li>
+</ol>
+</div>
+<div class="section" id="alternatives">
+<h3><a class="toc-backref" href="#id4">Alternatives</a><a class="headerlink" href="#alternatives" title="Permalink to this headline">¶</a></h3>
+<p>Commands like:</p>
+<div class="highlight-python"><pre>wajig install &lt;some-package&gt;</pre>
+</div>
+<p>can be substituted with:</p>
+<div class="highlight-python"><pre>sudo apt-get install &lt;some-package&gt;</pre>
+</div>
+<p>Note that <tt class="docutils literal"><span class="pre">waji&lt;TAB&gt;</span> <span class="pre">ins&lt;TAB&gt;&lt;SPACE&gt;</span> <span class="pre">&lt;package-name&gt;</span></tt> takes 9 keystrokes while <tt class="docutils literal"><span class="pre">sud&lt;TAB&gt;&lt;SPACE&gt;</span> <span class="pre">apt-g&lt;TAB&gt;</span> <span class="pre">i&lt;TAB&gt;</span> <span class="pre">&lt;package-name&gt;</span></tt> needs 13 keystrokes and contains a minus. ;)</p>
+<p>If you love clicking around, there are also some <a class="reference external" href="http://en.wikipedia.org/wiki/Advanced_Packaging_Tool#Front-ends">graphical apt-frontends</a>.</p>
+</div>
+</div>
+<div class="section" id="krusader-file-manager">
+<span id="krusader"></span><h2><a class="toc-backref" href="#id5">Krusader (File Manager)</a><a class="headerlink" href="#krusader-file-manager" title="Permalink to this headline">¶</a></h2>
+<p>If you ever used Norton Commander, Total Commander or any other twin panel file manager, then Krusader is for
+you. It&#8217;s the reason I switched from Gnome to KDE (besides great keyboard shortcut capabilities). Check out the <a class="reference external" href="http://www.krusader.org/screenshots.php">screenshots</a>!</p>
+</div>
+<div class="section" id="yakuake-quake-style-console">
+<h2><a class="toc-backref" href="#id6">Yakuake (Quake Style Console)</a><a class="headerlink" href="#yakuake-quake-style-console" title="Permalink to this headline">¶</a></h2>
+<p>If you like <a class="reference external" href="http://www.idsoftware.com/games/quake/quake3-arena/">Quake</a>&#8216;s Console, then you will love Yakuake. I wrote a <a class="reference external" href="http://www.kde-look.org/content/show.php/Yakuake+Skin:+Green+on+Black?content=93601">skin</a> that integrates nicely with dark (green on black) themes. Enjoy!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Best Apps Ever</a><ul>
+<li><a class="reference internal" href="#wajig-package-management">Wajig (Package Management)</a><ul>
+<li><a class="reference internal" href="#motivation">Motivation</a></li>
+<li><a class="reference internal" href="#alternatives">Alternatives</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#krusader-file-manager">Krusader (File Manager)</a></li>
+<li><a class="reference internal" href="#yakuake-quake-style-console">Yakuake (Quake Style Console)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Junk</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="braindump.html"
+                        title="next chapter">Brain Dump</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/junk/apps.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="braindump.html" title="Brain Dump"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Junk"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Junk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

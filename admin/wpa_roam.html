@@ -1,0 +1,173 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WPA2 Without Network Manager &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Administration" href="index.html" />
+    <link rel="next" title="VirtualEnv Init.d Scripts the Easy Way" href="venv_initd.html" />
+    <link rel="prev" title="Connecting to WPA2-Encrypted Networks" href="wpa_manual.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="venv_initd.html" title="VirtualEnv Init.d Scripts the Easy Way"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="wpa_manual.html" title="Connecting to WPA2-Encrypted Networks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="wpa2-without-network-manager">
+<h1>WPA2 Without Network Manager<a class="headerlink" href="#wpa2-without-network-manager" title="Permalink to this headline">¶</a></h1>
+<p>This shows how to configure roaming with WPA2-encrypted WLAN networks. The following is my adaption of <a class="reference external" href="https://zivwiki.uni-muenster.de/bin/view/Anleitungen/WirelessLANSetupDebian#3_WPA_configuration_for_roaming">https://zivwiki.uni-muenster.de/bin/view/Anleitungen/WirelessLANSetupDebian#3_WPA_configuration_for_roaming</a>.</p>
+<p><tt class="docutils literal"><span class="pre">/etc/network/interfaces</span></tt> (<em>ath1</em> is the wlan interface, <em>some_essid</em> and <em>another_essid</em> are &#8220;virtual interfaces&#8221; defined in <tt class="docutils literal"><span class="pre">/etc/wpa_supplicant/roam.conf</span></tt>):</p>
+<div class="highlight-python"><pre>auto lo
+iface lo inet loopback
+
+auto ath1
+allow-hotplug ath1
+iface ath1 inet manual
+    wpa-driver wext
+    wpa-roam /etc/wpa_supplicant/roam.conf
+
+iface home inet dhcp
+iface uni inet dhcp</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">/etc/wpa_supplicant/roam.conf</span></tt>:</p>
+<div class="highlight-python"><pre>ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=0
+ap_scan=1
+fast_reauth=1
+eapol_version=1
+network={
+    id_str="home"
+    ssid=&lt;essid of my router&gt;
+    psk=&lt;wpa_passphrase-generated-key&gt;
+    priority=5
+}
+network={
+    id_str="uni"
+    ssid=&lt;essid of the university's router&gt;
+    psk=&lt;wpa_passphrase-generated-key&gt;
+    priority=3
+}</pre>
+</div>
+<div class="section" id="some-hints">
+<h2>Some Hints<a class="headerlink" href="#some-hints" title="Permalink to this headline">¶</a></h2>
+<p>Manual control:</p>
+<div class="highlight-python"><pre>ifup ath1  # brings up the pysical interface while redirecting control to wpa_supplicant
+wpa_cli  # type help or status...
+wpa_action home stop
+wpa_action uni reload
+# ...</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">WPA2 Without Network Manager</a><ul>
+<li><a class="reference internal" href="#some-hints">Some Hints</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="wpa_manual.html"
+                        title="previous chapter">Connecting to WPA2-Encrypted Networks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="venv_initd.html"
+                        title="next chapter">VirtualEnv Init.d Scripts the Easy Way</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/admin/wpa_roam.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="venv_initd.html" title="VirtualEnv Init.d Scripts the Easy Way"
+             >next</a></li>
+        <li class="right" >
+          <a href="wpa_manual.html" title="Connecting to WPA2-Encrypted Networks"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Administration</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
