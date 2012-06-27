@@ -30,7 +30,8 @@ Configure Agent with ::
         pluginsync = true
 
 
-Sources
--------
+Further Reading
+---------------
 - http://docs.puppetlabs.com/guides/puppetlabs_package_repositories.html#for-debian-and-ubuntu (ubuntu packages)
 - http://docs.puppetlabs.com/guides/installation.html#post-install
+- http://docs.puppetlabs.com/guides/style_guide.html
