@@ -5,7 +5,7 @@ Master: ``locutus.local`` and client: ``ubuntu1204.local``
 DNS is set up, so those work::
 
     locutus $ ping ubuntu1204
-    ubuntu1204 $ pint locutus
+    ubuntu1204 $ ping locutus
 
 Puppet Agent
 ------------
