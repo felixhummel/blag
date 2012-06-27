@@ -25,7 +25,7 @@ push: clean html
 	git checkout master
 
 show:
-	firefox _build/html/index.html
+	python -mwebbrowser _build/html/index.html
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
