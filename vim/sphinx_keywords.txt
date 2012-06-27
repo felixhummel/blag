@@ -1,0 +1,38 @@
+mod: name of a module
+func: name of a Python function
+data: name of a module-level variable
+const: name of a "defined" constant
+class: class name; dotted name may be used.
+meth: method of an object
+attr: data attribute of an object.
+exc: exception; dotted name may be used.
+obj: object of unspecified type
+cdata: C variable.
+cfunc: C function. Should include trailing parentheses.
+cmacro: C macro
+ctype: C type
+envvar: environment variable
+token: grammar token
+keyword: keyword in Python.
+option: command-line option to an executable program
+term: reference to a term in the glossary
+ref: link to section
+doc: link to specified document
+download: link to files within your source tree
+abbr: abbreviation; can contain parenthesized explanation
+command: OS-level command, e.g. ``rm``
+dfn: defining instance of a term in the text
+file: file or directory
+guilabel: part of an interactive user interface
+kbd: sequence of keystrokes
+mailheader: RFC 822-style mail header
+makevar: make variable
+manpage: Unix manual page, e.g. :manpage:`ls(1)`
+menuselection: sequence of menu selections, sep: ``-->``
+mimetype: MIME type or component of a MIME type
+newsgroup: Usenet newsgroup.
+program: an executable program
+regexp: regular expression
+samp: piece of literal text
+pep: reference to a Python Enhancement Proposal
+rfc: reference to an Internet Request for Comments

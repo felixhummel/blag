@@ -1,0 +1,10 @@
+#!/bin/bash
+temp1=`mktemp -d`
+temp2=`mktemp -d`
+
+cp i_am_the_script.py $temp1
+cd $temp2
+
+echo "+++ we are now in `pwd` and the script is at $temp1"
+echo "+++ script output:"
+$temp1/i_am_the_script.py
