@@ -22,7 +22,7 @@ Configure Agent with ::
 
     [agent]
         certname = ubuntu1204.local
-        server = locutus
+        server = locutus.local
         report = true
         classfile = $vardir/classes.txt
         localconfig = $vardir/localconfig
