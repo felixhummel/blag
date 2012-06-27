@@ -16,7 +16,7 @@ ALLSPHINXOPTS   = -d _build/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 cheat: html
 
 push: clean html
-	rm -r /dev/shm/html
+	rm -rf /dev/shm/html
 	mv _build/html/ /dev/shm/
 	git checkout gh-pages
 	cp -r /dev/shm/html/* .
