@@ -18,6 +18,24 @@ Agent: As root or ``sudo bash``::
     service puppet start
 
 
+Agent: Apply ntp manifest::
+
+    cat <<'EOF'>ntp.pp
+    class ntp {
+      package { "ntp": 
+        ensure => installed 
+      }
+
+      service { "ntp":
+        ensure => running,
+      }
+    }
+
+    class {'ntp': }
+    EOF
+
+    puppet apply ntp.pp
+
 Agent: Configure puppet::
 
     mv /etc/puppet/puppet.conf /etc/puppet/puppet.conf.bak
