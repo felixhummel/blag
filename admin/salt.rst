@@ -25,4 +25,5 @@ Links
 -----
 - http://saltstack.org/
 - first look https://groups.google.com/forum/#!topic/salt-users/tfCu_dK10ZE
+- salt-call http://salt.readthedocs.org/en/latest/topics/troubleshooting/index.html?highlight=debug#using-salt-call
 
