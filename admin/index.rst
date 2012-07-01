@@ -11,6 +11,7 @@ Administration
     grub
     grub2_multi_boot
     puppet
+    salt
     wpa_manual
     wpa_roam
     venv_initd
