@@ -73,8 +73,22 @@ Master: sign certificate::
     sudo puppet cert list
     sudo puppet cert sign ubuntu1204.local
 
+Restarting a Virtual Machine That Is Signed
+-------------------------------------------
+Fix date::
+
+    service ntp stop
+    ntpdate pool.ntp.org
+    service ntp start
+    puppet agent --test --debug
+
 Further Reading
 ---------------
 - http://docs.puppetlabs.com/guides/puppetlabs_package_repositories.html#for-debian-and-ubuntu (ubuntu packages)
 - http://docs.puppetlabs.com/guides/installation.html#post-install
+- http://www.puppetcookbook.com/
+- http://projects.puppetlabs.com/projects/1/wiki/Advanced_Puppet_Pattern
 - http://docs.puppetlabs.com/guides/style_guide.html
+- http://bitcube.co.uk/content/puppet-errors-explained
+
+
