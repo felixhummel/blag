@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Nginx &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Administration" href="index.html" />
+    <link rel="next" title="Puppet on Ubuntu 12.04 LTS" href="puppet.html" />
+    <link rel="prev" title="Multi Boot With Grub 2" href="grub2_multi_boot.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="puppet.html" title="Puppet on Ubuntu 12.04 LTS"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="grub2_multi_boot.html" title="Multi Boot With Grub 2"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nginx">
+<h1>Nginx<a class="headerlink" href="#nginx" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-build-nginx-on-ubuntu-12-04">
+<h2>How To Build Nginx on Ubuntu 12.04<a class="headerlink" href="#how-to-build-nginx-on-ubuntu-12-04" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> -x
+
+<span class="nb">export </span><span class="nv">NGINX_VERSION</span><span class="o">=</span>1.2.1
+<span class="nb">export </span><span class="nv">PREFIX</span><span class="o">=</span>/opt/nginx
+
+curl -O http://nginx.org/download/nginx-<span class="nv">$NGINX_VERSION</span>.tar.gz <span class="o">||</span> <span class="nb">exit </span>1
+git clone https://github.com/yaoweibin/nginx_tcp_proxy_module.git
+tar -xvzf nginx-<span class="nv">$NGINX_VERSION</span>.tar.gz
+<span class="nb">cd </span>nginx-<span class="nv">$NGINX_VERSION</span>
+patch -p1 &lt; ../nginx_tcp_proxy_module/tcp.patch
+<span class="c">#./configure --add-module=../nginx_tcp_proxy_module/</span>
+./configure --prefix<span class="o">=</span><span class="nv">$PREFIX</span> --user<span class="o">=</span>nginx --group<span class="o">=</span>nginx --with-http_ssl_module --with-http_geoip_module --with-http_flv_module --add-module<span class="o">=</span>../nginx_tcp_proxy_module/
+sudo make <span class="o">&amp;&amp;</span> make install
+</pre></div>
+</td></tr></table></div>
+<p><a class="reference download internal" href="../_downloads/build_nginx.sh"><tt class="xref download docutils literal"><span class="pre">build_nginx.sh</span></tt></a></p>
+<p>From: <a class="reference external" href="http://www.letseehere.com/reverse-proxy-web-sockets">http://www.letseehere.com/reverse-proxy-web-sockets</a></p>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://nginx.org/">http://nginx.org/</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Nginx</a><ul>
+<li><a class="reference internal" href="#how-to-build-nginx-on-ubuntu-12-04">How To Build Nginx on Ubuntu 12.04</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="grub2_multi_boot.html"
+                        title="previous chapter">Multi Boot With Grub 2</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="puppet.html"
+                        title="next chapter">Puppet on Ubuntu 12.04 LTS</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/admin/nginx.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="puppet.html" title="Puppet on Ubuntu 12.04 LTS"
+             >next</a></li>
+        <li class="right" >
+          <a href="grub2_multi_boot.html" title="Multi Boot With Grub 2"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Administration</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

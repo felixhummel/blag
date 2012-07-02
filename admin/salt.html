@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Salt Configuration Management &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Administration" href="index.html" />
+    <link rel="next" title="Connecting to WPA2-Encrypted Networks" href="wpa_manual.html" />
+    <link rel="prev" title="Puppet on Ubuntu 12.04 LTS" href="puppet.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="wpa_manual.html" title="Connecting to WPA2-Encrypted Networks"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="puppet.html" title="Puppet on Ubuntu 12.04 LTS"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="salt-configuration-management">
+<h1>Salt Configuration Management<a class="headerlink" href="#salt-configuration-management" title="Permalink to this headline">¶</a></h1>
+<p>Minion Install:</p>
+<div class="highlight-python"><pre>sudo apt-get install -y python-software-properties
+sudo add-apt-repository -y ppa:saltstack/salt
+sudo apt-get update
+sudo apt-get install -y salt-minion</pre>
+</div>
+<p>Master Install:</p>
+<div class="highlight-python"><pre>sudo apt-get install python-software-properties
+sudo add-apt-repository ppa:saltstack/salt
+sudo apt-get update
+sudo apt-get install salt-master</pre>
+</div>
+<p>Minion: Who is your master?</p>
+<div class="highlight-python"><pre>sed -i.bak -e 's/#master: salt/master: locutus/' /etc/salt/minion
+service salt-minion restart</pre>
+</div>
+<p>Master: Accept obedient minion:</p>
+<div class="highlight-python"><pre>sudo salt-key -L
+sudo salt-key -a ubuntu1204</pre>
+</div>
+<p>Master: Order your minion:</p>
+<div class="highlight-python"><pre>sudo salt \* test.ping</pre>
+</div>
+<p>Test run on minion:</p>
+<div class="highlight-python"><pre>salt-call -l debug state.highstate</pre>
+</div>
+<p>Workflow for remote execution modules:</p>
+<div class="highlight-python"><pre>vim /srv/salt/_modules/foo.py
+sudo salt ubuntu1204 saltutil.sync_all
+sudo salt --text-out ubuntu1204 foo.bar
+# if this does not work. do it on the minion
+salt-call saltutil.sync_all; salt-call foo.bar
+# to reload, restart minion and master daemons</pre>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>from bash to state</dt>
+<dd><ol class="first last arabic simple">
+<li>try command: psql -t -c &#8220;select datname from pg_catalog.pg_database&#8221;</li>
+<li>create salt function: postgres.db_list</li>
+<li>repeat steps 1 and 2 for other stuff</li>
+<li>create salt state</li>
+</ol>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="stupid-error-messages">
+<h2>Stupid Error Messages<a class="headerlink" href="#stupid-error-messages" title="Permalink to this headline">¶</a></h2>
+<p>Whey I ran <tt class="docutils literal"><span class="pre">salt-call</span> <span class="pre">postgres.user_create</span> <span class="pre">trac</span> <span class="pre">password=trac</span> <span class="pre">login=true</span></tt>, I got:</p>
+<div class="highlight-python"><pre>got multiple values for keyword argument 'foo'</pre>
+</div>
+<p>What it meant: You have forgotten to add the argument &#8220;login&#8221; to your user_create function.</p>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://saltstack.org/">http://saltstack.org/</a></li>
+<li>first look <a class="reference external" href="https://groups.google.com/forum/#!topic/salt-users/tfCu_dK10ZE">https://groups.google.com/forum/#!topic/salt-users/tfCu_dK10ZE</a></li>
+<li>salt-call <a class="reference external" href="http://salt.readthedocs.org/en/latest/topics/troubleshooting/index.html?highlight=debug#using-salt-call">http://salt.readthedocs.org/en/latest/topics/troubleshooting/index.html?highlight=debug#using-salt-call</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Salt Configuration Management</a><ul>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+<li><a class="reference internal" href="#stupid-error-messages">Stupid Error Messages</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="puppet.html"
+                        title="previous chapter">Puppet on Ubuntu 12.04 LTS</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wpa_manual.html"
+                        title="next chapter">Connecting to WPA2-Encrypted Networks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/admin/salt.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="wpa_manual.html" title="Connecting to WPA2-Encrypted Networks"
+             >next</a></li>
+        <li class="right" >
+          <a href="puppet.html" title="Puppet on Ubuntu 12.04 LTS"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Administration</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
