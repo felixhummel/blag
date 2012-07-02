@@ -1,5 +1,36 @@
 Salt Configuration Management
 =============================
+Minion Install::
+
+    sudo apt-get install -y python-software-properties
+    sudo add-apt-repository -y ppa:saltstack/salt
+    sudo apt-get update
+    sudo apt-get install -y salt-minion
+
+Master Install::
+
+    sudo apt-get install python-software-properties
+    sudo add-apt-repository ppa:saltstack/salt
+    sudo apt-get update
+    sudo apt-get install salt-master
+
+
+Minion: Who is your master?
+
+::
+
+    sed -i.bak -e 's/#master: salt/master: locutus/' /etc/salt/minion
+    service salt-minion restart
+
+Master: Accept obedient minion::
+
+    sudo salt-key -L
+    sudo salt-key -a ubuntu1204
+
+Master: Order your minion::
+
+    sudo salt \* test.ping
+
 Test run on minion::
 
     salt-call -l debug state.highstate
@@ -20,6 +51,14 @@ Notes
     2. create salt function: postgres.db_list
     3. repeat steps 1 and 2 for other stuff
     4. create salt state
+
+Stupid Error Messages
+---------------------
+Whey I ran ``salt-call postgres.user_create trac password=trac login=true``, I got::
+
+    got multiple values for keyword argument 'foo'
+
+What it meant: You have forgotten to add the argument "login" to your user_create function.
 
 Links
 -----
