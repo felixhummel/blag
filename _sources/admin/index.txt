@@ -10,6 +10,7 @@ Administration
     usb_ubuntu
     grub
     grub2_multi_boot
+    nginx
     puppet
     salt
     wpa_manual
