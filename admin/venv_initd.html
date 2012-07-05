@@ -28,7 +28,7 @@
     <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
     <link rel="up" title="Administration" href="index.html" />
     <link rel="next" title="Apps" href="../apps/index.html" />
-    <link rel="prev" title="WPA2 Without Network Manager" href="wpa_roam.html" />
+    <link rel="prev" title="Virtualenv Upstart Instead of Init.d Scripts" href="virtualenv_upstart.html" />
  
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -51,7 +51,7 @@
           <a href="../apps/index.html" title="Apps"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="wpa_roam.html" title="WPA2 Without Network Manager"
+          <a href="virtualenv_upstart.html" title="Virtualenv Upstart Instead of Init.d Scripts"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
@@ -65,6 +65,10 @@
             
   <div class="section" id="virtualenv-init-d-scripts-the-easy-way">
 <h1>VirtualEnv Init.d Scripts the Easy Way<a class="headerlink" href="#virtualenv-init-d-scripts-the-easy-way" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is highly outdated. If you have <a class="reference external" href="http://upstart.ubuntu.com/">Upstart</a> installed, try this instead: <a class="reference internal" href="virtualenv_upstart.html"><em>Virtualenv Upstart Instead of Init.d Scripts</em></a>.</p>
+</div>
 <p>... at least, that&#8217;s the way I build them. Take <a class="reference external" href="http://bitbucket.org/marcinkuzminski/rhodecode/src">RhodeCode</a> as an example.</p>
 <ol class="arabic">
 <li><p class="first"><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">adduser</span> <span class="pre">--no-create-home</span> <span class="pre">--disabled-login</span> <span class="pre">rhodecode</span></tt> - create underprivileged user (no home dir, no shell)</p>
@@ -141,8 +145,8 @@ exit 0</pre>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="wpa_roam.html"
-                        title="previous chapter">WPA2 Without Network Manager</a></p>
+  <p class="topless"><a href="virtualenv_upstart.html"
+                        title="previous chapter">Virtualenv Upstart Instead of Init.d Scripts</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../apps/index.html"
                         title="next chapter">Apps</a></p>
@@ -175,7 +179,7 @@ exit 0</pre>
           <a href="../apps/index.html" title="Apps"
              >next</a></li>
         <li class="right" >
-          <a href="wpa_roam.html" title="WPA2 Without Network Manager"
+          <a href="virtualenv_upstart.html" title="Virtualenv Upstart Instead of Init.d Scripts"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" >Administration</a> &raquo;</li> 

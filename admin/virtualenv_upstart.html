@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>WPA2 Without Network Manager &mdash; Felix&#39; Wobsite</title>
+    <title>Virtualenv Upstart Instead of Init.d Scripts &mdash; Felix&#39; Wobsite</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
     <link rel="up" title="Administration" href="index.html" />
-    <link rel="next" title="Virtualenv Upstart Instead of Init.d Scripts" href="virtualenv_upstart.html" />
-    <link rel="prev" title="Connecting to WPA2-Encrypted Networks" href="wpa_manual.html" />
+    <link rel="next" title="VirtualEnv Init.d Scripts the Easy Way" href="venv_initd.html" />
+    <link rel="prev" title="WPA2 Without Network Manager" href="wpa_roam.html" />
  
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -48,10 +48,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="virtualenv_upstart.html" title="Virtualenv Upstart Instead of Init.d Scripts"
+          <a href="venv_initd.html" title="VirtualEnv Init.d Scripts the Easy Way"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="wpa_manual.html" title="Connecting to WPA2-Encrypted Networks"
+          <a href="wpa_roam.html" title="WPA2 Without Network Manager"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
@@ -63,51 +63,33 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="wpa2-without-network-manager">
-<h1>WPA2 Without Network Manager<a class="headerlink" href="#wpa2-without-network-manager" title="Permalink to this headline">¶</a></h1>
-<p>This shows how to configure roaming with WPA2-encrypted WLAN networks. The following is my adaption of <a class="reference external" href="https://zivwiki.uni-muenster.de/bin/view/Anleitungen/WirelessLANSetupDebian#3_WPA_configuration_for_roaming">https://zivwiki.uni-muenster.de/bin/view/Anleitungen/WirelessLANSetupDebian#3_WPA_configuration_for_roaming</a>.</p>
-<p><tt class="docutils literal"><span class="pre">/etc/network/interfaces</span></tt> (<em>ath1</em> is the wlan interface, <em>some_essid</em> and <em>another_essid</em> are &#8220;virtual interfaces&#8221; defined in <tt class="docutils literal"><span class="pre">/etc/wpa_supplicant/roam.conf</span></tt>):</p>
-<div class="highlight-python"><pre>auto lo
-iface lo inet loopback
+  <div class="section" id="virtualenv-upstart-instead-of-init-d-scripts">
+<h1>Virtualenv Upstart Instead of Init.d Scripts<a class="headerlink" href="#virtualenv-upstart-instead-of-init-d-scripts" title="Permalink to this headline">¶</a></h1>
+<p>This approach is even simpler than <a class="reference internal" href="venv_initd.html"><em>VirtualEnv Init.d Scripts the Easy Way</em></a>.</p>
+<p>Let&#8217;s assume you have a user <tt class="docutils literal"><span class="pre">trac</span></tt> with group <tt class="docutils literal"><span class="pre">trac</span></tt> living in <tt class="docutils literal"><span class="pre">/home/trac</span></tt> which contains a Virtualenv. To run Trac you would issue the following commands:</p>
+<div class="highlight-python"><pre>su - trac
+pwd
+# /home/trac
+source bin/activate
+tracd --port=8000 --hostname=0.0.0.0 --env-parent-dir=/home/trac/envs</pre>
+</div>
+<p>To make this an Upstart service, create a file called <tt class="docutils literal"><span class="pre">/etc/init/trac.conf</span></tt> with the following contents:</p>
+<div class="highlight-python"><pre>description "Trac daemon"
 
-auto ath1
-allow-hotplug ath1
-iface ath1 inet manual
-    wpa-driver wext
-    wpa-roam /etc/wpa_supplicant/roam.conf
+start on runlevel [2345]
+stop on runlevel [!2345]
 
-iface home inet dhcp
-iface uni inet dhcp</pre>
+setuid trac
+setgid git
+
+exec /home/trac/bin/tracd --port=8000 --hostname=0.0.0.0 --env-parent-dir=/home/trac/envs</pre>
 </div>
-<p><tt class="docutils literal"><span class="pre">/etc/wpa_supplicant/roam.conf</span></tt>:</p>
-<div class="highlight-python"><pre>ctrl_interface=/var/run/wpa_supplicant
-ctrl_interface_group=0
-ap_scan=1
-fast_reauth=1
-eapol_version=1
-network={
-    id_str="home"
-    ssid=&lt;essid of my router&gt;
-    psk=&lt;wpa_passphrase-generated-key&gt;
-    priority=5
-}
-network={
-    id_str="uni"
-    ssid=&lt;essid of the university's router&gt;
-    psk=&lt;wpa_passphrase-generated-key&gt;
-    priority=3
-}</pre>
+<p>Now start trac:</p>
+<div class="highlight-python"><pre>service trac start</pre>
 </div>
-<div class="section" id="some-hints">
-<h2>Some Hints<a class="headerlink" href="#some-hints" title="Permalink to this headline">¶</a></h2>
-<p>Manual control:</p>
-<div class="highlight-python"><pre>ifup ath1  # brings up the pysical interface while redirecting control to wpa_supplicant
-wpa_cli  # type help or status...
-wpa_action home stop
-wpa_action uni reload
-# ...</pre>
-</div>
-</div>
+<p>By using the full path <tt class="docutils literal"><span class="pre">/home/trac/bin/tracd</span></tt> virtualenv gets activated automatically. Check <tt class="docutils literal"><span class="pre">head</span> <span class="pre">-n</span> <span class="pre">1</span> <span class="pre">/home/trac/bin/tracd</span></tt> if you do not believe me.</p>
+<p>The <a class="reference external" href="http://upstart.ubuntu.com/cookbook/#setgid">setgid</a> line tells Upstart: &#8220;In addition to your main group (trac) use the group git too.&#8221;</p>
+<p>Another interesting option is <a class="reference external" href="http://upstart.ubuntu.com/cookbook/#respawn">respawn</a>. On death: revive.</p>
 </div>
 
 
@@ -116,23 +98,15 @@ wpa_action uni reload
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">WPA2 Without Network Manager</a><ul>
-<li><a class="reference internal" href="#some-hints">Some Hints</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="wpa_manual.html"
-                        title="previous chapter">Connecting to WPA2-Encrypted Networks</a></p>
+  <p class="topless"><a href="wpa_roam.html"
+                        title="previous chapter">WPA2 Without Network Manager</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="virtualenv_upstart.html"
-                        title="next chapter">Virtualenv Upstart Instead of Init.d Scripts</a></p>
+  <p class="topless"><a href="venv_initd.html"
+                        title="next chapter">VirtualEnv Init.d Scripts the Easy Way</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/admin/wpa_roam.txt"
+    <li><a href="../_sources/admin/virtualenv_upstart.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -156,10 +130,10 @@ wpa_action uni reload
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="virtualenv_upstart.html" title="Virtualenv Upstart Instead of Init.d Scripts"
+          <a href="venv_initd.html" title="VirtualEnv Init.d Scripts the Easy Way"
              >next</a></li>
         <li class="right" >
-          <a href="wpa_manual.html" title="Connecting to WPA2-Encrypted Networks"
+          <a href="wpa_roam.html" title="WPA2 Without Network Manager"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" >Administration</a> &raquo;</li> 
