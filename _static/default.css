@@ -498,12 +498,8 @@ div.warning {
 }
 
 div.note {
-    background-color:#C3833B;
-    border:medium none;
-    color:black;
-}
-div.note a, div.note a:hover {
-    color: blue;
+    border: medium solid #C3833B;
+    background-color: none;
 }
 
 p.admonition-title {
