@@ -18,11 +18,14 @@ cheat: html
 push: clean html
 	rm -rf /dev/shm/html
 	mv _build/html/ /dev/shm/
+	git stash
 	git checkout gh-pages
 	cp -r /dev/shm/html/* .
+	git add .
 	git commit --verbose --all -m "auto job. see https://github.com/felixhummel/blag"
 	git push
 	git checkout master
+	git stash pop
 
 show:
 	python -mwebbrowser _build/html/index.html
