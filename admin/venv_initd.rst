@@ -1,5 +1,9 @@
 VirtualEnv Init.d Scripts the Easy Way
 ======================================
+.. note:: This is highly outdated. If you have `Upstart`_ installed, try this instead: :doc:`virtualenv_upstart`.
+
+.. _Upstart: http://upstart.ubuntu.com/
+
 ... at least, that's the way I build them. Take `RhodeCode <http://bitbucket.org/marcinkuzminski/rhodecode/src>`__ as an example.
 
 1. ``sudo adduser --no-create-home --disabled-login rhodecode`` - create underprivileged user (no home dir, no shell)

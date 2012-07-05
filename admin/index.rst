@@ -15,5 +15,6 @@ Administration
     salt
     wpa_manual
     wpa_roam
+    virtualenv_upstart
     venv_initd
 
