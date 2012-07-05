@@ -25,7 +25,7 @@ push: clean html
 	git commit --verbose --all -m "auto job. see https://github.com/felixhummel/blag"
 	git push
 	git checkout master
-	git stash pop || true
+	git stash pop || git stash list
 
 show:
 	python -mwebbrowser _build/html/index.html
