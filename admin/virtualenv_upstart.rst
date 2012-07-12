@@ -35,3 +35,39 @@ Another interesting option is `respawn`_. On death: revive.
 .. _respawn: http://upstart.ubuntu.com/cookbook/#respawn
 .. _setgid: http://upstart.ubuntu.com/cookbook/#setgid
 
+Now let's take this a little further.
+
+Trac Gunicorn Upstart
+---------------------
+Install Gunicorn::
+
+    su - trac
+    source bin/activate
+    pip install gunicorn
+    exit
+
+New ``/etc/init/trac.conf``::
+
+    description "Trac daemon"
+
+    start on runlevel [2345]
+    stop on runlevel [!2345]
+
+    setuid trac
+    setgid git
+
+    env TRAC_ENV_PARENT_DIR='/home/trac/envs'
+
+    expect daemon
+
+    respawn
+
+    exec /home/trac/bin/gunicorn --config=/home/trac/conf/gunicorn_trac.py trac.web.main:dispatch_request
+
+The ``expect daemon`` line took a while to find. To trace forks, Upstart has two options:
+
+1. ``expect fork`` which traces *one* fork
+2. ``expect daemon`` which traces *two* forks
+
+- http://upstart.ubuntu.com/cookbook/#the-initctl-command-shows-the-wrong-pid
+
