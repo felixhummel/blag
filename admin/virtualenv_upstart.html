@@ -90,6 +90,41 @@ exec /home/trac/bin/tracd --port=8000 --hostname=0.0.0.0 --env-parent-dir=/home/
 <p>By using the full path <tt class="docutils literal"><span class="pre">/home/trac/bin/tracd</span></tt> virtualenv gets activated automatically. Check <tt class="docutils literal"><span class="pre">head</span> <span class="pre">-n</span> <span class="pre">1</span> <span class="pre">/home/trac/bin/tracd</span></tt> if you do not believe me.</p>
 <p>The <a class="reference external" href="http://upstart.ubuntu.com/cookbook/#setgid">setgid</a> line tells Upstart: &#8220;In addition to your main group (trac) use the group git too.&#8221;</p>
 <p>Another interesting option is <a class="reference external" href="http://upstart.ubuntu.com/cookbook/#respawn">respawn</a>. On death: revive.</p>
+<p>Now let&#8217;s take this a little further.</p>
+<div class="section" id="trac-gunicorn-upstart">
+<h2>Trac Gunicorn Upstart<a class="headerlink" href="#trac-gunicorn-upstart" title="Permalink to this headline">¶</a></h2>
+<p>Install Gunicorn:</p>
+<div class="highlight-python"><pre>su - trac
+source bin/activate
+pip install gunicorn
+exit</pre>
+</div>
+<p>New <tt class="docutils literal"><span class="pre">/etc/init/trac.conf</span></tt>:</p>
+<div class="highlight-python"><pre>description "Trac daemon"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+setuid trac
+setgid git
+
+env TRAC_ENV_PARENT_DIR='/home/trac/envs'
+
+expect daemon
+
+respawn
+
+exec /home/trac/bin/gunicorn --config=/home/trac/conf/gunicorn_trac.py trac.web.main:dispatch_request</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">expect</span> <span class="pre">daemon</span></tt> line took a while to find. To trace forks, Upstart has two options:</p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">expect</span> <span class="pre">fork</span></tt> which traces <em>one</em> fork</li>
+<li><tt class="docutils literal"><span class="pre">expect</span> <span class="pre">daemon</span></tt> which traces <em>two</em> forks</li>
+</ol>
+<ul class="simple">
+<li><a class="reference external" href="http://upstart.ubuntu.com/cookbook/#the-initctl-command-shows-the-wrong-pid">http://upstart.ubuntu.com/cookbook/#the-initctl-command-shows-the-wrong-pid</a></li>
+</ul>
+</div>
 </div>
 
 
@@ -98,6 +133,14 @@ exec /home/trac/bin/tracd --port=8000 --hostname=0.0.0.0 --env-parent-dir=/home/
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Virtualenv Upstart Instead of Init.d Scripts</a><ul>
+<li><a class="reference internal" href="#trac-gunicorn-upstart">Trac Gunicorn Upstart</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="wpa_roam.html"
                         title="previous chapter">WPA2 Without Network Manager</a></p>
