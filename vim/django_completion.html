@@ -88,7 +88,7 @@ DJANGO_SETTINGS_MODULE<span class="p">=</span><span class="s1">&#39;foo.settings
 
 project_base_dir <span class="p">=</span> os.environ[<span class="s1">&#39;VIRTUAL_ENV&#39;</span>]
 
-sys.<span class="nb">path</span>.<span class="nb">insert</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> project_base_dir<span class="p">)</span>
+sys.<span class="nb">path</span>.insert<span class="p">(</span><span class="m">0</span><span class="p">,</span> project_base_dir<span class="p">)</span>
 
 activate_this <span class="p">=</span> os.<span class="nb">path</span>.<span class="k">join</span><span class="p">(</span>project_base_dir<span class="p">,</span> <span class="s1">&#39;bin/activate_this.py&#39;</span><span class="p">)</span>
 execfile<span class="p">(</span>activate_this<span class="p">,</span> <span class="nb">dict</span><span class="p">(</span>__file__<span class="p">=</span>activate_this<span class="p">))</span>

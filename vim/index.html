@@ -79,14 +79,14 @@
 <p>Normally the following snippet would suffice:</p>
 <div class="highlight-vim"><div class="highlight"><pre><span class="k">fun</span><span class="p">!</span> Vimfun<span class="p">()</span>
     python pyfun<span class="p">()</span>
-endfun
+<span class="k">endfun</span>
 </pre></div>
 </div>
 <p>But if you want to pass parameters, you&#8217;ll need something like this (please correct me if I&#8217;m wrong).</p>
 <div class="highlight-vim"><div class="highlight"><pre><span class="k">fun</span><span class="p">!</span> Vimfun<span class="p">(</span><span class="k">x</span><span class="p">)</span>
 	python import <span class="k">vim</span>
 	python <span class="k">f</span><span class="p">(</span><span class="k">vim</span>.eval<span class="p">(</span>str<span class="p">(</span><span class="s1">&#39;a:x&#39;</span><span class="p">)))</span>
-endfun
+<span class="k">endfun</span>
 
 python <span class="p">&lt;&lt;</span> EOF
 <span class="nb">def</span> <span class="k">f</span><span class="p">(</span><span class="k">x</span><span class="p">)</span>:
@@ -101,11 +101,11 @@ EOF
 <div class="section" id="ugly-whitespace">
 <h2>Ugly Whitespace<a class="headerlink" href="#ugly-whitespace" title="Permalink to this headline">¶</a></h2>
 <p>To show all whitespace at line end:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">match</span> Error <span class="sr">/\s\+$/</span>
+<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">match</span> <span class="k">Error</span> <span class="sr">/\s\+$/</span>
 </pre></div>
 </div>
 <p>To remove it:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>%s<span class="sr">/\s\+$/</span>/
+<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span>%<span class="k">s</span><span class="sr">/\s\+$/</span>/
 </pre></div>
 </div>
 </div>
@@ -113,8 +113,8 @@ EOF
 <h2>Folding<a class="headerlink" href="#folding" title="Permalink to this headline">¶</a></h2>
 <p>See also: <tt class="docutils literal"><span class="pre">:help</span> <span class="pre">usr_28</span></tt>. Set folding for XML (in <tt class="docutils literal"><span class="pre">.vimrc</span></tt>):</p>
 <div class="highlight-vim"><div class="highlight"><pre><span class="c">&quot; XML syntax folding</span>
-<span class="k">let</span> g:xml_syntax_folding<span class="p">=</span><span class="m">1</span>
-au <span class="nb">FileType</span> xml <span class="k">setlocal</span> <span class="nb">foldmethod</span><span class="p">=</span><span class="nb">syntax</span>
+<span class="k">let</span> <span class="k">g</span>:xml_syntax_folding<span class="p">=</span><span class="m">1</span>
+<span class="k">au</span> <span class="nb">FileType</span> xml <span class="k">setlocal</span> <span class="nb">foldmethod</span><span class="p">=</span><span class="nb">syntax</span>
 </pre></div>
 </div>
 <p>Shortcuts (from <a class="reference external" href="http://nion.modprobe.de/blog/archives/448-Folding-in-VIM.html">nion&#8217;s blog</a> on 2009-03-23):</p>
@@ -161,7 +161,7 @@ au <span class="nb">FileType</span> xml <span class="k">setlocal</span> <span cl
 <div class="section" id="file-explorer">
 <h2>File Explorer<a class="headerlink" href="#file-explorer" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="http://www.vim.org/scripts/script.php?script_id=1658">NERDTree</a> is the answer. Wanted it on the right, so I added a one-liner to my .vimrc:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> g:NERDTreeWinPos<span class="p">=</span><span class="s2">&quot;right&quot;</span>
+<div class="highlight-vim"><div class="highlight"><pre><span class="k">let</span> <span class="k">g</span>:NERDTreeWinPos<span class="p">=</span><span class="s2">&quot;right&quot;</span>
 </pre></div>
 </div>
 <p>Beautiful.</p>

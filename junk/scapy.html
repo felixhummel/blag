@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Collaborative Editing &mdash; Felix&#39; Wobsite</title>
+    <title>Scapy &mdash; Felix&#39; Wobsite</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
     <link rel="up" title="Junk" href="index.html" />
-    <link rel="next" title="Shell Colors (ANSI Escape Codes)" href="shell_colors.html" />
-    <link rel="prev" title="Scapy" href="scapy.html" />
+    <link rel="next" title="Collaborative Editing" href="screen_collab.html" />
+    <link rel="prev" title="QBzr Colors for KDE4 Obsidian Coast Theme" href="qbzr_colors.html" />
  
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -48,10 +48,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="shell_colors.html" title="Shell Colors (ANSI Escape Codes)"
+          <a href="screen_collab.html" title="Collaborative Editing"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="scapy.html" title="Scapy"
+          <a href="qbzr_colors.html" title="QBzr Colors for KDE4 Obsidian Coast Theme"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
@@ -63,9 +63,20 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="collaborative-editing">
-<h1>Collaborative Editing<a class="headerlink" href="#collaborative-editing" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="http://en.wikipedia.org/wiki/Collaborative_real-time_editor">Collaborative Editing</a> is a cool thing. Linux has had it for quite some time now: <a class="reference external" href="http://blog.doingitwithlinux.com/2008/08/ssh-collaboration-using-screen.html">http://blog.doingitwithlinux.com/2008/08/ssh-collaboration-using-screen.html</a></p>
+  <div class="section" id="scapy">
+<h1>Scapy<a class="headerlink" href="#scapy" title="Permalink to this headline">¶</a></h1>
+<p>Monitor requests locally:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sniff</span><span class="p">(</span><span class="n">iface</span><span class="o">=</span><span class="s">&#39;lo&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="s">&#39;port 80&#39;</span><span class="p">,</span> <span class="n">prn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>HTTP only (requires <a class="reference external" href="http://blog.sbarbeau.fr/2011/06/http-support-in-scapy.html">HTTP extension</a>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">show_http</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">HTTPrequest</span> <span class="ow">in</span> <span class="n">p</span> <span class="ow">or</span> <span class="n">HTTPresponse</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+<span class="n">sniff</span><span class="p">(</span><span class="n">iface</span><span class="o">=</span><span class="s">&#39;lo&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="s">&#39;port 80&#39;</span><span class="p">,</span> <span class="n">prn</span><span class="o">=</span><span class="n">show_http</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 
 
@@ -75,14 +86,14 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="scapy.html"
-                        title="previous chapter">Scapy</a></p>
+  <p class="topless"><a href="qbzr_colors.html"
+                        title="previous chapter">QBzr Colors for KDE4 Obsidian Coast Theme</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="shell_colors.html"
-                        title="next chapter">Shell Colors (ANSI Escape Codes)</a></p>
+  <p class="topless"><a href="screen_collab.html"
+                        title="next chapter">Collaborative Editing</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/junk/screen_collab.txt"
+    <li><a href="../_sources/junk/scapy.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -106,10 +117,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="shell_colors.html" title="Shell Colors (ANSI Escape Codes)"
+          <a href="screen_collab.html" title="Collaborative Editing"
              >next</a></li>
         <li class="right" >
-          <a href="scapy.html" title="Scapy"
+          <a href="qbzr_colors.html" title="QBzr Colors for KDE4 Obsidian Coast Theme"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" >Junk</a> &raquo;</li> 
