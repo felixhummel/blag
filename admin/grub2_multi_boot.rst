@@ -32,6 +32,20 @@ Ubuntu server 12.04 x64::
 
     EOF
 
+Backtrack 5 R3 KDE x64::
+
+    cat <<'EOF' >> /mnt/boot/grub/grub.cfg
+    menuentry "Backtrack 5 R3 KDE x64" {
+      set isofile="/iso/BT5R3-KDE-64.iso"
+      set kernel=/casper/vmlinuz
+      set ramdisk=/casper/initrd.gz
+      loopback iso (hd0,1)${isofile}
+      linux (iso)${kernel} boot=install iso-scan/filename=${isofile}
+      initrd (iso)${ramdisk}
+    }
+
+    EOF
+
 Postprocessing::
 
     sync
