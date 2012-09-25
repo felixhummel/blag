@@ -72,17 +72,17 @@
 </pre></div>
 </div>
 <p>Print last exception:</p>
-<div class="highlight-clojure"><div class="highlight"><pre><span class="p">(</span><span class="nf">.printStackTrace</span> <span class="nv">*e</span><span class="p">)</span>
+<div class="highlight-clojure"><div class="highlight"><pre><span class="p">(</span><span class="o">.</span><span class="nv">printStackTrace</span> <span class="nv">*e</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><tt class="docutils literal"><span class="pre">(do</span></tt> returns last sequence</p>
 <p>Add cool stuff:</p>
-<div class="highlight-clojure"><div class="highlight"><pre><span class="p">(</span><span class="nf">use</span> <span class="ss">&#39;clojure.contrib.repl-utils</span><span class="p">)</span>
+<div class="highlight-clojure"><div class="highlight"><pre><span class="p">(</span><span class="nf">use</span> <span class="ss">&#39;clojure</span><span class="o">.</span><span class="nv">contrib</span><span class="o">.</span><span class="nv">repl-utils</span><span class="p">)</span>
 <span class="p">(</span><span class="nf">source</span> <span class="nv">+</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Show contents of a lib:</p>
-<div class="highlight-clojure"><div class="highlight"><pre><span class="p">(</span><span class="nb">ns-publics </span><span class="ss">&#39;clojure.contrib.repl-utils</span><span class="p">)</span>
+<div class="highlight-clojure"><div class="highlight"><pre><span class="p">(</span><span class="nb">ns-publics </span><span class="ss">&#39;clojure</span><span class="o">.</span><span class="nv">contrib</span><span class="o">.</span><span class="nv">repl-utils</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Using the help (p. 52):</p>
@@ -95,12 +95,13 @@
 <div class="section" id="symbols-and-vars">
 <h3>Symbols and Vars<a class="headerlink" href="#symbols-and-vars" title="Permalink to this headline">¶</a></h3>
 <p>At the REPL, <tt class="docutils literal"><span class="pre">q</span></tt> is not defined, but the symbol <tt class="docutils literal"><span class="pre">'q</span></tt> exists of course:</p>
-<div class="highlight-clojure"><pre>user=&gt; q
-java.lang.Exception: Unable to resolve symbol: q in this context (NO_SOURCE_FILE:0)
-user=&gt; 'q
-q
-user=&gt; (type 'q)
-clojure.lang.Symbol</pre>
+<div class="highlight-clojure"><div class="highlight"><pre><span class="nv">user=&gt;</span> <span class="nv">q</span>
+<span class="nv">java</span><span class="o">.</span><span class="nv">lang</span><span class="o">.</span><span class="nv">Exception:</span> <span class="nv">Unable</span> <span class="nv">to</span> <span class="nv">resolve</span> <span class="nv">symbol:</span> <span class="nv">q</span> <span class="nv">in</span> <span class="nv">this</span> <span class="nv">context</span> <span class="p">(</span><span class="nf">NO_SOURCE_FILE:0</span><span class="p">)</span>
+<span class="nv">user=&gt;</span> <span class="ss">&#39;q</span>
+<span class="nv">q</span>
+<span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">type</span> <span class="ss">&#39;q</span><span class="p">)</span>
+<span class="nv">clojure</span><span class="o">.</span><span class="nv">lang</span><span class="o">.</span><span class="nv">Symbol</span>
+</pre></div>
 </div>
 <p>Now with <tt class="docutils literal"><span class="pre">q</span></tt> defined:</p>
 <div class="highlight-clojure"><div class="highlight"><pre><span class="nv">user=&gt;</span> <span class="p">(</span><span class="k">def </span><span class="nv">q</span> <span class="s">&quot;hi&quot;</span><span class="p">)</span>
@@ -111,25 +112,25 @@ clojure.lang.Symbol</pre>
 <div class="highlight-clojure"><div class="highlight"><pre><span class="nv">user=&gt;</span> <span class="nv">q</span>
 <span class="s">&quot;hi&quot;</span>
 <span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">type</span> <span class="nv">q</span><span class="p">)</span>
-<span class="nv">java.lang.String</span>
+<span class="nv">java</span><span class="o">.</span><span class="nv">lang</span><span class="o">.</span><span class="nv">String</span>
 </pre></div>
 </div>
 <p>Quoting <tt class="docutils literal"><span class="pre">q</span></tt> returns its symbol:</p>
-<div class="highlight-clojure"><div class="highlight"><pre><span class="nv">user=&gt;</span> <span class="p">(</span><span class="k">quote </span><span class="nv">q</span><span class="p">)</span>
+<div class="highlight-clojure"><div class="highlight"><pre><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">quote</span> <span class="nv">q</span><span class="p">)</span>
 <span class="nv">q</span>
 <span class="nv">user=&gt;</span> <span class="ss">&#39;q</span>
 <span class="nv">q</span>
 <span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">type</span> <span class="ss">&#39;q</span><span class="p">)</span>
-<span class="nv">clojure.lang.Symbol</span>
+<span class="nv">clojure</span><span class="o">.</span><span class="nv">lang</span><span class="o">.</span><span class="nv">Symbol</span>
 </pre></div>
 </div>
 <p>Get the var of <tt class="docutils literal"><span class="pre">q</span></tt>:</p>
-<div class="highlight-clojure"><div class="highlight"><pre><span class="nv">user=&gt;</span> <span class="p">(</span><span class="k">var </span><span class="nv">q</span><span class="p">)</span>
+<div class="highlight-clojure"><div class="highlight"><pre><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">var</span> <span class="nv">q</span><span class="p">)</span>
 <span class="o">#</span><span class="ss">&#39;user/q</span>
 <span class="nv">user=&gt;</span> <span class="o">#</span><span class="ss">&#39;q</span>
 <span class="o">#</span><span class="ss">&#39;user/q</span>
 <span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">type</span> <span class="o">#</span><span class="ss">&#39;q</span><span class="p">)</span>
-<span class="nv">clojure.lang.Var</span>
+<span class="nv">clojure</span><span class="o">.</span><span class="nv">lang</span><span class="o">.</span><span class="nv">Var</span>
 <span class="nv">user=&gt;</span> <span class="p">(</span><span class="nb">var-get </span><span class="o">#</span><span class="ss">&#39;q</span><span class="p">)</span>
 <span class="s">&quot;hi&quot;</span>
 </pre></div>
@@ -157,18 +158,19 @@ clojure.lang.Symbol</pre>
 <div class="section" id="namespaces">
 <h3>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h3>
 <p>Switching is nice and easy:</p>
-<div class="highlight-clojure"><pre>user=&gt; (ns foo)
-nil
-foo=&gt; (def x "x in foo")
-#'foo/x
-foo=&gt; x
-"x in foo"
-foo=&gt; (ns bar)
-nil
-bar=&gt; x
-java.lang.Exception: Unable to resolve symbol: x in this context (NO_SOURCE_FILE:0)
-bar=&gt; foo/x
-"x in foo"</pre>
+<div class="highlight-clojure"><div class="highlight"><pre><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">ns</span> <span class="nv">foo</span><span class="p">)</span>
+<span class="nv">nil</span>
+<span class="nv">foo=&gt;</span> <span class="p">(</span><span class="k">def </span><span class="nv">x</span> <span class="s">&quot;x in foo&quot;</span><span class="p">)</span>
+<span class="o">#</span><span class="ss">&#39;foo/x</span>
+<span class="nv">foo=&gt;</span> <span class="nv">x</span>
+<span class="s">&quot;x in foo&quot;</span>
+<span class="nv">foo=&gt;</span> <span class="p">(</span><span class="nf">ns</span> <span class="nv">bar</span><span class="p">)</span>
+<span class="nv">nil</span>
+<span class="nv">bar=&gt;</span> <span class="nv">x</span>
+<span class="nv">java</span><span class="o">.</span><span class="nv">lang</span><span class="o">.</span><span class="nv">Exception:</span> <span class="nv">Unable</span> <span class="nv">to</span> <span class="nv">resolve</span> <span class="nv">symbol:</span> <span class="nv">x</span> <span class="nv">in</span> <span class="nv">this</span> <span class="nv">context</span> <span class="p">(</span><span class="nf">NO_SOURCE_FILE:0</span><span class="p">)</span>
+<span class="nv">bar=&gt;</span> <span class="nv">foo/x</span>
+<span class="s">&quot;x in foo&quot;</span>
+</pre></div>
 </div>
 <p>Aliasing works too:</p>
 <div class="highlight-clojure"><div class="highlight"><pre><span class="nv">bar=&gt;</span> <span class="c1">; foo/x is too much to type ;)</span>

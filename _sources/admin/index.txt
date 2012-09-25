@@ -7,6 +7,7 @@ Administration
     apache
     debian
     chroot
+    gitolite
     usb_ubuntu
     grub
     grub2_multi_boot
