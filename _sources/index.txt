@@ -14,6 +14,7 @@ Home
     basics/index
     couchdb/index
     junk/index
+    postgresql/index
     sphinx/index
     vim/index
     sandbox/index

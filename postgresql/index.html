@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PostgreSQL &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="next" title="Sphinx" href="../sphinx/index.html" />
+    <link rel="prev" title="Python" href="../junk/python/index.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../sphinx/index.html" title="Sphinx"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../junk/python/index.html" title="Python"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="postgresql">
+<h1>PostgreSQL<a class="headerlink" href="#postgresql" title="Permalink to this headline">¶</a></h1>
+<p>PostgreSQL 9.2 on Ubuntu 12.04 (<a class="reference external" href="http://askubuntu.com/questions/186610/how-do-i-upgrade-to-postgres-9-2">source</a>):</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo add-apt-repository ppa:pitti/postgresql
+sudo apt-get update
+sudo apt-get install postgresql-9.2
+</pre></div>
+</div>
+<div class="section" id="allow-connections-via-socket-and-md5-password">
+<h2>Allow connections via socket and MD5 password<a class="headerlink" href="#allow-connections-via-socket-and-md5-password" title="Permalink to this headline">¶</a></h2>
+<p>sudo vim /etc/postgresql/9.2/main/pg_hba.conf:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># md5-based auth instead of peer auth</span>
+<span class="c">#local   all             all                                     peer</span>
+<span class="nb">local   </span>all             all                                     md5
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-database">
+<h2>Example database<a class="headerlink" href="#example-database" title="Permalink to this headline">¶</a></h2>
+<p>Connect as user <em>postgres</em> (admin):</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo -u postgres psql
+</pre></div>
+</div>
+<p>Create user and database:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">USER</span> <span class="n">sample</span> <span class="k">WITH</span> <span class="n">PASSWORD</span> <span class="s1">&#39;sample&#39;</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">users</span> <span class="k">WITH</span> <span class="k">OWNER</span> <span class="n">sample</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="k">DATABASE</span> <span class="n">users</span> <span class="k">TO</span> <span class="n">sample</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Clean up:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">DROP</span> <span class="k">DATABASE</span> <span class="n">users</span><span class="p">;</span>
+<span class="k">DROP</span> <span class="k">USER</span> <span class="n">sample</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="links">
+<h2>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">examples (outdated but cool) <a class="reference external" href="http://www.commandprompt.com/ppbook/booktown.sql">http://www.commandprompt.com/ppbook/booktown.sql</a></p>
+</li>
+<li><p class="first">Sequences <a class="reference external" href="http://www.neilconway.org/docs/sequences/">http://www.neilconway.org/docs/sequences/</a></p>
+</li>
+<li><p class="first">environment variables <a class="reference external" href="http://www.postgresql.org/docs/9.2/static/libpq-envars.html">http://www.postgresql.org/docs/9.2/static/libpq-envars.html</a></p>
+</li>
+<li><p class="first">psql script debug flags <a class="reference external" href="http://archives.postgresql.org/pgsql-hackers/2010-06/msg00350.php">http://archives.postgresql.org/pgsql-hackers/2010-06/msg00350.php</a></p>
+</li>
+<li><dl class="first docutils">
+<dt>limit and total: <a class="reference external" href="http://stackoverflow.com/questions/156114/best-way-to-get-result-count-before-limit-was-applied-in-php-postgres">http://stackoverflow.com/questions/156114/best-way-to-get-result-count-before-limit-was-applied-in-php-postgres</a></dt>
+<dd><ul class="first last">
+<li><p class="first">problem with many (&gt; 500k) rows</p>
+</li>
+<li><dl class="first docutils">
+<dt>maybe adapt the following strategy (to deliver query times &lt; 0.5 sec):</dt>
+<dd><ul class="first last simple">
+<li>if count(*) &lt; 100000: select via count(*) over()</li>
+<li>else: return count from table &#8220;counts (table_name, count, date)&#8221;</li>
+<li>background job - nightly or parallel (maybe even on RO-replica)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">timing queries &#8211;&gt; <tt class="docutils literal"><span class="pre">\timing</span></tt>: <a class="reference external" href="http://dba.stackexchange.com/questions/3148/how-can-i-time-sql-queries-using-psql">http://dba.stackexchange.com/questions/3148/how-can-i-time-sql-queries-using-psql</a></p>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PostgreSQL</a><ul>
+<li><a class="reference internal" href="#allow-connections-via-socket-and-md5-password">Allow connections via socket and MD5 password</a></li>
+<li><a class="reference internal" href="#example-database">Example database</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../junk/python/index.html"
+                        title="previous chapter">Python</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../sphinx/index.html"
+                        title="next chapter">Sphinx</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/postgresql/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../sphinx/index.html" title="Sphinx"
+             >next</a></li>
+        <li class="right" >
+          <a href="../junk/python/index.html" title="Python"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
