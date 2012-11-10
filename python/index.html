@@ -1,0 +1,168 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Python &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="next" title="Buildout" href="buildout.html" />
+    <link rel="prev" title="PostgreSQL" href="../postgresql/index.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="buildout.html" title="Buildout"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../postgresql/index.html" title="PostgreSQL"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="python">
+<h1>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="buildout.html">Buildout</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildout.html#resources">Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="did_you_know.html">Did you know?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processes.html">Processes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="processes.html#bash">Bash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="processes.html#python">Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ipython/index.html">Ipython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ipython/index.html#benefits">Benefits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ipython/index.html#make-ipython-aware-of-virtualenvs">Make IPython aware of virtualenvs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="new-script-skeleton">
+<h2>New Script Skeleton<a class="headerlink" href="#new-script-skeleton" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="c"># vim: set fileencoding=utf-8 :</span>
+</pre></div>
+</div>
+<p>This is all you need to make an executable python <a class="reference external" href="http://docs.python.org/tutorial/modules.html">module</a> that defines
+<a class="reference external" href="http://en.wikipedia.org/wiki/Utf-8">UTF-8</a> as it&#8217;s default encoding
+for both vim and python. Download it <a class="reference download internal" href="../_downloads/skeleton.py"><tt class="xref download docutils literal"><span class="pre">here</span></tt></a>.</p>
+</div>
+<div class="section" id="packages">
+<h2>Packages<a class="headerlink" href="#packages" title="Permalink to this headline">¶</a></h2>
+<p>... are just directories with an <tt class="docutils literal"><span class="pre">__init__.py</span></tt> file in them:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># vim: set fileencoding=utf-8 :</span>
+<span class="kn">import</span> <span class="nn">package</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">pass</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;package&#39;</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Python</a><ul>
+<li><a class="reference internal" href="#new-script-skeleton">New Script Skeleton</a></li>
+<li><a class="reference internal" href="#packages">Packages</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../postgresql/index.html"
+                        title="previous chapter">PostgreSQL</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="buildout.html"
+                        title="next chapter">Buildout</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/python/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="buildout.html" title="Buildout"
+             >next</a></li>
+        <li class="right" >
+          <a href="../postgresql/index.html" title="PostgreSQL"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

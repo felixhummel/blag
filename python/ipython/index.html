@@ -1,0 +1,204 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ipython &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../../index.html" />
+    <link rel="up" title="Python" href="../index.html" />
+    <link rel="next" title="Sphinx" href="../../sphinx/index.html" />
+    <link rel="prev" title="Processes" href="../processes.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../sphinx/index.html" title="Sphinx"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../processes.html" title="Processes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Home</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Python</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ipython">
+<h1>Ipython<a class="headerlink" href="#ipython" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="benefits">
+<h2>Benefits<a class="headerlink" href="#benefits" title="Permalink to this headline">¶</a></h2>
+<p>Is &#8220;An Enhanced Interactive Python&#8221;. Install it with (see <a class="reference internal" href="../../junk/apps.html#wajig"><em>Wajig (Package Management)</em></a>):</p>
+<div class="highlight-python"><pre>wajig install ipython</pre>
+</div>
+<p>It has many great features, but these are the best:</p>
+<ol class="arabic">
+<li><p class="first">Tab-Completion.</p>
+</li>
+<li><p class="first">&#8220;Dynamic object information&#8221;</p>
+<blockquote>
+<div><p>try <tt class="docutils literal"><span class="pre">import</span> <span class="pre">os</span></tt> and then <tt class="docutils literal"><span class="pre">os?</span></tt> for basic info and <tt class="docutils literal"><span class="pre">os??</span></tt> for the source</p>
+</div></blockquote>
+</li>
+<li><p class="first">type <tt class="docutils literal"><span class="pre">%edit</span> <span class="pre">file.py</span></tt> to edit and run <tt class="docutils literal"><span class="pre">file.py</span></tt></p>
+<blockquote>
+<div><p>for this to work, you should set the <tt class="docutils literal"><span class="pre">EDITOR</span></tt>-variable to your favorite editor, e.g.:</p>
+<div class="highlight-python"><pre>echo 'export EDITOR=/usr/bin/vim' &gt;&gt; $HOME/.bashrc
+source $HOME/.bashrc</pre>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Scientists love it ;)</p>
+</li>
+</ol>
+</div>
+<div class="section" id="make-ipython-aware-of-virtualenvs">
+<h2>Make IPython aware of virtualenvs<a class="headerlink" href="#make-ipython-aware-of-virtualenvs" title="Permalink to this headline">¶</a></h2>
+<p>Tested with IPython 0.12 on Ubuntu 12.04 (precise).</p>
+<p>Create ipython profile:</p>
+<div class="highlight-python"><pre>ipython profile create</pre>
+</div>
+<p>Modify <tt class="docutils literal"><span class="pre">/usr/bin/ipython</span></tt> to look like this (<a class="reference download internal" href="../../_downloads/ipython"><tt class="xref download docutils literal"><span class="pre">download</span></tt></a>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;Terminal-based IPython entry point.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c"># --[ HACK to make ipython virtualenv-aware ]--</span>
+<span class="c"># see http://isbullsh.it/2012/04/Embed-ipython-in-virtualenv/</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">environ</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">if</span> <span class="s">&#39;VIRTUAL_ENV&#39;</span> <span class="ow">in</span> <span class="n">environ</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;/usr/lib/python2.7/dist-packages&#39;</span><span class="p">)</span>
+    <span class="c"># fix ImportError: No module named _simplegeneric</span>
+    <span class="c"># http://stackoverflow.com/questions/11573844/ipython-import-failure-and-python-sys-path-in-general</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;/usr/lib/pymodules/python2.7&#39;</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">sys</span><span class="p">,</span> <span class="n">environ</span>
+<span class="c"># --[ end of HACK ]--</span>
+
+<span class="kn">from</span> <span class="nn">IPython.frontend.terminal.ipapp</span> <span class="kn">import</span> <span class="n">launch_new_instance</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">launch_new_instance</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="k">if</span> <span class="s">&quot;qt.console.qtconsoleapp&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Could not start qtconsole. Please install ipython-qtconsole&quot;</span>
+  <span class="k">elif</span> <span class="s">&quot;html.notebook.notebookapp&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Could not start notebook. Please install ipython-notebook&quot;</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="c"># if there is no clue on the cause -- just re-raise</span>
+    <span class="k">raise</span>
+</pre></div>
+</div>
+<p>Copy <a class="reference download internal" href="../../_downloads/virtualenv.py"><tt class="xref download docutils literal"><span class="pre">virtualenv.py</span></tt></a> to <tt class="docutils literal"><span class="pre">~/.config/ipython/profile_default/startup/</span></tt>.</p>
+<p>Enjoy!</p>
+<p>Sources:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://isbullsh.it/2012/04/Embed-ipython-in-virtualenv/">http://isbullsh.it/2012/04/Embed-ipython-in-virtualenv/</a></li>
+<li><a class="reference external" href="http://archlinux.me/w0ng/2012/04/09/make-ipython-recognise-virtualenv/">http://archlinux.me/w0ng/2012/04/09/make-ipython-recognise-virtualenv/</a></li>
+<li><a class="reference external" href="http://stackoverflow.com/questions/11573844/ipython-import-failure-and-python-sys-path-in-general">http://stackoverflow.com/questions/11573844/ipython-import-failure-and-python-sys-path-in-general</a></li>
+<li><a class="reference external" href="http://stackoverflow.com/a/8032599/241240">http://stackoverflow.com/a/8032599/241240</a> (&#8220;startup folder in profile directories&#8221;)</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Ipython</a><ul>
+<li><a class="reference internal" href="#benefits">Benefits</a></li>
+<li><a class="reference internal" href="#make-ipython-aware-of-virtualenvs">Make IPython aware of virtualenvs</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../processes.html"
+                        title="previous chapter">Processes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../sphinx/index.html"
+                        title="next chapter">Sphinx</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/python/ipython/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../sphinx/index.html" title="Sphinx"
+             >next</a></li>
+        <li class="right" >
+          <a href="../processes.html" title="Processes"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Home</a> &raquo;</li>
+          <li><a href="../index.html" >Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
