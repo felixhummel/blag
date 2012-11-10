@@ -5,6 +5,7 @@ Python
     :glob:
 
     *
+    ipython/index
 
 New Script Skeleton
 ===================
@@ -22,22 +23,3 @@ Packages
 
 .. literalinclude:: __init__.py
 
-Ipython
-=======
-Is "An Enhanced Interactive Python". Install it with (see :ref:`wajig`)::
-
-    wajig install ipython
-
-It has many great features, but these are the best:
-
-1. Tab-Completion.
-2. "Dynamic object information"
-    
-    try ``import os`` and then ``os?`` for basic info and ``os??`` for the source
-
-3. type ``%edit file.py`` to edit and run ``file.py``
-
-    for this to work, you should set the ``EDITOR``-variable to your favorite editor, e.g.::
-
-        echo 'export EDITOR=/usr/bin/vim' >> $HOME/.bashrc
-        source $HOME/.bashrc
