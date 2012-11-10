@@ -13,5 +13,4 @@ Really simple stuff and skeletons.
     html/index
     firefox
     networking
-    python/index
     vmware
