@@ -16,6 +16,10 @@ sudo vim /etc/postgresql/9.2/main/pg_hba.conf::
     #local   all             all                                     peer
     local   all             all                                     md5
 
+Reload server::
+
+    service postgresql reload
+
 Example database
 ----------------
 Connect as user *postgres* (admin)::
