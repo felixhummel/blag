@@ -43,6 +43,12 @@ Clean up:
     DROP DATABASE users;
     DROP USER sample;
 
+Clean Your Room!
+----------------
+::
+
+    sudo -Hu postgres vacuumdb -az
+
 Links
 -----
 - examples (outdated but cool) http://www.commandprompt.com/ppbook/booktown.sql
