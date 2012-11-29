@@ -34,6 +34,10 @@ Create user and database:
     CREATE DATABASE users WITH OWNER sample;
     GRANT ALL PRIVILEGES ON DATABASE users TO sample;
 
+Try it::
+
+    PGUSER=sample PGPASSWORD=sample PGDATABASE=users psql
+
 .. todo:: publish repo with example db, link here
 
 Clean up:
