@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
     <link rel="next" title="Python" href="../python/index.html" />
-    <link rel="prev" title="Python" href="../junk/python/index.html" />
+    <link rel="prev" title="Readline" href="../junk/python/readline.html" />
  
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -50,7 +50,7 @@
           <a href="../python/index.html" title="Python"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="../junk/python/index.html" title="Python"
+          <a href="../junk/python/readline.html" title="Readline"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li> 
       </ul>
@@ -97,6 +97,12 @@ sudo apt-get install postgresql-9.2
 <p>Clean up:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span class="k">DROP</span> <span class="k">DATABASE</span> <span class="n">users</span><span class="p">;</span>
 <span class="k">DROP</span> <span class="k">USER</span> <span class="n">sample</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="clean-your-room">
+<h2>Clean Your Room!<a class="headerlink" href="#clean-your-room" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre>sudo -Hu postgres vacuumdb -az
 </pre></div>
 </div>
 </div>
@@ -147,14 +153,15 @@ sudo apt-get install postgresql-9.2
 <li><a class="reference internal" href="#">PostgreSQL</a><ul>
 <li><a class="reference internal" href="#allow-connections-via-socket-and-md5-password">Allow connections via socket and MD5 password</a></li>
 <li><a class="reference internal" href="#example-database">Example database</a></li>
+<li><a class="reference internal" href="#clean-your-room">Clean Your Room!</a></li>
 <li><a class="reference internal" href="#links">Links</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../junk/python/index.html"
-                        title="previous chapter">Python</a></p>
+  <p class="topless"><a href="../junk/python/readline.html"
+                        title="previous chapter">Readline</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../python/index.html"
                         title="next chapter">Python</a></p>
@@ -187,7 +194,7 @@ sudo apt-get install postgresql-9.2
           <a href="../python/index.html" title="Python"
              >next</a></li>
         <li class="right" >
-          <a href="../junk/python/index.html" title="Python"
+          <a href="../junk/python/readline.html" title="Readline"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li> 
       </ul>
