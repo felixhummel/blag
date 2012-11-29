@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Syncing desktop, notebook and server with bzr &mdash; Felix&#39; Wobsite</title>
+    <title>Testbox Setup &mdash; Felix&#39; Wobsite</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
     <link rel="up" title="Junk" href="index.html" />
-    <link rel="next" title="Testacular" href="testacular.html" />
-    <link rel="prev" title="Shell Colors (ANSI Escape Codes)" href="shell_colors.html" />
+    <link rel="next" title="Capture and Save Webcam Video" href="vlc.html" />
+    <link rel="prev" title="Testacular" href="testacular.html" />
  
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -48,10 +48,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="testacular.html" title="Testacular"
+          <a href="vlc.html" title="Capture and Save Webcam Video"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="shell_colors.html" title="Shell Colors (ANSI Escape Codes)"
+          <a href="testacular.html" title="Testacular"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
@@ -63,48 +63,17 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <p>For <em>large files</em> (like Ubuntu images) I use <a class="reference external" href="http://www.krusader.org/">krusader</a> to make backups or copy them somewhere on demand, but for <em>small, hand-written files</em> like configs, notes and scripts, I use <a class="reference external" href="http://bazaar-vcs.org/">bazaar</a> (see below).</p>
-<p>This way my stuff is</p>
-<ul class="simple">
-<li>versioned</li>
-<li>mirrored on three computers and</li>
-<li>accessible anywhere (well, the ssh port is open on most firewalls I have encountered so far).</li>
-</ul>
-<div class="section" id="syncing-desktop-notebook-and-server-with-bzr">
-<h1>Syncing desktop, notebook and server with bzr<a class="headerlink" href="#syncing-desktop-notebook-and-server-with-bzr" title="Permalink to this headline">¶</a></h1>
-<p>For projects like &#8220;studying&#8221;, &#8220;wobsite&#8221;, &#8220;evaluations&#8221;, ... I use a bzr branch on my server like so:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd </span>someproject
-<span class="c"># first time setup (on desktop)</span>
-bzr init .
-bzr push sftp://server/var/bzr/someproject
-bzr <span class="nb">bind </span>sftp://server/var/bzr/someproject
+  <div class="section" id="testbox-setup">
+<h1>Testbox Setup<a class="headerlink" href="#testbox-setup" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><pre>cd ~/.ssh/keys
+ssh-keygen -C 'Test box' -N '' -f testbox
+scp root@testbox testbox:.ssh/id_rsa
+scp root@testbox.pub  testbox:.ssh/id_rsa.pub
 
-<span class="c"># get it to notebook (still on desktop)</span>
-ssh notebook
-    bzr co sftp://server/var/bzr/someproject
-<span class="nb">exit</span>
-
-<span class="c"># on the road, without internet access (on notebook)</span>
-bzr unbind
-bzr m <span class="s2">&quot;will merge it, when i come home&quot;</span>
-
-<span class="c"># back at home, with internet access (on desktop)</span>
-ssh notebook
-    bzr <span class="nb">bind</span>
-<span class="nb">    </span>bzr update
-    bzr m <span class="s2">&quot;did some stuff on the road&quot;</span>
-<span class="nb">exit</span>
-
-<span class="nb">cd </span>someproject
-bzr update
-</pre></div>
-</div>
-<p>Assuming <tt class="docutils literal"><span class="pre">~/someproject</span></tt> is already versioned and I have internet access available, the workflow remains simple:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> ~/someproject
-bzr update
-<span class="c"># do stuff</span>
-bzr m <span class="s2">&quot;did stuff&quot;</span>
-</pre></div>
+cd ~/gitolite-admin/
+cp ~/.ssh/keys/root@testbox.pub keydir/root_testbox.pub
+vim conf/gitolite.conf
+git commit -m "add root@testbox"</pre>
 </div>
 </div>
 
@@ -115,14 +84,14 @@ bzr m <span class="s2">&quot;did stuff&quot;</span>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="shell_colors.html"
-                        title="previous chapter">Shell Colors (ANSI Escape Codes)</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="testacular.html"
-                        title="next chapter">Testacular</a></p>
+                        title="previous chapter">Testacular</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="vlc.html"
+                        title="next chapter">Capture and Save Webcam Video</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/junk/slashdot_2009-06-24.txt"
+    <li><a href="../_sources/junk/testbox_setup.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -146,10 +115,10 @@ bzr m <span class="s2">&quot;did stuff&quot;</span>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="testacular.html" title="Testacular"
+          <a href="vlc.html" title="Capture and Save Webcam Video"
              >next</a></li>
         <li class="right" >
-          <a href="shell_colors.html" title="Shell Colors (ANSI Escape Codes)"
+          <a href="testacular.html" title="Testacular"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" >Junk</a> &raquo;</li> 
