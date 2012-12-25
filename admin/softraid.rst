@@ -87,6 +87,20 @@ http://www.gagme.com/greg/linux/raid-lvm.php
     sudo lvcreate --name storage --extents 100%VG raid
     sudo lvdisplay
 
+Format File System And Mount
+----------------------------
+::
+
+    sudo mkfs.ext3 -L storage /dev/raid/storage
+    sudo mkdir /media/storage
+    sudo mount /dev/raid/storage /media/storage
+    cd /media/storage/
+    df .
+
+give ownership to self::
+
+    sudo chown -R `id -u`:`id -g` /media/storage/
+
 
 Troubleshooting
 ---------------
