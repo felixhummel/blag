@@ -102,6 +102,13 @@ give ownership to self::
     sudo chown -R `id -u`:`id -g` /media/storage/
 
 
+Open after Reboot
+-----------------
+See :download:`open_storage.sh`::
+
+    ./open_storage.sh
+
+
 Troubleshooting
 ---------------
 md127 http://ubuntuforums.org/showthread.php?p=10907831#post10907831::
