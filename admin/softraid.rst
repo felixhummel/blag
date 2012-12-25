@@ -56,18 +56,42 @@ add to config (http://wiki.ubuntuusers.de/Software-RAID#mdadm-conf-aktualisieren
     DEVICE /dev/disk/by-partuuid/8500f8db-b3e8-4b26-ac30-51b8d0b731dd /dev/disk/by-partuuid/2333aceb-a287-49c7-95f2-848321bb95c1
     ARRAY /dev/md0 metadata=1.2 name=locutus:0 UUID=25f29ab9:89f6e9e7:19f083c1:bc9b2d06
 
+Encrypt RAID device
+-------------------
+::
+
+    sudo cryptsetup --cipher aes-xts-plain64 --key-size 512 --hash sha512 --iter-time 5000 --use-random --verify-passphrase luksFormat /dev/md0
+    # uppercase YES
+    # check
+    sudo cryptsetup luksDump /dev/md0
+    # test
+    sudo cryptsetup luksOpen /dev/md0 crypt0
+    ls /dev/mapper/crypt0
 
 
-
+Setup LVM
+---------
 http://www.gagme.com/greg/linux/raid-lvm.php
 
-- ~65000 extends per LV
-- 256MB physical extend size (12TB storage: 12000000MB / 65000 ~ 182 MB)
+- physical extend size limitations do not apply to LVM2 (see manpage)
+    - ~65000 extends per LV
+    - 256MB physical extend size (12TB storage: 12000000MB / 65000 ~ 182 MB)
+
+::
+
+    sudo pvcreate /dev/mapper/crypt0
+    sudo pvdisplay
+    sudo vgcreate raid /dev/mapper/crypt0
+    sudo vgdisplay
+    # full size of raid
+    sudo lvcreate --name storage --extents 100%VG raid
+    sudo lvdisplay
 
 
-setup lvm:
+Troubleshooting
+---------------
+md127 http://ubuntuforums.org/showthread.php?p=10907831#post10907831::
 
-    pvcreate /dev/sdc1
-    vgcreate raid /dev/sdc1
-    
+    # check /etc/mdadm/mdadm.conf
+    sudo update-initramfs -u
 
