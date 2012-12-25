@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Soft Raid 1 on Ubuntu 12.04 with GPT disks &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Administration" href="index.html" />
+    <link rel="next" title="Salt Configuration Management" href="salt.html" />
+    <link rel="prev" title="Puppet on Ubuntu 12.04 LTS" href="puppet.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="salt.html" title="Salt Configuration Management"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="puppet.html" title="Puppet on Ubuntu 12.04 LTS"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="soft-raid-1-on-ubuntu-12-04-with-gpt-disks">
+<h1>Soft Raid 1 on Ubuntu 12.04 with GPT disks<a class="headerlink" href="#soft-raid-1-on-ubuntu-12-04-with-gpt-disks" title="Permalink to this headline">¶</a></h1>
+<p>prerequisites:</p>
+<div class="highlight-python"><pre>wajig install gdisk mdadm lvm2</pre>
+</div>
+<div class="section" id="create-partitions">
+<h2>Create Partitions<a class="headerlink" href="#create-partitions" title="Permalink to this headline">¶</a></h2>
+<p>We will use one partition per device with maximum size.</p>
+<p>create partitions:</p>
+<div class="highlight-python"><pre>wajig install gdisk
+gdisk /dev/sdc
+# create a new empty GUID partition table (GPT)
+o
+y
+w
+y
+# add a new partition (type: Linux RAID)
+a
+&lt;ENTER&gt;
+&lt;ENTER&gt;
+&lt;ENTER&gt;
+fd00
+w
+y
+&lt;ENTER&gt;</pre>
+</div>
+<p>reboot.</p>
+<p>check:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">gdisk</span> <span class="o">-</span><span class="n">l</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdc</span>
+</pre></div>
+</div>
+<p>same for /dev/sdd.</p>
+<p>find partition uuids:</p>
+<div class="highlight-python"><pre>ls -la /dev/disk/by-partuuid/</pre>
+</div>
+</div>
+<div class="section" id="setup-raid1">
+<h2>Setup RAID1<a class="headerlink" href="#setup-raid1" title="Permalink to this headline">¶</a></h2>
+<p>watch raid (md) logging:</p>
+<div class="highlight-python"><pre>tail -f /var/log/syslog
+watch cat /proc/mdstat</pre>
+</div>
+<p>setup raid1:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mdadm</span> <span class="o">--</span><span class="n">create</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md0</span> <span class="o">--</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">raid</span><span class="o">-</span><span class="n">devices</span><span class="o">=</span><span class="mi">2</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdc1</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdd1</span>
+<span class="n">y</span>
+</pre></div>
+</div>
+<p>add to config (<a class="reference external" href="http://wiki.ubuntuusers.de/Software-RAID#mdadm-conf-aktualisieren">http://wiki.ubuntuusers.de/Software-RAID#mdadm-conf-aktualisieren</a>):</p>
+<div class="highlight-python"><pre>DEVICE /dev/disk/by-partuuid/8500f8db-b3e8-4b26-ac30-51b8d0b731dd /dev/disk/by-partuuid/2333aceb-a287-49c7-95f2-848321bb95c1
+ARRAY /dev/md0 metadata=1.2 name=locutus:0 UUID=25f29ab9:89f6e9e7:19f083c1:bc9b2d06</pre>
+</div>
+</div>
+<div class="section" id="encrypt-raid-device">
+<h2>Encrypt RAID device<a class="headerlink" href="#encrypt-raid-device" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>sudo cryptsetup --cipher aes-xts-plain64 --key-size 512 --hash sha512 --iter-time 5000 --use-random --verify-passphrase luksFormat /dev/md0
+# uppercase YES
+# check
+sudo cryptsetup luksDump /dev/md0
+# test
+sudo cryptsetup luksOpen /dev/md0 crypt0
+ls /dev/mapper/crypt0</pre>
+</div>
+</div>
+<div class="section" id="setup-lvm">
+<h2>Setup LVM<a class="headerlink" href="#setup-lvm" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.gagme.com/greg/linux/raid-lvm.php">http://www.gagme.com/greg/linux/raid-lvm.php</a></p>
+<ul>
+<li><dl class="first docutils">
+<dt>physical extend size limitations do not apply to LVM2 (see manpage)</dt>
+<dd><ul class="first last simple">
+<li>~65000 extends per LV</li>
+<li>256MB physical extend size (12TB storage: 12000000MB / 65000 ~ 182 MB)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-python"><pre>sudo pvcreate /dev/mapper/crypt0
+sudo pvdisplay
+sudo vgcreate raid /dev/mapper/crypt0
+sudo vgdisplay
+# full size of raid
+sudo lvcreate --name storage --extents 100%VG raid
+sudo lvdisplay</pre>
+</div>
+</div>
+<div class="section" id="format-file-system-and-mount">
+<h2>Format File System And Mount<a class="headerlink" href="#format-file-system-and-mount" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>sudo mkfs.ext3 -L storage /dev/raid/storage
+sudo mkdir /media/storage
+sudo mount /dev/raid/storage /media/storage
+cd /media/storage/
+df .</pre>
+</div>
+<p>give ownership to self:</p>
+<div class="highlight-python"><pre>sudo chown -R `id -u`:`id -g` /media/storage/</pre>
+</div>
+</div>
+<div class="section" id="open-after-reboot">
+<h2>Open after Reboot<a class="headerlink" href="#open-after-reboot" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference download internal" href="../_downloads/open_storage.sh"><tt class="xref download docutils literal"><span class="pre">open_storage.sh</span></tt></a>:</p>
+<div class="highlight-python"><pre>./open_storage.sh</pre>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>md127 <a class="reference external" href="http://ubuntuforums.org/showthread.php?p=10907831#post10907831">http://ubuntuforums.org/showthread.php?p=10907831#post10907831</a>:</p>
+<div class="highlight-python"><pre># check /etc/mdadm/mdadm.conf
+sudo update-initramfs -u</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Soft Raid 1 on Ubuntu 12.04 with GPT disks</a><ul>
+<li><a class="reference internal" href="#create-partitions">Create Partitions</a></li>
+<li><a class="reference internal" href="#setup-raid1">Setup RAID1</a></li>
+<li><a class="reference internal" href="#encrypt-raid-device">Encrypt RAID device</a></li>
+<li><a class="reference internal" href="#setup-lvm">Setup LVM</a></li>
+<li><a class="reference internal" href="#format-file-system-and-mount">Format File System And Mount</a></li>
+<li><a class="reference internal" href="#open-after-reboot">Open after Reboot</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="puppet.html"
+                        title="previous chapter">Puppet on Ubuntu 12.04 LTS</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="salt.html"
+                        title="next chapter">Salt Configuration Management</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/admin/raid.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="salt.html" title="Salt Configuration Management"
+             >next</a></li>
+        <li class="right" >
+          <a href="puppet.html" title="Puppet on Ubuntu 12.04 LTS"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Administration</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

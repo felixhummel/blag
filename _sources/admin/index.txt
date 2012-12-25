@@ -13,6 +13,7 @@ Administration
     grub2_multi_boot
     nginx
     puppet
+    raid
     salt
     wpa_manual
     wpa_roam
