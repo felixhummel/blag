@@ -14,6 +14,8 @@ Administration
     nginx
     puppet
     salt
+    ssh_keygen
+    ssl
     wpa_manual
     wpa_roam
     virtualenv_upstart
