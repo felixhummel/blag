@@ -13,6 +13,7 @@ Administration
     grub2_multi_boot
     nginx
     puppet
+    raid
     salt
     ssh_keygen
     ssl

@@ -47,7 +47,7 @@ Bash and Python
     print 'hello world'
     EOF
 
-See also :doc:`../python/index`!
+See also :doc:`/python/index`!
 
 Quoting
 =======

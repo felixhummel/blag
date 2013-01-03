@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+"""Terminal-based IPython entry point.
+"""
+
+# --[ HACK to make ipython virtualenv-aware ]--
+# see http://isbullsh.it/2012/04/Embed-ipython-in-virtualenv/
+from os import environ
+import sys
+if 'VIRTUAL_ENV' in environ:
+    sys.path.append('/usr/lib/python2.7/dist-packages')
+    # fix ImportError: No module named _simplegeneric
+    # http://stackoverflow.com/questions/11573844/ipython-import-failure-and-python-sys-path-in-general
+    sys.path.append('/usr/lib/pymodules/python2.7')
+del sys, environ
+# --[ end of HACK ]--
+
+from IPython.frontend.terminal.ipapp import launch_new_instance
+
+try:
+  launch_new_instance()
+except ImportError as e:
+  if "qt.console.qtconsoleapp" in e.message:
+    print "Could not start qtconsole. Please install ipython-qtconsole"
+  elif "html.notebook.notebookapp" in e.message:
+    print "Could not start notebook. Please install ipython-notebook"
+  else:
+    # if there is no clue on the cause -- just re-raise
+    raise
