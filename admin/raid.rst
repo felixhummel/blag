@@ -2,7 +2,7 @@ Soft Raid 1 on Ubuntu 12.04 with GPT disks
 ==========================================
 prerequisites::
 
-    wajig install gdisk mdadm lvm2
+    sudo --yes apt-get install gdisk mdadm lvm2 cryptsetup
 
 Create Partitions
 -----------------
