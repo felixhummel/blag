@@ -126,25 +126,25 @@ Share
 ::
 
     [global]
-       workgroup = WORKGROUP
-       server string = %h
-       dns proxy = no
+    workgroup = WORKGROUP
+    server string = %h
+    dns proxy = no
 
-       log file = /var/log/samba/log.%m
-       max log size = 1000
-       syslog = 0
-       panic action = /usr/share/samba/panic-action %d
+    log file = /var/log/samba/log.%m
+    max log size = 1000
+    syslog = 0
+    panic action = /usr/share/samba/panic-action %d
 
-       encrypt passwords = true
-       passdb backend = tdbsam
-       obey pam restrictions = yes
-       unix password sync = yes
-       passwd program = /usr/bin/passwd %u
-       passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
-       pam password change = yes
-       map to guest = bad user
+    encrypt passwords = true
+    passdb backend = tdbsam
+    obey pam restrictions = yes
+    unix password sync = yes
+    passwd program = /usr/bin/passwd %u
+    passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
+    pam password change = yes
+    map to guest = bad user
 
-       usershare allow guests = yes
+    usershare allow guests = yes
 
     [storage]
     comment = storage
@@ -153,6 +153,10 @@ Share
     guest ok = yes
     valid users = storage
     writable = yes
+
+restart Samba::
+
+    service smbd restart
 
 
 Troubleshooting
