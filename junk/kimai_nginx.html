@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Multi Boot With Grub 2 &mdash; Felix&#39; Wobsite</title>
+    <title>Kimai Nginx Install &mdash; Felix&#39; Wobsite</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -26,9 +26,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
-    <link rel="up" title="Administration" href="index.html" />
-    <link rel="next" title="Munin" href="munin.html" />
-    <link rel="prev" title="GRUB" href="grub.html" />
+    <link rel="up" title="Junk" href="index.html" />
+    <link rel="next" title="LVM Notes" href="lvm.html" />
+    <link rel="prev" title="KDE 4" href="kde4.html" />
  
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -48,13 +48,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="munin.html" title="Munin"
+          <a href="lvm.html" title="LVM Notes"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="grub.html" title="GRUB"
+          <a href="kde4.html" title="KDE 4"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Administration</a> &raquo;</li> 
+          <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -63,51 +63,54 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="multi-boot-with-grub-2">
-<h1>Multi Boot With Grub 2<a class="headerlink" href="#multi-boot-with-grub-2" title="Permalink to this headline">¶</a></h1>
-<p>Just some notes. You will get this, if this is for you:</p>
-<div class="highlight-python"><pre>fdisk /dev/sdb
-# WARNING pull stick, reattach (else grub-install could have problems probing the device)
-mount /dev/sdb1 /mnt
-grub-install --no-floppy --recheck --root-directory=/mnt /dev/sdb
-mkdir /mnt/iso
+  <div class="section" id="kimai-nginx-install">
+<h1>Kimai Nginx Install<a class="headerlink" href="#kimai-nginx-install" title="Permalink to this headline">¶</a></h1>
+<p>user www-data to nginx:</p>
+<div class="highlight-python"><pre>vim /etc/php5/fpm/pool.d/www.conf
+service php5-fpm restart</pre>
+</div>
+<p>nginx config:</p>
+<div class="highlight-python"><pre>server {
+  listen       80;
+  server_name  BLUBB;
 
-# tmpdir to mount images
-mkdir -p /tmp/img</pre>
-</div>
-<p>For each iso:</p>
-<div class="highlight-python"><pre># copy image to /mnt/iso
-mount -o loop /mnt/iso/IMAGE_NAME /tmp/img
-# inspect syslinux loader for kernel args
-umount /tmp/img</pre>
-</div>
-<p>Ubuntu server 12.04 x64:</p>
-<div class="highlight-python"><pre>cat &lt;&lt;'EOF' &gt;&gt; /mnt/boot/grub/grub.cfg
-menuentry "ubuntu-12.04-server-amd64" {
-  set isofile="/iso/ubuntu-12.04-server-amd64.iso"
-  set kernel=/install/vmlinuz
-  set ramdisk=/install/initrd.gz
-  loopback iso (hd0,1)${isofile}
-  linux (iso)${kernel} boot=install iso-scan/filename=${isofile}
-  initrd (iso)${ramdisk}
-}
+  #charset koi8-r;
 
-EOF</pre>
+  #access_log  logs/host.access.log  main;
+
+  location / {
+    root   BLAH;
+    index  index.html index.htm;
+  }
+  #error_page  404              /404.html;
+
+  # redirect server error pages to the static page /50x.html
+  #
+  error_page   500 502 503 504  /50x.html;
+  location = /50x.html {
+    root   html;
+  }
+
+  # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+  #
+  location ~ \.php$ {
+    root           BLAH;
+    fastcgi_pass   127.0.0.1:9000;
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+    include        fastcgi_params;
+  }
+}</pre>
 </div>
-<p>Backtrack 5 R3 KDE x64: <a class="reference external" href="http://www.backtrack-linux.org/forums/showthread.php?t=42735">http://www.backtrack-linux.org/forums/showthread.php?t=42735</a></p>
-<p>Postprocessing:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">sync</span>
-<span class="n">umount</span> <span class="o">/</span><span class="n">mnt</span>
-<span class="c"># pull stick, attach to target, enjoy</span>
-</pre></div>
+<p>DB:</p>
+<div class="highlight-python"><pre>CREATE USER 'kimai'@'localhost' IDENTIFIED BY 'kimai';
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON `kimai`.* TO 'kimai'@'localhost';
+CREATE DATABASE kimai;</pre>
 </div>
-<p>Sources:</p>
-<ul class="simple">
-<li><a class="reference external" href="http://www.gnu.org/software/grub/manual/grub.html">GRUB 2 manual</a></li>
-<li><a class="reference external" href="http://members.iinet.net/~herman546/p20/GRUB2%20CLI%20Mode%20Commands.html">GRUB 2 Cli mode commands</a></li>
-<li><a class="reference external" href="http://www.panticz.de/MultiBootUSB">http://www.panticz.de/MultiBootUSB</a></li>
-<li><a class="reference external" href="http://ubuntuforums.org/showthread.php?t=1549847">http://ubuntuforums.org/showthread.php?t=1549847</a></li>
-</ul>
+<p>post:</p>
+<div class="highlight-python"><pre>cd kimai/
+rm -r installer/</pre>
+</div>
 </div>
 
 
@@ -117,14 +120,14 @@ EOF</pre>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="grub.html"
-                        title="previous chapter">GRUB</a></p>
+  <p class="topless"><a href="kde4.html"
+                        title="previous chapter">KDE 4</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="munin.html"
-                        title="next chapter">Munin</a></p>
+  <p class="topless"><a href="lvm.html"
+                        title="next chapter">LVM Notes</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/admin/grub2_multi_boot.txt"
+    <li><a href="../_sources/junk/kimai_nginx.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -148,13 +151,13 @@ EOF</pre>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="munin.html" title="Munin"
+          <a href="lvm.html" title="LVM Notes"
              >next</a></li>
         <li class="right" >
-          <a href="grub.html" title="GRUB"
+          <a href="kde4.html" title="KDE 4"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
-          <li><a href="index.html" >Administration</a> &raquo;</li> 
+          <li><a href="index.html" >Junk</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -66,7 +66,7 @@
   <div class="section" id="soft-raid-1-on-ubuntu-12-04-with-gpt-disks">
 <h1>Soft Raid 1 on Ubuntu 12.04 with GPT disks<a class="headerlink" href="#soft-raid-1-on-ubuntu-12-04-with-gpt-disks" title="Permalink to this headline">¶</a></h1>
 <p>prerequisites:</p>
-<div class="highlight-python"><pre>wajig install gdisk mdadm lvm2</pre>
+<div class="highlight-python"><pre>sudo --yes apt-get install gdisk mdadm lvm2 cryptsetup</pre>
 </div>
 <div class="section" id="create-partitions">
 <h2>Create Partitions<a class="headerlink" href="#create-partitions" title="Permalink to this headline">¶</a></h2>
@@ -167,6 +167,50 @@ df .</pre>
 <div class="highlight-python"><pre>./open_storage.sh</pre>
 </div>
 </div>
+<div class="section" id="share">
+<h2>Share<a class="headerlink" href="#share" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>wajig install samba</pre>
+</div>
+<div class="highlight-python"><pre>sudo adduser --home /media/storage --shell /bin/false --no-create-home --disabled-login --gecos 'windows share account' storage
+sudo passwd storage
+# make samba aware of new user
+sudo smbpasswd -a storage
+sudo vim /etc/samba/smb.conf
+sudo chown -R storage:storage /media/storage</pre>
+</div>
+<div class="highlight-python"><pre>[global]
+workgroup = WORKGROUP
+server string = %h
+dns proxy = no
+
+log file = /var/log/samba/log.%m
+max log size = 1000
+syslog = 0
+panic action = /usr/share/samba/panic-action %d
+
+encrypt passwords = true
+passdb backend = tdbsam
+obey pam restrictions = yes
+unix password sync = yes
+passwd program = /usr/bin/passwd %u
+passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
+pam password change = yes
+map to guest = bad user
+
+usershare allow guests = yes
+
+[storage]
+comment = storage
+path = /media/storage
+browsable = yes
+guest ok = yes
+valid users = storage
+writable = yes</pre>
+</div>
+<p>restart Samba:</p>
+<div class="highlight-python"><pre>service smbd restart</pre>
+</div>
+</div>
 <div class="section" id="troubleshooting">
 <h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
 <p>md127 <a class="reference external" href="http://ubuntuforums.org/showthread.php?p=10907831#post10907831">http://ubuntuforums.org/showthread.php?p=10907831#post10907831</a>:</p>
@@ -191,6 +235,7 @@ sudo update-initramfs -u</pre>
 <li><a class="reference internal" href="#setup-lvm">Setup LVM</a></li>
 <li><a class="reference internal" href="#format-file-system-and-mount">Format File System And Mount</a></li>
 <li><a class="reference internal" href="#open-after-reboot">Open after Reboot</a></li>
+<li><a class="reference internal" href="#share">Share</a></li>
 <li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
