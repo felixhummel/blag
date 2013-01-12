@@ -11,6 +11,7 @@ Administration
     usb_ubuntu
     grub
     grub2_multi_boot
+    munin
     nginx
     puppet
     raid
