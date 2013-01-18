@@ -1,0 +1,195 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>OpenWRT on WRT54GL &mdash; Felix&#39; Wobsite</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
+    <link rel="up" title="Junk" href="index.html" />
+    <link rel="next" title="Network Management Disabled" href="problems.html" />
+    <link rel="prev" title="Notify" href="notify.html" />
+ 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4581995-6']);
+      _gaq.push(['_setDomainName', 'blag.felixhummel.de']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="problems.html" title="Network Management Disabled"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="notify.html" title="Notify"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="openwrt-on-wrt54gl">
+<h1>OpenWRT on WRT54GL<a class="headerlink" href="#openwrt-on-wrt54gl" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>domain name for lan: <tt class="docutils literal"><span class="pre">lan</span></tt></li>
+<li>when setting up a new box, e.g. ubuntu-box, it should be reachable at <tt class="docutils literal"><span class="pre">ubuntu-box.lan</span></tt></li>
+<li>should be possible to add subdomains (see <a class="reference internal" href="#subdomains-with-dnsmasq">Subdomains with Dnsmasq</a>)</li>
+</ul>
+<div class="section" id="reset">
+<h2>Reset<a class="headerlink" href="#reset" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>remove power cable</li>
+<li>hold reset button</li>
+<li>insert power cable</li>
+<li>when DMZ led up: release reset button</li>
+<li><tt class="docutils literal"><span class="pre">telnet</span> <span class="pre">192.168.1.1</span></tt></li>
+</ul>
+</div>
+<div class="section" id="white-russian-to-backfire">
+<h2>White Russian to Backfire<a class="headerlink" href="#white-russian-to-backfire" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>scp openwrt-brcm47xx-squashfs.trx md5sums root@192.168.1.1:
+ssh root@192.168.1.1
+md5sum -c md5sums
+mtd -r write openwrt-brcm47xx-squashfs.trx linux</pre>
+</div>
+<p>wait for it...</p>
+<div class="highlight-python"><pre>ping -i 2 192.168.1.1</pre>
+</div>
+</div>
+<div class="section" id="check-out-uci">
+<h2>Check out UCI<a class="headerlink" href="#check-out-uci" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://wiki.openwrt.org/doc/uci">http://wiki.openwrt.org/doc/uci</a></p>
+</div>
+<div class="section" id="configure-dhcp">
+<h2>Configure DHCP<a class="headerlink" href="#configure-dhcp" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>DSL-Router at 192.168.1.1</li>
+<li>wrt = DHCP Server = 192.168.1.2</li>
+<li>Network &gt; Interfaces &gt; LAN: for now: lease time 2m &#8211; TODO: up to 72h</li>
+<li>default gateway (<a class="reference external" href="http://wiki.openwrt.org/doc/uci/dhcp#dhcp.option.example.to.set.an.alternative.default.gateway">wiki</a>)</li>
+</ul>
+<p><tt class="docutils literal"><span class="pre">/etc/config/dhcp</span></tt>:</p>
+<div class="highlight-python"><pre>config 'dhcp' 'lan'
+        [...]
+        list 'dhcp_option' '3,192.168.1.2'</pre>
+</div>
+<div class="section" id="subdomains-with-dnsmasq">
+<h3>Subdomains with Dnsmasq<a class="headerlink" href="#subdomains-with-dnsmasq" title="Permalink to this headline">¶</a></h3>
+<p>Thanks, <a class="reference external" href="http://www.santiagolizardo.com/article/how-to-setup-wildcard-subdomains-in-linux/64001">Santiago</a>!</p>
+<p>Mission: Subdomains for <tt class="docutils literal"><span class="pre">enterprise.lan</span></tt> (192.168.1.3), e.g. <tt class="docutils literal"><span class="pre">mail.enterprise.lan</span></tt> or <tt class="docutils literal"><span class="pre">www.enterprise.lan</span></tt> ...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">dnsmasq</span><span class="o">.</span><span class="n">conf</span>
+</pre></div>
+</div>
+<p>For <tt class="docutils literal"><span class="pre">enterprise.lan</span></tt>, add the line:</p>
+<div class="highlight-python"><pre>address=/enterprise.lan/192.168.1.3</pre>
+</div>
+<p>Reload dnsmasq and try it (either locally or on another box):</p>
+<div class="highlight-python"><pre>/etc/init.d/dnsmasq reload
+nslookup www.enterprise.lan</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">OpenWRT on WRT54GL</a><ul>
+<li><a class="reference internal" href="#reset">Reset</a></li>
+<li><a class="reference internal" href="#white-russian-to-backfire">White Russian to Backfire</a></li>
+<li><a class="reference internal" href="#check-out-uci">Check out UCI</a></li>
+<li><a class="reference internal" href="#configure-dhcp">Configure DHCP</a><ul>
+<li><a class="reference internal" href="#subdomains-with-dnsmasq">Subdomains with Dnsmasq</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="notify.html"
+                        title="previous chapter">Notify</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="problems.html"
+                        title="next chapter">Network Management Disabled</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/junk/openwrt.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="problems.html" title="Network Management Disabled"
+             >next</a></li>
+        <li class="right" >
+          <a href="notify.html" title="Notify"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Junk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2009, Felix Hummel.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
