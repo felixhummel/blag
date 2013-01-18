@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Network Management Disabled &mdash; Felix&#39; Wobsite</title>
+    <title>Prime 95 on Linux &mdash; Felix&#39; Wobsite</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
     <link rel="up" title="Junk" href="index.html" />
-    <link rel="next" title="QBzr Colors for KDE4 Obsidian Coast Theme" href="qbzr_colors.html" />
-    <link rel="prev" title="Prime 95 on Linux" href="prime95_linux.html" />
+    <link rel="next" title="Network Management Disabled" href="problems.html" />
+    <link rel="prev" title="OpenWRT on WRT54GL" href="openwrt.html" />
  
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -48,10 +48,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="qbzr_colors.html" title="QBzr Colors for KDE4 Obsidian Coast Theme"
+          <a href="problems.html" title="Network Management Disabled"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="prime95_linux.html" title="Prime 95 on Linux"
+          <a href="openwrt.html" title="OpenWRT on WRT54GL"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
@@ -63,11 +63,21 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="network-management-disabled">
-<h1>Network Management Disabled<a class="headerlink" href="#network-management-disabled" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-python"><pre>service network-manager stop
-rm /var/lib/NetworkManager/NetworkManager.state
-service network-manager start</pre>
+  <div class="section" id="prime-95-on-linux">
+<h1>Prime 95 on Linux<a class="headerlink" href="#prime-95-on-linux" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><pre>wget http://mersenneforum.org/gimps/p95v277.linux64.tar.gz
+aunpack p95v277.linux64.tar.gz
+rm p95v277.linux64.tar.gz
+cd p95v277.linux64/
+./mprime -t</pre>
+</div>
+<p>get and configure sensors:</p>
+<div class="highlight-python"><pre>wajig install lm-sensors
+sensors-detect</pre>
+</div>
+<p>watch em BURNNN!!!</p>
+<div class="highlight-python"><pre>htop
+watch 'sensors | grep Core'</pre>
 </div>
 </div>
 
@@ -78,14 +88,14 @@ service network-manager start</pre>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="prime95_linux.html"
-                        title="previous chapter">Prime 95 on Linux</a></p>
+  <p class="topless"><a href="openwrt.html"
+                        title="previous chapter">OpenWRT on WRT54GL</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="qbzr_colors.html"
-                        title="next chapter">QBzr Colors for KDE4 Obsidian Coast Theme</a></p>
+  <p class="topless"><a href="problems.html"
+                        title="next chapter">Network Management Disabled</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/junk/problems.txt"
+    <li><a href="../_sources/junk/prime95_linux.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -109,10 +119,10 @@ service network-manager start</pre>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="qbzr_colors.html" title="QBzr Colors for KDE4 Obsidian Coast Theme"
+          <a href="problems.html" title="Network Management Disabled"
              >next</a></li>
         <li class="right" >
-          <a href="prime95_linux.html" title="Prime 95 on Linux"
+          <a href="openwrt.html" title="OpenWRT on WRT54GL"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" >Junk</a> &raquo;</li> 
