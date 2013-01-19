@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Apps &mdash; Felix&#39; Wobsite</title>
+    <title>Etherpad Lite with PostgreSQL &mdash; Felix&#39; Wobsite</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -26,8 +26,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
-    <link rel="next" title="Etherpad Lite with PostgreSQL" href="etherpad-lite.html" />
-    <link rel="prev" title="VirtualEnv Init.d Scripts the Easy Way" href="../admin/venv_initd.html" />
+    <link rel="up" title="Apps" href="index.html" />
+    <link rel="next" title="Mutt How To Mirror" href="mutt.html" />
+    <link rel="prev" title="Apps" href="index.html" />
  
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -47,12 +48,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="etherpad-lite.html" title="Etherpad Lite with PostgreSQL"
+          <a href="mutt.html" title="Mutt How To Mirror"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="../admin/venv_initd.html" title="VirtualEnv Init.d Scripts the Easy Way"
+          <a href="index.html" title="Apps"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Home</a> &raquo;</li> 
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Apps</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,26 +63,35 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="apps">
-<h1>Apps<a class="headerlink" href="#apps" title="Permalink to this headline">¶</a></h1>
-<p>Notes about some of my favorite apps.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="etherpad-lite.html">Etherpad Lite with PostgreSQL</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="etherpad-lite.html#backup-and-restore-database">Backup and Restore Database</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="mutt.html">Mutt How To Mirror</a></li>
-<li class="toctree-l1"><a class="reference internal" href="oocalc.html">Open Office Calc</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="oocalc.html#exporting-selection">Exporting Selection</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="screen.html">GNU Screen</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="screen.html#my-favorite-commands">My Favorite Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="screen.html#shortcuts-in-a-screen-session">Shortcuts in a screen session</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="etherpad-lite-with-postgresql">
+<h1>Etherpad Lite with PostgreSQL<a class="headerlink" href="#etherpad-lite-with-postgresql" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="backup-and-restore-database">
+<h2>Backup and Restore Database<a class="headerlink" href="#backup-and-restore-database" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>mkdir /var/backups/pad
+sudo -Hu postgres pg_dump pad &gt; /var/backups/pad/`date +%F`.sql
+cp settings.json /var/backups/pad/
+
+# git pull or git clone - depends
+cp -r /home/pad/ /srv/pad
+cd /srv/pad
+git pull
+
+/root/devops/root/bin/postgres_create_user_and_db pad2
+chown -R pad:pad /srv/pad
+cd /srv/pad
+sudo -Hu pad npm install pg
+
+sudo -Hu postgres PGDATABASE=pad2 psql &lt; /var/backups/pad/pad.sql
+
+vim settings.json  # user = pad2
+sudo -Hu pad bin/run.sh</pre>
+</div>
+<p>sudo -Hu postgres psql:</p>
+<div class="highlight-python"><pre>\c pad2
+alter table store owner to pad2;
+alter table v_pads owner to pad2;
+alter function public.ueberdb_insert_or_update(character varying, text) owner to pad2;</pre>
+</div>
 </div>
 </div>
 
@@ -90,15 +101,23 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Etherpad Lite with PostgreSQL</a><ul>
+<li><a class="reference internal" href="#backup-and-restore-database">Backup and Restore Database</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../admin/venv_initd.html"
-                        title="previous chapter">VirtualEnv Init.d Scripts the Easy Way</a></p>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Apps</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="etherpad-lite.html"
-                        title="next chapter">Etherpad Lite with PostgreSQL</a></p>
+  <p class="topless"><a href="mutt.html"
+                        title="next chapter">Mutt How To Mirror</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/apps/index.txt"
+    <li><a href="../_sources/apps/etherpad-lite.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -122,12 +141,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="etherpad-lite.html" title="Etherpad Lite with PostgreSQL"
+          <a href="mutt.html" title="Mutt How To Mirror"
              >next</a></li>
         <li class="right" >
-          <a href="../admin/venv_initd.html" title="VirtualEnv Init.d Scripts the Easy Way"
+          <a href="index.html" title="Apps"
              >previous</a> |</li>
-        <li><a href="../index.html">Home</a> &raquo;</li> 
+        <li><a href="../index.html">Home</a> &raquo;</li>
+          <li><a href="index.html" >Apps</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
