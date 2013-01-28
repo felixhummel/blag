@@ -1,3 +1,6 @@
+***
+Git
+***
 Git, Gitosis
 ============
 Client
@@ -23,4 +26,11 @@ Clone gitosis-admin::
 
     git clone git@serv:gitosis-admin
 
+
+Bisect
+======
+Simple, auto::
+
+    git bisect start BAD_COMMIT GOOD_COMMIT
+    git bisect run test_runner tests/
 
