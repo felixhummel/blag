@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Git, Gitosis &mdash; Felix&#39; Wobsite</title>
+    <title>Git &mdash; Felix&#39; Wobsite</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -63,16 +63,18 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="git-gitosis">
-<h1>Git, Gitosis<a class="headerlink" href="#git-gitosis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="git">
+<h1>Git<a class="headerlink" href="#git" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="git-gitosis">
+<h2>Git, Gitosis<a class="headerlink" href="#git-gitosis" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="client">
-<h2>Client<a class="headerlink" href="#client" title="Permalink to this headline">¶</a></h2>
+<h3>Client<a class="headerlink" href="#client" title="Permalink to this headline">¶</a></h3>
 <p>Copy pub key to serv:</p>
 <div class="highlight-python"><pre>scp ~/.ssh/id_rsa.pub serv:felix@acer.pub</pre>
 </div>
 </div>
 <div class="section" id="server">
-<h2>Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h2>
+<h3>Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h3>
 <p>Add Git user:</p>
 <div class="highlight-python"><pre>adduser --system --shell /bin/sh --gecos 'git user' --group --disabled-password git</pre>
 </div>
@@ -81,9 +83,17 @@
 </div>
 </div>
 <div class="section" id="id1">
-<h2>Client<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h3>Client<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Clone gitosis-admin:</p>
 <div class="highlight-python"><pre>git clone git@serv:gitosis-admin</pre>
+</div>
+</div>
+</div>
+<div class="section" id="bisect">
+<h2>Bisect<a class="headerlink" href="#bisect" title="Permalink to this headline">¶</a></h2>
+<p>Simple, auto:</p>
+<div class="highlight-python"><pre>git bisect start BAD_COMMIT GOOD_COMMIT
+git bisect run test_runner tests/</pre>
 </div>
 </div>
 </div>
@@ -96,10 +106,14 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Git, Gitosis</a><ul>
+<li><a class="reference internal" href="#">Git</a><ul>
+<li><a class="reference internal" href="#git-gitosis">Git, Gitosis</a><ul>
 <li><a class="reference internal" href="#client">Client</a></li>
 <li><a class="reference internal" href="#server">Server</a></li>
 <li><a class="reference internal" href="#id1">Client</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bisect">Bisect</a></li>
 </ul>
 </li>
 </ul>
