@@ -175,6 +175,23 @@ iface eth inet dhcp</pre>
 </div>
 </div>
 </div>
+<div class="section" id="ip-address-in-etc-issue-for-virtualbox">
+<h2>IP Address in /etc/issue for Virtualbox<a class="headerlink" href="#ip-address-in-etc-issue-for-virtualbox" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>cat&lt;&lt;'EOF' &gt; /etc/issue.template
+Ubuntu 12.04.1 LTS \n \l
+username: root
+password: toor
+ip address: IP_ADDRESS
+EOF
+
+cp /etc/rc.local /var/backup/
+cat&lt;&lt;'EOF' &gt; /etc/rc.local
+ip_address=`ifconfig eth0 | awk '/inet addr/ {print $2}' | cut -f2 -d:`
+sed -e "s/IP_ADDRESS/$ip_address/" /etc/issue.template &gt; /etc/issue
+exit 0
+EOF</pre>
+</div>
+</div>
 </div>
 
 
@@ -198,6 +215,7 @@ iface eth inet dhcp</pre>
 <li><a class="reference internal" href="#set-hostname-on-host">Set Hostname on Host</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#ip-address-in-etc-issue-for-virtualbox">IP Address in /etc/issue for Virtualbox</a></li>
 </ul>
 </li>
 </ul>
