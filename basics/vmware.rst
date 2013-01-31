@@ -106,3 +106,22 @@ On host, edit::
 and add::
 
     10.0.0.23 tsvm
+
+IP Address in /etc/issue for Virtualbox
+=======================================
+::
+
+    cat<<'EOF' > /etc/issue.template
+    Ubuntu 12.04.1 LTS \n \l
+    username: root
+    password: toor
+    ip address: IP_ADDRESS
+    EOF
+
+    cp /etc/rc.local /var/backup/
+    cat<<'EOF' > /etc/rc.local
+    ip_address=`ifconfig eth0 | awk '/inet addr/ {print $2}' | cut -f2 -d:`
+    sed -e "s/IP_ADDRESS/$ip_address/" /etc/issue.template > /etc/issue
+    exit 0
+    EOF
+
