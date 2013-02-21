@@ -70,7 +70,15 @@ From http://www.vmware.com/support/gsx3/doc/network_macaddr_gsx.html
 
 Set Static Device Name
 ----------------------
-::
+Problem: Different MAC addresses for the same VM result in different device names. Those are not configured (see /etc/network/interfaces) and thus cannot get an IP address.
+In a VM where we have **EXACTLY ONE** MAC address, so we can set **any** device to ``eth0``::
+
+    find /etc/udev/rules.d/ -name "*-net.rules" -exec rm {} \;
+    cat <<'EOF' > /etc/udev/rules.d/70-persistent-net.rules
+    SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{dev_id}=="0x0", ATTR{type}=="1", KERNEL=="eth*", NAME="eth0"
+    EOF
+
+For a specific MAC-address::
 
     find /etc/udev/rules.d/ -name "*-net.rules" -exec rm {} \;
     echo 'KERNEL=="eth*", SYSFS{address}=="00:50:56:00:13:37", NAME="eth"' >        /etc/udev/rules.d/10-net.rules
