@@ -20,6 +20,18 @@ The client is already installed. To install the server::
 
     wajig install openssh-server
 
+Configuration
+-------------
+Check out `~/.ssh/config`. Do it! It's worth it.
+
+The command `ssh -p 2345 -i /var/some_key some_user@some_weird_host_name` becomes `ssh foo` with the following entry::
+
+    Host foo
+      Hostname some_weird_host_name
+      User some_user
+      IdentityFile /var/some_key
+      Port 2345
+
 Usage
 -----
 Connect to host ``notebook``::
@@ -73,3 +85,32 @@ List Open Ports
     netstat --numeric-hosts --protocol=inet
 
 We use :option:`--numeric-hosts` because dns lookups can be quite slow.
+
+Netstat Lines Explained
+=======================
+I'm usually interested in all (-a) numeric (-n) TCP (-t) connections and the corresponding processes (-p). 'tanp' sounds nicer than 'atnp'.
+
+::
+
+    netstat -tanp
+
+Just nginx listening on all addresses (0.0.0.0) on port 80::
+
+    tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      9111/nginx -g daemo     nginx.
+
+What's rpcbind? Basically a multiplexer for kernel-based services like NFS::
+
+    tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      31994/rpcbind           needed for nfs
+
+No pid? Dafuq? `rpcinfo -p` tells us more::
+
+    tcp        0      0 0.0.0.0:48660           0.0.0.0:*               LISTEN      -
+
+`rpcinfo -p`::
+
+       program vers proto   port  service
+
+       100021    3   tcp  48660  nlockmgr
+       100021    4   tcp  48660  nlockmgr
+       100021    1   tcp  48660  nlockmgr
+       [...]

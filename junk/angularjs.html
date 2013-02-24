@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Htop or Linux Memory &mdash; Felix&#39; Wobsite</title>
+    <title>Troubleshooting &mdash; Felix&#39; Wobsite</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Felix&#39; Wobsite" href="../index.html" />
     <link rel="up" title="Junk" href="index.html" />
-    <link rel="next" title="Javascript Hacks" href="javascript.html" />
-    <link rel="prev" title="Git" href="git.html" />
+    <link rel="next" title="Best Apps Ever" href="apps.html" />
+    <link rel="prev" title="Junk" href="index.html" />
  
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -48,10 +48,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="javascript.html" title="Javascript Hacks"
+          <a href="apps.html" title="Best Apps Ever"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="git.html" title="Git"
+          <a href="index.html" title="Junk"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Junk</a> &raquo;</li> 
@@ -63,24 +63,25 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="htop-or-linux-memory">
-<h1>Htop or Linux Memory<a class="headerlink" href="#htop-or-linux-memory" title="Permalink to this headline">¶</a></h1>
-<p>Help, Linux ate my RAM: <a class="reference external" href="http://webcache.googleusercontent.com/search?q=cache:http://www.linuxatemyram.com/">http://webcache.googleusercontent.com/search?q=cache:http://www.linuxatemyram.com/</a></p>
-<p>RAM available = free + buffers + cache</p>
-<p>Htop <a class="reference external" href="http://htop.sourceforge.net/index.php?page=faq">http://htop.sourceforge.net/index.php?page=faq</a></p>
-<p>Colors (F1 in htop):</p>
-<ul class="simple">
-<li>green: processes (=RES in column)</li>
-<li>blue: buffers</li>
-<li>orange: cache</li>
-</ul>
-<p>Difference between buffers and cache: <a class="reference external" href="http://www.linuxhowtos.org/System/Linux%20Memory%20Management.htm">http://www.linuxhowtos.org/System/Linux%20Memory%20Management.htm</a></p>
-<ul class="simple">
-<li>Buffers hold file system meta data</li>
-<li>Cache holds file contents</li>
-</ul>
-<p>Get available RAM one-liner:</p>
-<div class="highlight-python"><pre>free -m | awk '/cache:/ {print $4}'</pre>
+  <div class="section" id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="non-assignable-model-expression">
+<h2>Non-assignable model expression<a class="headerlink" href="#non-assignable-model-expression" title="Permalink to this headline">¶</a></h2>
+<p>DOM element misses attribute.</p>
+<p>First encounter:</p>
+<div class="highlight-python"><pre>// html
+&lt;leaflet center="dafuq"&gt;&lt;/leaflet&gt;
+// js
+$scope.dafuq = { lat: '47.75443', lng: '11.99677', zoom: 4 };
+$scope.zoom = 4;</pre>
+</div>
+<p>Solution:</p>
+<div class="highlight-python"><pre>// html
+&lt;leaflet center="dafuq" zoom="zoom"&gt;&lt;/leaflet&gt;
+// js
+$scope.dafuq = { lat: '47.75443', lng: '11.99677', zoom: 4 };
+$scope.zoom = 4;</pre>
+</div>
 </div>
 </div>
 
@@ -90,15 +91,23 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#non-assignable-model-expression">Non-assignable model expression</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
-  <p class="topless"><a href="git.html"
-                        title="previous chapter">Git</a></p>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Junk</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="javascript.html"
-                        title="next chapter">Javascript Hacks</a></p>
+  <p class="topless"><a href="apps.html"
+                        title="next chapter">Best Apps Ever</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/junk/htop.txt"
+    <li><a href="../_sources/junk/angularjs.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -122,10 +131,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="javascript.html" title="Javascript Hacks"
+          <a href="apps.html" title="Best Apps Ever"
              >next</a></li>
         <li class="right" >
-          <a href="git.html" title="Git"
+          <a href="index.html" title="Junk"
              >previous</a> |</li>
         <li><a href="../index.html">Home</a> &raquo;</li>
           <li><a href="index.html" >Junk</a> &raquo;</li> 

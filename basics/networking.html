@@ -71,13 +71,15 @@
 <li><a class="reference internal" href="#networking" id="id2">Networking</a><ul>
 <li><a class="reference internal" href="#ssh" id="id3">SSH</a><ul>
 <li><a class="reference internal" href="#installation" id="id4">Installation</a></li>
-<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
-<li><a class="reference internal" href="#file-transfer" id="id6">File Transfer</a></li>
-<li><a class="reference internal" href="#authentication" id="id7">Authentication</a></li>
-<li><a class="reference internal" href="#mounting-ssh" id="id8">Mounting SSH</a></li>
+<li><a class="reference internal" href="#configuration" id="id5">Configuration</a></li>
+<li><a class="reference internal" href="#usage" id="id6">Usage</a></li>
+<li><a class="reference internal" href="#file-transfer" id="id7">File Transfer</a></li>
+<li><a class="reference internal" href="#authentication" id="id8">Authentication</a></li>
+<li><a class="reference internal" href="#mounting-ssh" id="id9">Mounting SSH</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#list-open-ports" id="id9">List Open Ports</a></li>
+<li><a class="reference internal" href="#list-open-ports" id="id10">List Open Ports</a></li>
+<li><a class="reference internal" href="#netstat-lines-explained" id="id11">Netstat Lines Explained</a></li>
 </ul>
 </li>
 </ul>
@@ -98,14 +100,25 @@
 <div class="highlight-python"><pre>wajig install openssh-server</pre>
 </div>
 </div>
+<div class="section" id="configuration">
+<h3><a class="toc-backref" href="#id5">Configuration</a><a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>Check out <tt class="docutils literal"><span class="pre">~/.ssh/config</span></tt>. Do it! It&#8217;s worth it.</p>
+<p>The command <tt class="docutils literal"><span class="pre">ssh</span> <span class="pre">-p</span> <span class="pre">2345</span> <span class="pre">-i</span> <span class="pre">/var/some_key</span> <span class="pre">some_user&#64;some_weird_host_name</span></tt> becomes <tt class="docutils literal"><span class="pre">ssh</span> <span class="pre">foo</span></tt> with the following entry:</p>
+<div class="highlight-python"><pre>Host foo
+  Hostname some_weird_host_name
+  User some_user
+  IdentityFile /var/some_key
+  Port 2345</pre>
+</div>
+</div>
 <div class="section" id="usage">
-<h3><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id6">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
 <p>Connect to host <tt class="docutils literal"><span class="pre">notebook</span></tt>:</p>
 <div class="highlight-python"><pre>ssh notebook</pre>
 </div>
 </div>
 <div class="section" id="file-transfer">
-<h3><a class="toc-backref" href="#id6">File Transfer</a><a class="headerlink" href="#file-transfer" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id7">File Transfer</a><a class="headerlink" href="#file-transfer" title="Permalink to this headline">¶</a></h3>
 <p>In <a class="reference internal" href="../junk/apps.html#krusader"><em>Krusader (File Manager)</em></a>&#8216;s/Dolphin&#8217;s/&lt;your-graphical-filemanager-name-here&gt; address bar, type:</p>
 <div class="highlight-python"><pre>sftp://notebook</pre>
 </div>
@@ -115,7 +128,7 @@ scp notebook:/etc/passwd .  # copies /etc/passwd on notebook to current working 
 </div>
 </div>
 <div class="section" id="authentication">
-<h3><a class="toc-backref" href="#id7">Authentication</a><a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">Authentication</a><a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h3>
 <p>Either with username/password or through public key encryption. The latter is very easy to setup and even lets you skip the password prompt (if you choose an empty password).</p>
 <p>Assumption: working on <em>desktop</em>, connecting to <em>notebook</em>:</p>
 <div class="highlight-python"><pre>ssh-keygen  # only if you haven't done it already
@@ -126,7 +139,7 @@ ssh notebook</pre>
 <p>If you chose an empty password and <em>desktop</em> gets compromised, then <em>notebook</em> will be too.</p>
 </div>
 <div class="section" id="mounting-ssh">
-<h3><a class="toc-backref" href="#id8">Mounting SSH</a><a class="headerlink" href="#mounting-ssh" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id9">Mounting SSH</a><a class="headerlink" href="#mounting-ssh" title="Permalink to this headline">¶</a></h3>
 <p>Prerequisites:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sshfs</span>
 </pre></div>
@@ -141,12 +154,36 @@ ssh notebook</pre>
 </div>
 </div>
 <div class="section" id="list-open-ports">
-<h2><a class="toc-backref" href="#id9">List Open Ports</a><a class="headerlink" href="#list-open-ports" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id10">List Open Ports</a><a class="headerlink" href="#list-open-ports" title="Permalink to this headline">¶</a></h2>
 <p>... excluding sockets:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">netstat</span> <span class="o">--</span><span class="n">numeric</span><span class="o">-</span><span class="n">hosts</span> <span class="o">--</span><span class="n">protocol</span><span class="o">=</span><span class="n">inet</span>
 </pre></div>
 </div>
 <p>We use <em class="xref std std-option">--numeric-hosts</em> because dns lookups can be quite slow.</p>
+</div>
+<div class="section" id="netstat-lines-explained">
+<h2><a class="toc-backref" href="#id11">Netstat Lines Explained</a><a class="headerlink" href="#netstat-lines-explained" title="Permalink to this headline">¶</a></h2>
+<p>I&#8217;m usually interested in all (-a) numeric (-n) TCP (-t) connections and the corresponding processes (-p). &#8216;tanp&#8217; sounds nicer than &#8216;atnp&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">netstat</span> <span class="o">-</span><span class="n">tanp</span>
+</pre></div>
+</div>
+<p>Just nginx listening on all addresses (0.0.0.0) on port 80:</p>
+<div class="highlight-python"><pre>tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      9111/nginx -g daemo     nginx.</pre>
+</div>
+<p>What&#8217;s rpcbind? Basically a multiplexer for kernel-based services like NFS:</p>
+<div class="highlight-python"><pre>tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      31994/rpcbind           needed for nfs</pre>
+</div>
+<p>No pid? Dafuq? <tt class="docutils literal"><span class="pre">rpcinfo</span> <span class="pre">-p</span></tt> tells us more:</p>
+<div class="highlight-python"><pre>tcp        0      0 0.0.0.0:48660           0.0.0.0:*               LISTEN      -</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">rpcinfo</span> <span class="pre">-p</span></tt>:</p>
+<div class="highlight-python"><pre>program vers proto   port  service
+
+100021    3   tcp  48660  nlockmgr
+100021    4   tcp  48660  nlockmgr
+100021    1   tcp  48660  nlockmgr
+[...]</pre>
+</div>
 </div>
 </div>
 
@@ -161,6 +198,7 @@ ssh notebook</pre>
 <li><a class="reference internal" href="#">Networking</a><ul>
 <li><a class="reference internal" href="#ssh">SSH</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
 <li><a class="reference internal" href="#usage">Usage</a></li>
 <li><a class="reference internal" href="#file-transfer">File Transfer</a></li>
 <li><a class="reference internal" href="#authentication">Authentication</a></li>
@@ -168,6 +206,7 @@ ssh notebook</pre>
 </ul>
 </li>
 <li><a class="reference internal" href="#list-open-ports">List Open Ports</a></li>
+<li><a class="reference internal" href="#netstat-lines-explained">Netstat Lines Explained</a></li>
 </ul>
 </li>
 </ul>
