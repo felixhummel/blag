@@ -1,3 +1,14 @@
+*****
+MySQL
+*****
+
+Dev User
+========
+::
+
+    CREATE USER '{{USERNAME}}'@'localhost' IDENTIFIED BY '{{PASSWORD}}';
+    GRANT ALL PRIVILEGES ON `{{DBNAME}}` . * TO '{{USERNAME}}'@'localhost';
+
 MySQL on Ramdisk
 ================
 Install::
