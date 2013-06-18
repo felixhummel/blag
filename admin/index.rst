@@ -8,6 +8,7 @@ Administration
     debian
     chroot
     gitolite
+    lxc
     usb_ubuntu
     grub
     grub2_multi_boot
