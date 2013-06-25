@@ -97,3 +97,10 @@ Note that there is no ``sql:``-prefix on the db path::
 
 .. note:: Tried the same for ``localhost``. Does not work.
 
+Troubleshooting::
+
+    # list certs
+    certutil -d $nssdb_dir -L
+    # delete cert by nickname
+    certutil -d $nssdb_dir -D -n <nickname>
+
