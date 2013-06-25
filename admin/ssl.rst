@@ -85,7 +85,7 @@ Import for wget::
 
 Import for chromium (restart chromium afterwards)::
 
-    nssdb_dir=$(sql:$HOME/.pki/nssdb)
+    nssdb_dir=sql:$HOME/.pki/nssdb
     certutil -d $nssdb_dir -A -t "CT,C,C" -n locutus.lan -i /etc/nginx/certs/locutus.lan/crt
 
 For firefox (every profile has an nssdb, restart firefox afterwards).
